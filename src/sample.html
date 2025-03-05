@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 id="number">0</h1>
+    <button id="increment"> + </button>
+    <button id="decrement"> - </button>
+
+    <script>
+      const h1tag = document.getElementById('number');
+      const incrementBtn = document.getElementById('increment');
+      const decrementBtn = document.getElementById('decrement');
+
+      // 액션 타입 정의
+      const INCREMENT = 'INCREMENT';
+      const DECREMENT = 'DECREMENT';
+
+      // 액션 객체 만들어주는 액션 크리에이터(함수)
+      const increment = (payload) => ({ type: INCREMENT, payload });
+      const decrement = () => ({ type: DECREMENT });
+
+      // state 초기값 설정
+      const initialState = {
+        number: 0,
+      };
+
+      // 리듀서 함수
+      const counter = (state = initialState, action) => {
+        switch (action.type) {
+          case INCREMENT:
+            return { number: state.number + action.payload };
+          case DECREMENT:
+            return { nubmer: state.number - 1 };
+          default:
+            return state;
+        }
+      };
+
+      // 스토어 생성
+      const { createStore } = Redux;
+      const store = createStore(counter);
+
+      // 상태값이 변경될때마다 호출 시킬 listener 함수
+      const render = () => {
+        h1tag.innerText = store.getState().number;
+      };
+
+      // 리스너 주면서 스토어 구독
+      store.subscribe(render);
+
+      render(); // 초기 렌더링 위해 직접 한번 실행.
+
+      // 버튼에 이벤트 등록
+      incrementBtn.addEventListener('click', () => {
+        store.dispatch(increment(20));
+      });
+
+      decrementBtn.addEventListener('click', () => {
+        store.dispatch(decrement());
+      });
+    </script>
+  </body>
+</html>

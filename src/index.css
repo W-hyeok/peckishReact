@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* @font-face {
+  font-family: 'Moneygraphy-Pixel';
+  font-weight: normal;
+  src: url('./fonts/Moneygraphy-Pixel.ttf') format('truetype');
+}
+
+body {
+  font-family: 'Moneygraphy-Pixel';
+} */
+
+@font-face {
+  font-family: 'GmarketSansTTFMedium';
+  font-weight: normal;
+  src: url('./fonts/GmarketSansTTFMedium.ttf') format('truetype');
+}
+
+body {
+  font-family: 'GmarketSansTTFMedium';
+}

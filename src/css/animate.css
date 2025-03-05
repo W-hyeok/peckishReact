@@ -1,0 +1,19 @@
+/* 애니메이션 스타일 */
+@keyframes flowText {
+  0% {
+    transform: translateX(100%); /* 오른쪽 끝에서 시작 */
+  }
+  100% {
+    transform: translateX(-150%); /* 왼쪽 끝까지 스크롤 */
+  }
+}
+
+/* 텍스트 스크롤(실적용 시 text-area를 box로 감싸야 함. 안그러면 글자가 잘리고, 글자 태그가 통째로 움직임) */
+.flowing-text-box {
+  overflow: hidden;
+}
+
+.text-area {
+  white-space: nowrap;
+  animation: flowText 10s linear infinite; /* 10초 동안 반복 */
+}
