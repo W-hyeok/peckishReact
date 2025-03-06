@@ -5,10 +5,11 @@ import { API_SERVER_HOST } from './todoApi';
 import { setCookie } from '../util/cookieUtil';
 
 // 내 카카오 REST API 키
-const REST_API_KEY = `b2cb5c3c0b7c9698bd342d04c3ea75ab`;
+const REST_API_KEY = `6716774ce6c892623201cc8a0a099a90`;
 
 // Redirect URI
-const REDIRECT_URI = `http://localhost:5173/member/kakao`;
+// const REDIRECT_URI = `http://3.38.234.141:80/member/kakao`; // (배포용)
+const REDIRECT_URI = `http://localhost:5173/member/kakao`; // (local test용)
 
 // 카카오 인가 요청 경로
 const AUTH_CODE_PATH = `https://kauth.kakao.com/oauth/authorize`;

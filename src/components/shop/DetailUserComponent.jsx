@@ -19,7 +19,6 @@ import '../../css/hoverText.css'; // 텍스트 잘림 방지
 import '../../css/scrollbar.css';
 import '../../css/scrollbar2.css';
 
-import { format } from 'date-fns';
 import { useTimeStamp } from '../../hooks/useTimeAgo';
 import useCustomMove from '../../hooks/useCustomMove';
 

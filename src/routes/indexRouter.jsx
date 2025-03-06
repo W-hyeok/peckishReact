@@ -15,7 +15,7 @@ const AdminShopIndex = lazy(
   () => import('../pages/admin/adminshop/AdminShopIndex')
 );
 const AdminMemberIndex = lazy(
-  () => import('../pages/admin/adminMember/AdminMemberIndex')
+  () => import('../pages/admin/adminmember/AdminMemberIndex')
 );
 const TestPage = lazy(() => import('../pages/TestPage'));
 // 라우팅 설정 메인 파일

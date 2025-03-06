@@ -2,7 +2,10 @@ import axios from 'axios';
 import jwtAxios from '../util/jwtUtil';
 
 // API서버 요청 기능
-export const API_SERVER_HOST = 'http://localhost:8080';
+// export const API_SERVER_HOST = 'http://3.38.234.141:8080'; // (배포용)
+export const API_SERVER_HOST = 'http://localhost:8080'; // (local test용)
+
+
 // const prefix = `${API_SERVER_HOST}/api/todo`;
 
 // // tno 로 Todo 조회

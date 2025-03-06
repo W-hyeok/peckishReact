@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { getCookie } from '../util/cookieUtil';
-//import { emit } from 'npm';
+import fishLogo from '/src/assets/fish_logo.png';
 
 const user = {
   name: '붕찾사',
@@ -121,7 +121,7 @@ export default function Header() {
               <Link to={'/'}>
                 <img
                   alt="Your Company"
-                  src="/src/assets/fish_logo.png"
+                  src={fishLogo}
                   className="h-10 w-auto"
                 />
               </Link>
@@ -242,7 +242,7 @@ export default function Header() {
                   <div>
                     <img
                       alt="Your Company"
-                      src="/src/assets/fish_logo.png"
+                      src={fishLogo}
                       className="h-10 w-auto"
                     />
                   </div>
