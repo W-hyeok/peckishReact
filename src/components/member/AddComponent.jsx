@@ -87,8 +87,8 @@ const AddComponent = () => {
     const currentNickname = e.target.value;
     setNickname(currentNickname);
 
-    if (currentNickname.length < 2 || currentNickname.length > 5) {
-      setNicknameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요!');
+    if (currentNickname.length < 2 || currentNickname.length > 15) {
+      setNicknameMessage('닉네임은 2글자 이상 15글자 이하로 입력해주세요!');
       setIsNickname(false);
     } else {
       setNicknameMessage('사용가능한 닉네임 입니다.');

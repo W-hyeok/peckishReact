@@ -19,7 +19,7 @@ const adminRouter = () => {
         <Suspense fallback={<LoadingPage />}>
           <AdminList />
         </Suspense>
-        ),
+      ),
     },
     {
       path: 'shoplist',
@@ -27,7 +27,7 @@ const adminRouter = () => {
         <Suspense fallback={<LoadingPage />}>
           <AdminShopList />
         </Suspense>
-        ),
+      ),
     },
     {
       path: 'memberlist',
@@ -35,7 +35,7 @@ const adminRouter = () => {
         <Suspense fallback={<LoadingPage />}>
           <AdminMemberList />
         </Suspense>
-        ),
+      ),
     },
     {
       path: 'read/:email',
@@ -52,7 +52,7 @@ const adminRouter = () => {
           <AdminReadMemberRead />
         </Suspense>
       ),
-    },    
+    },
     {
       path: 'modifyInfo/:email',
       element: (

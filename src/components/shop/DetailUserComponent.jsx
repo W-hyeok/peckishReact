@@ -19,9 +19,10 @@ import '../../css/hoverText.css'; // 텍스트 잘림 방지
 import '../../css/scrollbar.css';
 import '../../css/scrollbar2.css';
 
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import { useTimeStamp } from '../../hooks/useTimeAgo';
 import useCustomMove from '../../hooks/useCustomMove';
+import axios from 'axios';
 
 const host = `${API_SERVER_HOST}`;
 
@@ -123,6 +124,24 @@ const DetailUserComponent = ({ shop, shopId, mapData, storeLoc }) => {
   const navigate = useNavigate();
   console.log(mapData);
   console.log(storeLoc);
+
+  const handleChatroom = async () => {
+    try {
+      // 1. 백엔드에 채팅방 생성 요청 (이미 생성된 경우 기존 채팅방 ID를 반환)
+      const response = await axios.post(`${host}/api/chat/room`, {
+        customerId: 'exampleCustomerId',
+      });
+
+      // 2. 반환된 채팅방 ID를 변수에 저장 (예시로 response.data.id로 가정)
+      const roomId = response.data.id;
+
+      // 3. 동적으로 생성된 채팅방 ID로 이동
+      navigate(`/room/${roomId}`);
+    } catch (error) {
+      console.error('채팅방 생성 실패:', error);
+      // 오류 처리 로직 추가 (예: 사용자에게 오류 메시지 표시)
+    }
+  };
 
   // 방문 성공
   const [visitedSuccess, setVisitedSuccess] = useState(0);
@@ -266,29 +285,14 @@ const DetailUserComponent = ({ shop, shopId, mapData, storeLoc }) => {
             {shop.shopUserDTO.location}
           </p>
 
-          {/* 방문 인증 여부 */}
+          {/* 문의하기 */}
           <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
             <button
               type="button"
-              onClick={handleVisitedSuccess}
+              onClick={handleChatroom}
               className="flex items-center justify-center rounded-md border border-black/30 px-8 py-3 font-extrabold text-lg text-green-800 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
             >
-              {/* <img
-                src="../../src/assets/icon/success2.png"
-                className="h-1/12 w-1/12 mr-2"
-              /> */}
-              방문 성공 ({visitedSuccess}회)
-            </button>
-            <button
-              type="button"
-              className="flex w-auto items-center justify-center rounded-md border border-black/30 px-8 py-3 font-extrabold text-lg text-rose-800 hover:bg-rose-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              onClick={handleVisitedFail}
-            >
-              {/* <img
-                src="../../src/assets/icon/failed.png"
-                className="h-1/12 w-1/12 mr-2"
-              /> */}
-              방문 실패 ({visitedFail}회)
+              문의하기
             </button>
           </div>
 
