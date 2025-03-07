@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { getCookie } from '../util/cookieUtil';
 import fishLogo from '/src/assets/fish_logo.png';
+import profile from '/src/assets/icon/profile.png';
 
 const user = {
   name: '붕찾사',
@@ -149,7 +150,7 @@ export default function Header() {
                     <span className="sr-only">Open user menu</span>
                     <img
                       alt=""
-                      src={user.imageUrl}
+                      src={profile}
                       className="size-12 rounded-full"
                     />
                   </MenuButton>
@@ -260,7 +261,7 @@ export default function Header() {
                   <div className="shrink-0">
                     <img
                       alt=""
-                      src={user.imageUrl}
+                      src={profile}
                       className="size-10 rounded-full"
                     />
                   </div>

@@ -5,6 +5,8 @@ import ResultModal from '../common/ResultModal';
 import { putTemporaryPassword } from '../../api/memberApi';
 import { useNavigate } from 'react-router-dom';
 
+import fishLogo from '/src/assets/fish_logo.png';
+
 const SearchPasswordComponent = () => {
   const { moveToLogin, moveToPath, exceptionHandle } = useCustomLogin();
   const [result, setResult] = useState(null);
@@ -140,7 +142,7 @@ const SearchPasswordComponent = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
             alt="Your Company"
-            src="/src/assets/fish_logo.png"
+            src={fishLogo}
             className="mx-auto h-10 w-auto"
           />
           <h3 className="mt-1 text-center text-1x1/9 font-bold tracking-tight text-gray-900">

@@ -5,6 +5,8 @@ import KakaoLoginComponent from './KakaoLoginComponent';
 import ResultModal from '../common/ResultModal';
 // import { set } from 'react-datepicker/dist/date_utils';
 
+import fishLogo from '/src/assets/fish_logo.png';
+
 const initState = {
   email: '',
   password: '',
@@ -97,7 +99,7 @@ const LoginComponent = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
             alt="Your Company"
-            src="/src/assets/fish_logo.png"
+            src={fishLogo}
             className="mx-auto h-8 w-auto"
           />
           <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">

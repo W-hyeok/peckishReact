@@ -3,6 +3,8 @@ import useCustomLogin from '../../hooks/useCustomLogin';
 import ResultModal from '../common/ResultModal';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+import fishLogo from '/src/assets/fish_logo.png';
+
 const LogoutComponent = () => {
   const { doLogout, moveToPath } = useCustomLogin();
   const [result, setResult] = useState(null);
@@ -34,7 +36,7 @@ const LogoutComponent = () => {
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
             alt="Your Company"
-            src="/src/assets/fish_logo.png"
+            src={fishLogo}
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
