@@ -4,6 +4,7 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 import { putMemberModifyInfo } from '../../api/memberApi';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import ResultModal from '../../components/common/ResultModal';
+import { PhotoIcon } from '@heroicons/react/24/solid';
 
 const host = API_SERVER_HOST;
 
@@ -22,10 +23,6 @@ const LeftModifyInfoComponent = () => {
   const [phoneMessage, setPhoneMessage] = useState('');
   const [isPhone, setIsPhone] = useState(false);
 
-  const [memberType, setMemberType] = useState('');
-
-  const uploadRefCerti = useRef();
-
   const [result, setResult] = useState(null);
 
   const { moveToPath, doLogout, exceptionHandle } = useCustomLogin();
@@ -41,31 +38,7 @@ const LeftModifyInfoComponent = () => {
     setRoleNames(cookieMember.roleNames);
   }, []);
 
-  const handleClickModifyInfo = () => {
-    // 저장 요청
-    const cerImg = uploadRefCerti.current.files[0];
-
-    const formData = new FormData();
-    if (cerImg) {
-      formData.append('certiImg', cerImg);
-    }
-
-    formData.append('email', email);
-    formData.append('nickname', nickname);
-    formData.append('phone', phone);
-    formData.append('memberType', memberType);
-
-    console.log('modifyInfo - email: {}', email);
-    console.log('modifyInfo - memberType: {}', memberType);
-
-    putMemberModifyInfo(email, formData)
-      .then((data) => {
-        console.log('회원 일반 정보 수정 data 확인: {}', data);
-        setResult(data);
-      })
-      .catch((err) => exceptionHandle(err));
-  };
-
+  
   // 닉네임 유효성 검사
 
   const onChangeNickname = (e) => {
@@ -108,11 +81,61 @@ const LeftModifyInfoComponent = () => {
   };
 
   // MemberType
+  const [memberType, setMemberType] = useState('');
 
   const onChangeMemberType = (e) => {
     const currentMemberType = e.target.value;
+    console.log("****####**: {}", currentMemberType);
     setMemberType(currentMemberType);
   };
+
+  const uploadRefCerti = useRef();
+
+  const [certfile, setCertfile] = useState(null);
+  const [certimage, setCertimage] = useState(null);
+
+  // 사업자 등록증 파일 선택 시 호출되는 함수
+  const handleCertChange = () => {
+    const certImg = uploadRefCerti.current?.files[0]; // 파일을 참조
+
+    if (certImg) {
+      setCertfile(certImg); // shopfile 상태에 파일 저장
+      const reader = new FileReader(); // FileReader 생성
+      reader.onloadend = () => {
+        setCertimage(reader.result); // 파일을 읽은 후 image 상태에 URL 저장
+      };
+      reader.readAsDataURL(certImg); // 파일을 Data URL 형식으로 읽기
+    }
+  };
+
+  const handleClickModifyInfo = () => {
+    // 저장 요청
+    const formData = new FormData();
+
+    if (memberType === "OWNER") {
+      if (!certfile) {
+        console.error('사업자 등록증 사진진 없습니다!');
+        return; // 파일이 없으면 저장하지 않음
+      }
+      formData.append('certiImg', certfile);
+    }
+
+    formData.append('email', email);
+    formData.append('nickname', nickname);
+    formData.append('phone', phone);
+    formData.append('memberType', memberType);
+
+    console.log('modifyInfo - email: {}', email);
+    console.log('modifyInfo - memberType: {}', memberType);
+
+    putMemberModifyInfo(email, formData)
+      .then((data) => {
+        console.log('회원 일반 정보 수정 data 확인: {}', data);
+        setResult(data);
+      })
+      .catch((err) => exceptionHandle(err));
+  };
+
 
   const notificationMethods = [
     { id: 'USER', title: '일반회원' },
@@ -145,7 +168,6 @@ const LeftModifyInfoComponent = () => {
             <div className="overflow-hidden rounded-lg bg-white shadow">
               <div className="p-6">
                 {/* Your content */}
-
                 <div className="space-y-12">
                   <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6 ">
                     <div className="col-span-full flex items-center justify-center">
@@ -188,7 +210,6 @@ const LeftModifyInfoComponent = () => {
                           name="nickname"
                           type="text"
                           value={nickname}
-                          // value={nickname}
                           onChange={onChangeNickname}
                           required
                           className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -208,6 +229,7 @@ const LeftModifyInfoComponent = () => {
                           name="phone"
                           type="text"
                           value={phone}
+                          required
                           onChange={addHyphen}
                           className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                         />
@@ -218,7 +240,7 @@ const LeftModifyInfoComponent = () => {
                 </div>
 
                 {/* 회원 유형 및 사업자 등록증 첨부 */}
-                <fieldset>
+                {/* <fieldset>
                   <label className="block text-sm/6 font-medium text-gray-900 mt-4">
                     회원 유형
                   </label>
@@ -265,6 +287,90 @@ const LeftModifyInfoComponent = () => {
                         </div>
                       </div>
                     </div>
+                  </div>
+                </fieldset> */}
+                <fieldset>
+                  <label className="block text-sm/6 font-medium text-gray-900">
+                    회원 유형
+                  </label>
+                  <div className="mt-1 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                    {notificationMethods.map((notificationMethod) => (
+                      <div
+                        key={notificationMethod.id}
+                        className="flex items-center"
+                      >
+                        <input
+                          defaultChecked={notificationMethod.id === 'user'}
+                          id={notificationMethod.id}
+                          name="memberType"
+                          type="radio"
+                          value={notificationMethod.id}
+                          onChange={onChangeMemberType}
+                          className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+                        />
+                        <label
+                          htmlFor={notificationMethod.id}
+                          className="ml-3 block text-sm/6 font-medium text-gray-900"
+                        >
+                          {notificationMethod.title}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="col-span-full">
+                    {memberType === 'OWNER' ? (
+                      <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                        <div className="text-center">
+                          {certimage ? (
+                            <img
+                              src={certimage}
+                              alt="Preview"
+                              className="mx-auto rounded-lg max-w-full h-auto"
+                              style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
+                            />
+                          ) : (
+                            <PhotoIcon
+                              aria-hidden="true"
+                              className="mx-auto size-14 text-gray-300"
+                            />
+                          )}
+                          {!certimage && (
+                            <>
+                              <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
+                                <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                  <span>+ 사업자 등록증 첨부 필수</span>
+                                  <input
+                                    type="file"
+                                    ref={uploadRefCerti}
+                                    multiple={false}
+                                    name="certiImg"
+                                    className="sr-only"
+                                    onChange={handleCertChange}
+                                  />
+                                </label>
+                              </div>
+                            </>
+                          )}  
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mt-1 hidden justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                        <div className="text-center">
+                          <div className="mt-0 flex justify-center text-sm/4 text-gray-600">
+                            <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                              <span>+ 사업자 등록증 첨부</span>
+                              <input
+                                type="file"
+                                ref={uploadRefCerti}
+                                name="certiImg"
+                                className="sr-only"
+                              />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </fieldset>
 

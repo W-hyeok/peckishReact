@@ -4,19 +4,9 @@ import { putMemberModifyKakao } from '../../api/memberApi';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import ResultModal from '../common/ResultModal';
 import { PhotoIcon } from '@heroicons/react/24/outline';
-import { putMemberModifyInfo } from '../../api/memberApi';
-
-// const initState = {
-//   email: '',
-//   password: '',
-//   nickname: '',
-//   phone: '',
-//   profileImg: '',
-// };
 
 const ModifyComponent = () => {
   const uploadRef = useRef(); //
-  // const [member, setMember] = useState(initState);
   const loginInfo = useSelector((state) => state.loginSlice);
 
   const [email, setEmail] = useState('');
@@ -24,9 +14,11 @@ const ModifyComponent = () => {
     useCustomLogin();
   const [result, setResult] = useState(null);
 
+  // const profImg = uploadRef.current?.files[0];
+
   useEffect(() => {
     setEmail(loginInfo.email);
-    setPassword('abcdef');
+    // setPassword('abcdef');
     setNickname(loginInfo.nickname);
     setPhone(loginInfo.phone);
   }, [loginInfo]);
@@ -110,27 +102,45 @@ const ModifyComponent = () => {
     }
   };
 
-  const handleChange = (e) => {
-    member[e.target.name] = e.target.value;
-    setMember({ ...member });
+  const [shopfile, setShopfile] = useState(null); // shopfile 상태 추가
+  const [image, setImage] = useState(null);
+
+  // 파일 선택 시 호출되는 함수
+  const handleImageChange = () => {
+    const profImg = uploadRef.current?.files[0]; // 파일을 참조
+
+    if (profImg) {
+      setShopfile(profImg); // shopfile 상태에 파일 저장
+      const reader = new FileReader(); // FileReader 생성
+      reader.onloadend = () => {
+        setImage(reader.result); // 파일을 읽은 후 image 상태에 URL 저장
+      };
+      reader.readAsDataURL(profImg); // 파일을 Data URL 형식으로 읽기
+    }
   };
 
   const handleClickModify = () => {
     console.log('카카오 logInfo 확인: {}', loginInfo);
 
+      // shopfile 상태가 제대로 설정되었는지 확인
+      if (!shopfile) {
+        console.error('사진 파일이 없습니다!');
+        return; // 파일이 없으면 저장하지 않음
+      }
+
     // 저장 요청
-    const profImg = uploadRef.current.files[0];
+    // const profImg = uploadRef.current.files[0];
 
     const formKakaoData = new FormData();
-    if (profImg) {
-      formKakaoData.append('profileImg', profImg);
-    }
+    // if (profImg) {
+    //   formKakaoData.append('profileImg', profImg);
+    // }
 
+    formKakaoData.append('profileImg', shopfile);
     formKakaoData.append('email', email);
     formKakaoData.append('password', password);
     formKakaoData.append('nickname', nickname);
     formKakaoData.append('phone', phone);
-    formKakaoData.append('profileImg', profImg);
 
     console.log('modifyKakao - email: {}', email);
     console.log('modifyKakao - nickname: {}', nickname);
@@ -230,6 +240,7 @@ const ModifyComponent = () => {
                       <input
                         name="password"
                         type="password"
+                        placeholder="숫자+영문자+특수문자 5~15 글자 사이 입력해주세요!"
                         value={password}
                         onChange={onChangePassword}
                         required
@@ -268,6 +279,7 @@ const ModifyComponent = () => {
                       <input
                         name="nickname"
                         type="text"
+                        placeholder='닉네임은 2~5 사이 글자로 이용하세요'
                         value={nickname}
                         onChange={onChangeNickname}
                         required
@@ -297,28 +309,44 @@ const ModifyComponent = () => {
                   {/* profile 사진 첨부 */}
                   <div className="col-span-full">
                     <label className="block text-sm/6 font-medium text-gray-900">
-                      프로필 사진
+                      프로필 사진*
                     </label>
                     <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
                       <div className="text-center">
-                        <PhotoIcon
-                          aria-hidden="true"
-                          className="mx-auto size-14 text-gray-300"
-                        />
-                        <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
-                          <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                            <span>사진 첨부</span>
-                            <input
-                              type="file"
-                              ref={uploadRef}
-                              name="profileImg"
-                              className="sr-only"
-                            />
-                          </label>
-                        </div>
+                        {image ? (
+                          <img
+                            src={image}
+                            alt="Preview"
+                            className="mx-auto rounded-lg max-w-full h-auto"
+                            style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
+                          />
+                        ) : (
+                          <PhotoIcon
+                            aria-hidden="true"
+                            className="mx-auto size-14 text-gray-300"
+                          />
+                        )}
+                        {!image && (
+                          <>
+                            <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
+                              <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                <span>사진 첨부</span>
+                                <input
+                                  type="file"
+                                  ref={uploadRef}
+                                  multiple={false}
+                                  name="profileImg"
+                                  className="sr-only"
+                                  onChange={handleImageChange}
+                                />
+                              </label>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
+
 
                   <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button
