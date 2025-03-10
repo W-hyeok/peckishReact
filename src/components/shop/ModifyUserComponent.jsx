@@ -41,7 +41,7 @@ const center = {
   lng: 126.570667,
 };
 
-const ModifyUserComponent = ({ shopId, shopDetailId, infoType }) => {
+const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   console.log('user', shop);
   console.log('user', shopId);
   console.log('user', shopDetailId);

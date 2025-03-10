@@ -4,12 +4,14 @@ import LoadingPage from '../components/common/LoadingPage';
 import memberRouter from './memberRouter';
 import shopRouter from './shopRouter';
 import adminRouter from './adminRouter';
+import reviewRouter from './reviewRouter';
 
 // 지연 로딩 처리 : dynamic import
 const Main = lazy(() => import('../pages/MainPage'));
 const About = lazy(() => import('../pages/AboutPage'));
 const MemberIndex = lazy(() => import('../pages/member/MemberIndex'));
 const ShopIndex = lazy(() => import('../pages/shop/shopIndex'));
+const ReviewIndex = lazy(() => import('../pages/review/reviewIndex'));
 const AdminIndex = lazy(() => import('../pages/admin/AdminIndex'));
 const AdminShopIndex = lazy(
   () => import('../pages/admin/adminshop/AdminShopIndex')
@@ -54,6 +56,15 @@ const Router = () => {
         </Suspense>
       ),
       children: shopRouter(),
+    }, // shop
+    {
+      path: 'review',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <ReviewIndex />
+        </Suspense>
+      ),
+      children: reviewRouter(),
     }, // shop
     {
       path: 'admin',
