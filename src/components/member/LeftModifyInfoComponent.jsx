@@ -38,7 +38,6 @@ const LeftModifyInfoComponent = () => {
     setRoleNames(cookieMember.roleNames);
   }, []);
 
-  
   // 닉네임 유효성 검사
 
   const onChangeNickname = (e) => {
@@ -85,7 +84,7 @@ const LeftModifyInfoComponent = () => {
 
   const onChangeMemberType = (e) => {
     const currentMemberType = e.target.value;
-    console.log("****####**: {}", currentMemberType);
+    console.log('****####**: {}', currentMemberType);
     setMemberType(currentMemberType);
   };
 
@@ -112,7 +111,7 @@ const LeftModifyInfoComponent = () => {
     // 저장 요청
     const formData = new FormData();
 
-    if (memberType === "OWNER") {
+    if (memberType === 'OWNER') {
       if (!certfile) {
         console.error('사업자 등록증 사진진 없습니다!');
         return; // 파일이 없으면 저장하지 않음
@@ -135,7 +134,6 @@ const LeftModifyInfoComponent = () => {
       })
       .catch((err) => exceptionHandle(err));
   };
-
 
   const notificationMethods = [
     { id: 'USER', title: '일반회원' },
@@ -240,55 +238,6 @@ const LeftModifyInfoComponent = () => {
                 </div>
 
                 {/* 회원 유형 및 사업자 등록증 첨부 */}
-                {/* <fieldset>
-                  <label className="block text-sm/6 font-medium text-gray-900 mt-4">
-                    회원 유형
-                  </label>
-                  <div className="mt-1 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                    {notificationMethods.map((notificationMethod) => (
-                      <div
-                        key={notificationMethod.id}
-                        className="flex items-center"
-                      >
-                        <input
-                          defaultChecked={
-                            notificationMethod.id ===
-                            `${roleNames[roleNames.length - 1]}`
-                          }
-                          id={notificationMethod.id}
-                          name="memberType"
-                          type="radio"
-                          value={notificationMethod.id}
-                          onChange={onChangeMemberType}
-                          className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
-                        />
-                        <label
-                          htmlFor={notificationMethod.id}
-                          className="ml-3 block text-sm/6 font-medium text-gray-900"
-                        >
-                          {notificationMethod.title}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="col-span-full">
-                    <div className="mt-2 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
-                      <div className="text-center">
-                        <div className="mt-0 flex justify-center text-sm/4 text-gray-600">
-                          <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                            <span>+ 사업자 등록증 첨부</span>
-                            <input
-                              type="file"
-                              ref={uploadRefCerti}
-                              className="sr-only"
-                            />
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </fieldset> */}
                 <fieldset>
                   <label className="block text-sm/6 font-medium text-gray-900">
                     회원 유형
@@ -351,7 +300,7 @@ const LeftModifyInfoComponent = () => {
                                 </label>
                               </div>
                             </>
-                          )}  
+                          )}
                         </div>
                       </div>
                     ) : (
