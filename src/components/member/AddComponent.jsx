@@ -155,19 +155,19 @@ const AddComponent = () => {
     }
   };
 
-    // 사업자 등록증 파일 선택 시 호출되는 함수
-    const handleCertChange = () => {
-      const certImg = uploadRefCerti.current?.files[0]; // 파일을 참조
-  
-      if (certImg) {
-        setCertfile(certImg); // shopfile 상태에 파일 저장
-        const reader = new FileReader(); // FileReader 생성
-        reader.onloadend = () => {
-          setCertimage(reader.result); // 파일을 읽은 후 image 상태에 URL 저장
-        };
-        reader.readAsDataURL(certImg); // 파일을 Data URL 형식으로 읽기
-      }
-    };
+  // 사업자 등록증 파일 선택 시 호출되는 함수
+  const handleCertChange = () => {
+    const certImg = uploadRefCerti.current?.files[0]; // 파일을 참조
+
+    if (certImg) {
+      setCertfile(certImg); // shopfile 상태에 파일 저장
+      const reader = new FileReader(); // FileReader 생성
+      reader.onloadend = () => {
+        setCertimage(reader.result); // 파일을 읽은 후 image 상태에 URL 저장
+      };
+      reader.readAsDataURL(certImg); // 파일을 Data URL 형식으로 읽기
+    }
+  };
 
   const handleClickSignup = () => {
     // shopfile 상태가 제대로 설정되었는지 확인
@@ -175,16 +175,18 @@ const AddComponent = () => {
       console.error('프로필 사진 파일이 없습니다!');
       return; // 파일이 없으면 저장하지 않음
     }
-    if (!certfile) {
-      console.error('사업자 등록증 사진진 없습니다!');
+    if (memberType==="OWNER" && !certfile) {
+      console.error('사업자 등록증 사진 없습니다!');
       return; // 파일이 없으면 저장하지 않음
     }
     // const profImg = uploadRef.current?.files[0]; // 파일을 참조
     // const cerImg = uploadRefCerti.current.files[0];
 
     const formData = new FormData();
+    if (memberType==="OWNER") {
+      formData.append('certiImg', certfile);
+    }
     formData.append('profileImg', profileFile);
-    formData.append('certiImg', certfile);
     formData.append('email', email);
     formData.append('password', password);
     formData.append('nickname', nickname);
@@ -220,8 +222,8 @@ const AddComponent = () => {
   };
 
   const notificationMethods = [
-    { id: 'user', title: '일반회원' },
-    { id: 'owner', title: '사업자회원' },
+    { id: 'USER', title: '일반회원' },
+    { id: 'OWNER', title: '사업자회원' },
   ];
 
   const closeModal = () => {
@@ -367,7 +369,7 @@ const AddComponent = () => {
                     <input
                       name="nickname"
                       type="text"
-                      placeholder='닉네임은 2~5 사이 글자로 이용하세요'
+                      placeholder="닉네임은 2~5 사이 글자로 이용하세요"
                       value={nickname}
                       onChange={onChangeNickname}
                       required
@@ -393,6 +395,7 @@ const AddComponent = () => {
                     <p className="text-sm text-gray-900">{phoneMessage}</p>
                   </div>
                 </div>
+
                 {/* profile 사진 첨부 */}
                 <div className="col-span-full">
                   <label className="block text-sm/6 font-medium text-gray-900">
@@ -496,7 +499,7 @@ const AddComponent = () => {
                                 </label>
                               </div>
                             </>
-                          )}  
+                          )}
                         </div>
                       </div>
                     ) : (
