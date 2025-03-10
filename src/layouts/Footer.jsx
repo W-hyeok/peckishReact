@@ -50,7 +50,7 @@ export default function Footer() {
       <div className="xl:grid xl:grid-cols-3 xl:gap-8">
         <div className="space-y-2">
           <p className="text-sm/6 text-gray-200 ml-10 pt-2">
-            &copy; 2025 "붕어빵 찾는 사람들", Inc. All rights reserved.
+            &copy; 2025 "간식 혁명단", Inc. All rights reserved.
           </p>
           {/* <img
               alt="Company name"

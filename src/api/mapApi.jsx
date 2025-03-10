@@ -14,8 +14,8 @@ export const getMap = async (sid) => {
 };
 
 // 카테고리별 목록 불러오기 getListByCate(매개변수)
-export const getMapList = async (krCate, cert, isOpen) => {
-  const result = await axios.get(`${host}/${krCate}/${cert}/${isOpen}`);
-  console.log(krCate, cert, isOpen);
+export const getMapList = async (krCate) => {
+  const result = await axios.get(`${host}/${krCate}`);
+  console.log(krCate);
   return result.data;
 };

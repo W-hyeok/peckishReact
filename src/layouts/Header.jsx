@@ -11,11 +11,14 @@ import {
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCookie } from '../util/cookieUtil';
 import fishLogo from '/src/assets/fish_logo.png';
 import profile from '/src/assets/icon/profile.png';
+import profileIcon from '../assets/icon/profileIcon.png';
+import { API_SERVER_HOST } from '../api/todoApi';
 
+const host = API_SERVER_HOST;
 const user = {
   name: '붕찾사',
   // email: 'boongeubbang@example.com',
@@ -65,7 +68,9 @@ export default function Header() {
     ? getCookie('member')
     : { email: null };
 
-  console.log('cookie 확인 *****: {}', cookieMember);
+  useEffect(() => {
+    console.log('cookie 확인 *****: {}', cookieMember);
+  }, []);
 
   // 로그인 이전 볼 수 있는 링크
   const userNavigation = [
@@ -99,7 +104,9 @@ export default function Header() {
   //cookieMember = getCookie('member') ? getCookie('member') : { email: null };
 
   const loginState = useSelector((state) => state.loginSlice);
-  console.log(loginState.roleNames);
+  useEffect(() => {
+    console.log(loginState.roleNames);
+  }, []);
 
   let numStat = 0;
 
@@ -150,7 +157,7 @@ export default function Header() {
                     <span className="sr-only">Open user menu</span>
                     <img
                       alt=""
-                      src={profile}
+                      src={`${host}/api/member/view/${cookieMember.profileFilename}`}
                       className="size-12 rounded-full"
                     />
                   </MenuButton>
@@ -213,7 +220,8 @@ export default function Header() {
               <PopoverButton className="group relative inline-flex items-center justify-center rounded-md bg-transparent p-2 text-indigo-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open main menu</span>
-                <Bars3Icon
+                <img
+                  src={profileIcon}
                   aria-hidden="true"
                   className="block size-6 group-data-[open]:hidden"
                 />
@@ -235,10 +243,10 @@ export default function Header() {
           <PopoverPanel
             focus
             transition
-            className="absolute inset-x-0 top-0 z-30 mx-auto w-full max-w-3xl origin-top transform p-2 transition duration-150 data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:ease-out data-[leave]:ease-in"
+            className="absolute inset-x-0 top-0 z-30 mx-auto w-1/2 min-w-fit max-w-3xl origin-top transform p-2 transition duration-150 data-[closed]:scale-95 data-[closed]:opacity-0 data-[enter]:ease-out data-[leave]:ease-in"
           >
             <div className="divide-y divide-gray-200 rounded-lg bg-white shadow-lg ring-1 ring-black/5">
-              <div className="pb-2 pt-3">
+              {/* <div className="pb-2 pt-3">
                 <div className="flex items-center justify-between px-4">
                   <div>
                     <img
@@ -255,15 +263,23 @@ export default function Header() {
                     </PopoverButton>
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="pb-2 pt-4">
                 <div className="flex items-center px-5">
                   <div className="shrink-0">
-                    <img
-                      alt=""
-                      src={profile}
-                      className="size-10 rounded-full"
-                    />
+                    {cookieMember ? (
+                      <img
+                        alt=""
+                        src={`${host}/api/member/view/${cookieMember.profileFilename}`}
+                        className="size-10 rounded-full"
+                      />
+                    ) : (
+                      <img
+                        alt=""
+                        src={profile}
+                        className="size-10 rounded-full"
+                      />
+                    )}
                   </div>
                   <div className="ml-3 min-w-0 flex-1">
                     <div className="truncate text-base font-medium text-gray-800">

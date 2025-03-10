@@ -4,11 +4,11 @@ import Header from './Header';
 const BasicLayout = ({ children }) => {
   return (
     // flex...: 화면 전체 높이 설정
-    <div className="flex flex-col min-h-screen bg-[#f9dfb1]">
+    <div className="grid grid-flow-row min-h-screen bg-[#e9e8bc] ">
       <Header />
-      <div className="flex-grow">{children}</div>{' '}
+      <div className="">{children}</div>{' '}
       {/* 남은 공간 차지 / footer는 항상 페이지 하단에 고정 */}
-      <Footer />
+      <Footer className="" />
     </div>
   );
 };
