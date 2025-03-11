@@ -19,6 +19,9 @@ const AdminShopIndex = lazy(
 const AdminMemberIndex = lazy(
   () => import('../pages/admin/adminmember/AdminMemberIndex')
 );
+const RoomPage = lazy(() => import('../pages/chat/RoomPage'));
+const RoomComponent = lazy(() => import('../components/chat/RoomComponent'));
+const RoomListPage = lazy(() => import('../pages/chat/RoomListPage'));
 const TestPage = lazy(() => import('../pages/TestPage'));
 // 라우팅 설정 메인 파일
 const Router = () => {
@@ -93,6 +96,32 @@ const Router = () => {
       ),
       children: adminRouter(),
     }, // admin
+
+    {
+      path: 'room/:room_ID',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <RoomPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: '/roomList',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <RoomListPage />
+        </Suspense>
+      ),
+    },
+    {
+      path: '/roomList/room/:room_ID',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <RoomComponent />
+        </Suspense>
+      ),
+    },
+
     {
       path: 'test',
       element: (

@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
-import { deleteOne } from '../../api/shopApi';
 import { Fragment, useState } from 'react';
 import {
   Dialog,
@@ -35,8 +34,12 @@ import { useTimeStamp } from '../../hooks/useTimeAgo';
 
 import { useNavigate } from 'react-router-dom';
 import useCustomMove from '../../hooks/useCustomMove';
+import { getCookie } from '../../util/cookieUtil';
+import { createRoom } from '../../api/roomApi';
+import axios from 'axios';
 
 const host = `${API_SERVER_HOST}`;
+const memberInfo = getCookie('member');
 
 const navigation = {
   categories: [
@@ -290,39 +293,52 @@ function classNames(...classes) {
 const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
   console.log('shop : ', shop);
   console.log('shopId : ', shopId);
-  //console.log('shopDetailId : ', shopDetailId);
 
   const navigate = useNavigate();
 
-  // 방문 성공
-  const [visitedSuccess, setVisitedSuccess] = useState(0);
-  // 방문 실패
-  const [visitedFail, setVisitedFail] = useState(0);
-  // 방문 여부 확인
-  const [hasVisited, setHasVisited] = useState(false);
+  const [ownerEmail, setOwnerEmail] = useState(null);
 
-  // 방문 성공 클릭 이벤트
-  const handleVisitedSuccess = () => {
-    if (hasVisited) {
-      alert('한 번만 방문을 기록할 수 있습니다');
-      return;
+  useEffect(() => {
+    const fetchOwnerInfo = async () => {
+      try {
+        const response = await axios.get(`${host}/api/shop/owner/${shopId}`);
+        setOwnerEmail(response.data.email); // 사장님 이메일 저장
+        console.log('setOwnerEmail: ', response.data.email);
+      } catch (error) {
+        console.error('사장님 정보를 가져오지 못했습니다.', error);
+      }
+    };
+
+    fetchOwnerInfo();
+  }, [shopId]);
+
+  const handleChat = async () => {
+    try {
+      const memberEmail = memberInfo.email; // JWT에서 사용자 이메일 추출
+      if (!ownerEmail) {
+        alert('사장님 이메일을 확인할 수 없습니다.');
+        return;
+      }
+
+      const member1 = ownerEmail;
+      const member2 = memberEmail;
+      // 두 멤버를 createRoom에 전달합니다.
+      const room = await createRoom({
+        member1,
+        member2,
+        shopId,
+      });
+      console.log('채팅방 생성 성공:', room);
+      // 반환된 room 객체의 roomId를 이용해 채팅방 페이지로 이동합니다.
+      if (room.room_ID) {
+        navigate(`/room/${room.room_ID}`);
+      } else {
+        console.error('roomId가 반환되지 않았습니다.');
+      }
+    } catch (error) {
+      console.error('채팅방 생성 실패', error);
     }
-    setVisitedSuccess(visitedSuccess + 1); // 방문 성공시 +1
-
-    setHasVisited(true); // 방문 여부 바꾸기
   };
-
-  // 방문 실패 클릭 이벤트
-  const handleVisitedFail = () => {
-    if (hasVisited) {
-      alert('한 번만 방문을 기록할 수 있습니다');
-      return;
-    }
-    setVisitedFail(visitedFail + 1); // 방문 실패시 +1
-    setHasVisited(true); // 방문 여부 바꾸기
-  };
-
-  // 방문 성공 여부 back에 전달해주기
 
   // 메뉴 추가버튼 클릭시 이벤트
   const handleClickAddMenu = () => {
@@ -437,25 +453,10 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
           <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
             <button
               type="button"
-              onClick={handleVisitedSuccess}
+              onClick={handleChat}
               className="flex items-center justify-center rounded-md border border-black/30 px-8 py-3 font-extrabold text-lg text-green-800 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
             >
-              {/* <img
-                src="../../src/assets/icon/success2.png"
-                className="h-1/12 w-1/12 mr-2"
-              /> */}
-              방문 성공 ({visitedSuccess}회)
-            </button>
-            <button
-              type="button"
-              className="flex w-auto items-center justify-center rounded-md border border-black/30 px-8 py-3 font-extrabold text-lg text-rose-800 hover:bg-rose-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              onClick={handleVisitedFail}
-            >
-              {/* <img
-                src="../../src/assets/icon/failed.png"
-                className="h-1/12 w-1/12 mr-2"
-              /> */}
-              방문 실패 ({visitedFail}회)
+              문의 하기
             </button>
           </div>
 
