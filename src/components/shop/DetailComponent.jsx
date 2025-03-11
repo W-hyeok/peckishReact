@@ -22,6 +22,9 @@ const DetailComponent = ({ shop, shopId }) => {
   console.log(shop);
   console.log(shopId);
 
+  const USER = 'USER';
+  const OWNER = 'OWNER';
+
   const user = {
     name: '제보된 정보 없음',
     imageUrl: '/src/assets/shop/notReport.png',
@@ -94,6 +97,7 @@ const DetailComponent = ({ shop, shopId }) => {
                 <DetailUserComponent
                   shop={shop}
                   shopId={shopId}
+                  infoType={USER}
                   mapData={mapData}
                   storeLoc={storeLoc}
                 />
@@ -127,6 +131,7 @@ const DetailComponent = ({ shop, shopId }) => {
                 <DetailOwnerComponent
                   shop={shop}
                   shopId={shopId}
+                  infoType={OWNER}
                   mapData={mapData}
                   storeLoc={storeLoc}
                 />

@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { Fragment, useState } from 'react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { Menu, MenuButton, MenuItem } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
+import { Menu, MenuButton, MenuItem } from '@headlessui/react';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -28,8 +28,9 @@ import axios from 'axios';
 
 import AddReviewModal from '../common/AddReviewModal';
 import ResultModal from '../common/ResultModal';
-import AddMenuModal from './AddMenuModal';
+import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, getMenuList } from '../../api/shopApi';
+import DetailOwnerMenuComponent from './DetailOwnerMenuComponent';
 
 // 메뉴 등록할때 입력받는 데이터 담는 menu state
 const initState = {
@@ -39,7 +40,7 @@ const initState = {
 };
 
 const host = `${API_SERVER_HOST}`;
-const memberInfo = getCookie('member');
+const memberInfo = getCookie('member'); //채팅
 
 const reviews = {
   average: 4,
@@ -108,6 +109,7 @@ const DetailOwnerComponent = ({
     fetchOwnerInfo();
   }, [shopId]);
 
+  //채팅
   const handleChat = async () => {
     try {
       const memberEmail = memberInfo.email; // JWT에서 사용자 이메일 추출
@@ -170,15 +172,6 @@ const DetailOwnerComponent = ({
       );
     });
   };
-
-  // 점포 수정 페이지로 이동 이벤트
-  const handleModify = () => {
-    navigate({
-      pathname: `/shop/modify/${shopId}/${shop.shopOwnerDTO.shopOwnerId}/OWNER`,
-    });
-  };
-
-  const { moveToBack } = useCustomMove();
 
   return (
     <>
@@ -295,45 +288,6 @@ const DetailOwnerComponent = ({
               문의 하기
             </button>
           </div>
-
-          {/* <div className="mt-10 border-t border-gray-200 pt-10">
-            <h3 className="text-sm font-medium text-gray-900">
-              방문 인증 기록
-            </h3>
-            <div className="mt-4">
-              <ul
-                role="list"
-                className="list-disc space-y-1 pl-5 text-sm/6 text-gray-500 marker:text-gray-300"
-              >
-                index : 각각의 항목의 인덱스 - 가격 정보 가져오기 위해서 추가 
-                            떡볶이 : 2000원
-                <li> 성공 {visitedSuccess}회</li>
-                <li> 실패 {visitedFail}회 </li>
-              </ul>
-            </div>
-          </div> */}
-
-          <div className="mt-10">
-            {/* 수정, 돌아가기 버튼 */}
-            <div className="flex">
-              <div className="ml-auto grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={handleModify}
-                  className="max-w-30 items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                  정보 수정
-                </button>
-                <button
-                  type="button"
-                  onClick={moveToBack}
-                  className="max-w-28 items-center justify-center pl-4 py-2 text-base text-black focus:outline-none focus:ring-2"
-                >
-                  돌아가기
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* tab */}
@@ -387,62 +341,11 @@ const DetailOwnerComponent = ({
                 <h3 className="sr-only">User Menu</h3>
 
                 {/* 메뉴 항목 목록 */}
-                {shop.menuOwnerList ? (
-                  <dl>
-                    {shop.menuOwnerList.map((menuOwner) => (
-                      <Fragment key={menuOwner.menuId}>
-                        {' '}
-                        {/* menuId 사용 */}
-                        <div className="flex items-center py-4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200">
-                          <img
-                            alt={menuOwner.menuName}
-                            src={`${host}/api/shop/view/${menuOwner.menuFilename}`}
-                            className="w-14 h-14 rounded-full bg-gray-50 mr-6 transition-all duration-300 transform hover:scale-105"
-                          />
-                          <div className="flex-1">
-                            <dt className="font-semibold text-gray-900 text-lg">
-                              {menuOwner.menuName}
-                            </dt>
-                            <dd className="text-sm text-gray-600">
-                              {menuOwner.price}
-                            </dd>
-                          </div>
-
-                          {/* 각 메뉴 항목마다 삭제 버튼을 추가 */}
-                          <div className="ml-auto flex items-center gap-x-6">
-                            <Menu as="div" className="relative flex-none">
-                              <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
-                                <span className="sr-only">Open options</span>
-                                <EllipsisVerticalIcon
-                                  aria-hidden="true"
-                                  className="size-5"
-                                />
-                              </MenuButton>
-                              <Menu.Items
-                                transition
-                                className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5"
-                              >
-                                <MenuItem>
-                                  <a
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      handleMenuRemove(menuOwner.menuId); // 메뉴 삭제 함수 호출
-                                    }}
-                                    className="block px-3 py-1 text-sm text-gray-900"
-                                  >
-                                    삭제하기
-                                    <span className="sr-only">
-                                      , {menuOwner.menuId}
-                                    </span>
-                                  </a>
-                                </MenuItem>
-                              </Menu.Items>
-                            </Menu>
-                          </div>
-                        </div>
-                      </Fragment>
-                    ))}
-                  </dl>
+                {menuItems ? (
+                  <DetailOwnerMenuComponent
+                    menuItems={menuItems}
+                    handleMenuRemove={handleMenuRemove}
+                  />
                 ) : (
                   // 등록된 메뉴가 하나도 없으면 노출
                   <p className="text-center mt-2 text-gray-600">

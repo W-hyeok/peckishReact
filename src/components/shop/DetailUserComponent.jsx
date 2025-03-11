@@ -21,24 +21,14 @@ import '../../css/scrollbar2.css';
 
 import { useTimeStamp } from '../../hooks/useTimeAgo';
 import useCustomMove from '../../hooks/useCustomMove';
+import AddReviewModal from '../common/AddReviewModal';
+import ResultModal from '../common/ResultModal';
+import AddMenuModal from '../common/AddMenuModal';
+import { deleteMenu, getMenuList } from '../../api/shopApi';
+import DetailUserMenuComponent from './DetailUserMenuComponent';
 
 const host = `${API_SERVER_HOST}`;
 
-const product = {
-  name: 'Application UI Icon Pack',
-  version: { name: '1.0', date: 'June 5, 2021', datetime: '2021-06-05' },
-  price: '$220',
-
-  highlights: [
-    '200+ SVG icons in 3 unique styles',
-    'Compatible with Figma, Sketch, and Adobe XD',
-    'Drawn on 24 x 24 pixel grid',
-  ],
-  imageSrc:
-    'https://tailwindui.com/plus/img/ecommerce-images/product-page-05-product-01.jpg',
-  imageAlt:
-    'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
-};
 const reviews = {
   average: 4,
   featured: [
@@ -69,48 +59,6 @@ const reviews = {
     // More reviews...
   ],
 };
-const faqs = [
-  {
-    question: 'What format are these icons?',
-    answer:
-      'The icons are in SVG (Scalable Vector Graphic) format. They can be imported into your design tool of choice and used directly in code.',
-  },
-  {
-    question: 'Can I use the icons at different sizes?',
-    answer:
-      "Yes. The icons are drawn on a 24 x 24 pixel grid, but the icons can be scaled to different sizes as needed. We don't recommend going smaller than 20 x 20 or larger than 64 x 64 to retain legibility and visual balance.",
-  },
-  // More FAQs...
-];
-const license = {
-  href: '#',
-  summary:
-    'For personal and professional use. You cannot resell or redistribute these icons in their original or modified state.',
-  content: `
-      <h4>Overview</h4>
-      
-      <p>For personal and professional use. You cannot resell or redistribute these icons in their original or modified state.</p>
-      
-      <ul role="list">
-      <li>You\'re allowed to use the icons in unlimited projects.</li>
-      <li>Attribution is not required to use the icons.</li>
-      </ul>
-      
-      <h4>What you can do with it</h4>
-      
-      <ul role="list">
-      <li>Use them freely in your personal and professional work.</li>
-      <li>Make them your own. Change the colors to suit your project or brand.</li>
-      </ul>
-      
-      <h4>What you can\'t do with it</h4>
-      
-      <ul role="list">
-      <li>Don\'t be greedy. Selling or distributing these icons in their original or modified state is prohibited.</li>
-      <li>Don\'t be evil. These icons cannot be used on websites or applications that promote illegal or immoral beliefs or activities.</li>
-      </ul>
-    `,
-};
 
 const { kakao } = window;
 
@@ -118,61 +66,80 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const DetailUserComponent = ({ shop, shopId, mapData, storeLoc }) => {
+const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
+  // 메뉴 목록 뿌려줄때 필요한 것들
+  const [menuItems, setMenuItems] = useState([]);
   const navigate = useNavigate();
+  const { moveToBack } = useCustomMove();
+  const [result, setResult] = useState(null);
+
+  const [refresh, setRefresh] = useState(false);
+  const [fetch, setFetch] = useState(false);
+
+  // DB에서 메뉴목록 불러오기
+  useEffect(() => {
+    getMenuList(shopId, infoType).then((data) => {
+      setFetch(false);
+      setMenuItems(data.RESULT);
+      setFetch(true);
+      console.log('메뉴 목록 업데이트:', data.RESULT);
+    });
+  }, [shopId, infoType, refresh]); // ✅ menuItems 제거, refresh 추가
+
+  //메뉴 삭제 (받을 인자 값)
+  const handleMenuRemove = (menuId) => {
+    console.log('삭제할 menuId : ', menuId);
+    deleteMenu(menuId, infoType).then((data) => {
+      console.log(data.RESULT);
+      // 메뉴 항목 업데이트 후 즉시 화면에 반영
+      setMenuItems((prevItems) =>
+        prevItems.filter((menu) => menu.menuId !== menuId)
+      );
+    });
+  };
+
   console.log(mapData);
   console.log(storeLoc);
 
-  // 방문 성공
-  const [visitedSuccess, setVisitedSuccess] = useState(0);
-  // 방문 실패
-  const [visitedFail, setVisitedFail] = useState(0);
-  // 방문 여부 확인
-  const [hasVisited, setHasVisited] = useState(false);
-
-  // 방문 성공 클릭 이벤트
-  const handleVisitedSuccess = () => {
-    if (hasVisited) {
-      alert('한 번만 방문을 기록할 수 있습니다');
-      return;
-    }
-    setVisitedSuccess(visitedSuccess + 1); // 방문 성공시 +1
-
-    setHasVisited(true); // 방문 여부 바꾸기
+  const closeModal = () => {
+    setResult(null);
+    setRefresh((prev) => !prev);
   };
 
-  // 방문 실패 클릭 이벤트
-  const handleVisitedFail = () => {
-    if (hasVisited) {
-      alert('한 번만 방문을 기록할 수 있습니다');
-      return;
-    }
-    setVisitedFail(visitedFail + 1); // 방문 실패시 +1
-    setHasVisited(true); // 방문 여부 바꾸기
-  };
-
-  // 방문 성공 여부 back에 전달해주기
-
-  // 메뉴 추가버튼 클릭시 이벤트
+  // 메뉴 추가 버튼 클릭시 이벤트
   const handleClickAddMenu = () => {
-    navigate({
-      pathname: `/shop/addMenu/${shopId}/${shop.shopUserDTO.shopUserId}/USER`,
-    });
+    console.log('메뉴모달 보여줘라');
+    setResult('menu');
+  };
+
+  // 리뷰 추가 버튼 클릭시 이벤트
+  const handleClickReview = () => {
+    console.log('리뷰모달 보여줘라');
+    setResult('review');
   };
 
   console.log(shop);
   console.log(shopId);
 
-  //점포 수정 페이지로 이동 이벤트
-  const handleModify = () => {
-    navigate({
-      pathname: `/shop/modify/${shopId}/${shop.shopUserDTO.shopUserId}/USER`,
-    });
-  };
-
-  const { moveToBack } = useCustomMove();
   return (
     <>
+      {result === 'review' && (
+        <AddReviewModal
+          title={'리뷰 작성'}
+          content={`리뷰를 작성해주세요`}
+          callbackFn={closeModal}
+        />
+      )}
+
+      {result === 'menu' && (
+        <AddMenuModal
+          shopId={shopId}
+          shopDetailId={shop.shopUserDTO.shopUserId}
+          infoType={infoType}
+          callbackFn={closeModal}
+        />
+      )}
+
       {/* Product USER */}
       <div className="lg:grid lg:grid-cols-4 lg:grid-rows-1 lg:gap-y-5">
         {/* Product image */}
@@ -264,69 +231,6 @@ const DetailUserComponent = ({ shop, shopId, mapData, storeLoc }) => {
             <span className="font-bold">위치: </span>
             {shop.shopUserDTO.location}
           </p>
-
-          {/* 방문 인증 여부 */}
-          <div className="mt-5 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={handleVisitedSuccess}
-              className="flex items-center justify-center rounded-md border border-black/30 px-8 py-3 font-extrabold text-lg text-green-800 hover:bg-green-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-            >
-              {/* <img
-                src="../../src/assets/icon/success2.png"
-                className="h-1/12 w-1/12 mr-2"
-              /> */}
-              방문 성공 ({visitedSuccess}회)
-            </button>
-            <button
-              type="button"
-              className="flex w-auto items-center justify-center rounded-md border border-black/30 px-8 py-3 font-extrabold text-lg text-rose-800 hover:bg-rose-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              onClick={handleVisitedFail}
-            >
-              {/* <img
-                src="../../src/assets/icon/failed.png"
-                className="h-1/12 w-1/12 mr-2"
-              /> */}
-              방문 실패 ({visitedFail}회)
-            </button>
-          </div>
-
-          {/* <div className="border-t border-gray-200 pt-5">
-            <h3 className="text-sm font-medium text-gray-900">
-              방문 인증 기록
-            </h3>
-            <div className="mt-2">
-              <ul
-                role="list"
-                className="list-disc space-y-1 pl-5 text-sm/6 text-gray-500 marker:text-gray-300"
-              >
-                <li> 성공 {visitedSuccess}회</li>
-                <li> 실패 {visitedFail}회 </li>
-              </ul>
-            </div>
-          </div> */}
-
-          <div className="mt-10">
-            {/* 수정, 돌아가기 버튼 */}
-            <div className="flex">
-              <div className="ml-auto grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={handleModify}
-                  className="max-w-30 items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                  정보 수정
-                </button>
-                <button
-                  type="button"
-                  onClick={moveToBack}
-                  className="max-w-28 items-center justify-center pl-4 py-2 text-base text-black focus:outline-none focus:ring-2"
-                >
-                  돌아가기
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* tab */}
@@ -346,17 +250,6 @@ const DetailUserComponent = ({ shop, shopId, mapData, storeLoc }) => {
               </TabList>
             </div>
 
-            {/* <TabPanel className="text-sm text-gray-500">
-                <h3 className="sr-only">상점 정보</h3>
-
-                <dl>영업일: {shop.shopUserDTO.days} </dl>
-                <dl>
-                  {' '}
-                  영업시간: {shop.shopUserDTO.openTime} ~{' '}
-                  {shop.shopUserDTO.closeTime}
-                </dl>
-                <dl></dl>
-              </TabPanel> */}
             <TabPanels as={Fragment}>
               {/* 상점 정보 */}
               <TabPanel className="text-sm text-gray-500 py-3 px-2 rounded-lg mt-0">
@@ -388,30 +281,15 @@ const DetailUserComponent = ({ shop, shopId, mapData, storeLoc }) => {
                 <h3 className="sr-only">User Menu</h3>
 
                 {/* 메뉴 목록 */}
-                {shop.menuUserList ? (
-                  <div className="max-h-64 scrollbar2">
-                    <dl>
-                      {shop.menuUserList.map((menuUser, index) => (
-                        <Fragment key={menuUser}>
-                          <div className="flex items-center py-4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200">
-                            <img
-                              alt={menuUser.menuName}
-                              src={`${host}/api/shop/view/${menuUser.menuFilename}`}
-                              className="w-1/6 h-1/6 rounded-full bg-gray-50 mr-6 transition-all duration-300 transform hover:scale-105"
-                            />
-                            <div className="flex-1">
-                              <dt className="font-semibold text-gray-900 text-lg">
-                                {menuUser.menuName}
-                              </dt>
-                              <dd className="text-sm text-gray-600">
-                                {menuUser.price}
-                              </dd>
-                            </div>
-                          </div>
-                        </Fragment>
-                      ))}
-                    </dl>
-                  </div>
+                {menuItems ? (
+                  fetch ? (
+                    <DetailUserMenuComponent
+                      menuItems={menuItems}
+                      handleMenuRemove={handleMenuRemove}
+                    />
+                  ) : (
+                    <></>
+                  )
                 ) : (
                   // 등록된 메뉴가 하나도 없으면 노출
                   <p className="text-center mt-2 text-gray-600">
@@ -485,6 +363,18 @@ const DetailUserComponent = ({ shop, shopId, mapData, storeLoc }) => {
                     </div>
                   </div>
                 ))}
+                {/* 리뷰 추가 버튼 */}
+                <div className="flex">
+                  <div className="mt-6 m-auto">
+                    <button
+                      type="button"
+                      onClick={handleClickReview}
+                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50 transition-all duration-300"
+                    >
+                      리뷰 작성
+                    </button>
+                  </div>
+                </div>
               </TabPanel>
             </TabPanels>
           </TabGroup>
