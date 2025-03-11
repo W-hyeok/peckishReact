@@ -136,7 +136,7 @@ const RoomComponent = () => {
   return (
     <>
       <main className="mb-[100px] max-w-screen-xl p-4 relative justify-center">
-        <div className="flex flex-row justify-center bg-white w-full max-w-5xl mx-auto h-[40rem] mt-[120px]">
+        <div className="flex flex-row justify-center bg-[#F9DFB1] w-full max-w-5xl mx-auto h-[40rem] ">
           <div className="flex flex-col flex-grow bg-gray-200 w-full max-w-xl mx-auto rounded-lg p-2 relative border-t border-gray-200 shadow-md">
             {/* 메시지 창 */}
             <div
