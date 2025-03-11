@@ -17,7 +17,6 @@ const initState = {
 };
 
 const host = `${API_SERVER_HOST}`;
-const moveToShopModify = useCustomMove;
 
 const AddMenuComponent = ({ shopId, shopDetailId, infoType }) => {
   console.log(shopId);
@@ -45,20 +44,6 @@ const AddMenuComponent = ({ shopId, shopDetailId, infoType }) => {
       setMenuItems(data.RESULT); // DB에서 가져온 목록을 menuItems state에 저장
     });
   }, [shopId, infoType, result]);
-
-  /* 메뉴 데이터 샘플
-  const [menuItems, setMenuItems] = useState([
-    {
-      // 백단에서 하나의 DTO로 데이터 모아담아 전달
-      shopDetailId: 1,
-      menuId: 1,
-      menuName: '어묵',
-      price: '1000',
-      menuFile: '',
-      infoType: 'USER',
-    },
-  ]);
-  */
 
   // 메뉴 저장 버튼 클릭
   // 메뉴 등록시 shopDetailId필요 <-- 이전 detail페이지에서 주소로 넘기기(addMenu 주소 수정필요)
@@ -142,11 +127,6 @@ const AddMenuComponent = ({ shopId, shopDetailId, infoType }) => {
       );
       setMenuItems(updatedMenuItems);
     });
-  };
-
-  // 점포 수정 페이지로 이동
-  const handleModify = () => {
-    moveToShopModify(`/shop/modify/${shopId}`);
   };
 
   return (

@@ -5,11 +5,14 @@ import { putMemberModifyInfo } from '../../api/memberApi';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import ResultModal from '../../components/common/ResultModal';
 import { PhotoIcon } from '@heroicons/react/24/solid';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const host = API_SERVER_HOST;
 
 const LeftModifyInfoComponent = () => {
   const cookieMember = getCookie('member');
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [profileFilename, setProfileFilename] = useState('');
@@ -39,7 +42,6 @@ const LeftModifyInfoComponent = () => {
   }, []);
 
   // 닉네임 유효성 검사
-
   const onChangeNickname = (e) => {
     const currentNickname = e.target.value;
     setNickname(currentNickname);
@@ -52,8 +54,8 @@ const LeftModifyInfoComponent = () => {
       setIsNickname(true);
     }
   };
-  // 전화번호 유효성 검사
 
+  // 전화번호 유효성 검사
   const onChangePhone = (getNumber) => {
     const currentPhone = getNumber;
     setPhone(currentPhone);
@@ -108,15 +110,18 @@ const LeftModifyInfoComponent = () => {
   };
 
   const handleClickModifyInfo = () => {
+    if (memberType === 'OWNER' && !certfile) {
+      console.error('사업자 등록증 사진이 없습니다!');
+      alert('사업자 등록증 사진이 없습니다!');
+      return; // 파일이 없으면 저장하지 않음
+    }
+
     // 저장 요청
     const formData = new FormData();
 
     if (memberType === 'OWNER') {
-      if (!certfile) {
-        console.error('사업자 등록증 사진진 없습니다!');
-        return; // 파일이 없으면 저장하지 않음
-      }
       formData.append('certiImg', certfile);
+      formData.append('businessNumber', businessNumber);
     }
 
     formData.append('email', email);
@@ -139,6 +144,39 @@ const LeftModifyInfoComponent = () => {
     { id: 'USER', title: '일반회원' },
     { id: 'OWNER', title: '사업자회원' },
   ];
+
+  const [businessNumber, setBusinessNumber] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
+
+  const API_KEY =
+    'aG6IoC0RqTa0qlI%2F1IYOFwZ6WYoBl75hFPreoQ7XfRLta6XWPS2g9r%2BY1ljasxvxdeC%2BEsDL8uoQ5v4LEwsBMg%3D%3D';
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+
+    console.log('*** 사업자 번호: {}', businessNumber);
+
+    try {
+      const url = `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${API_KEY}`;
+      const header = { headers: { 'Content-Type': 'application/json' } };
+      const data = JSON.stringify({ b_no: [businessNumber] });
+      const response = await axios.post(url, data, header);
+      console.log(response.data.status_code);
+
+      if (
+        response.data.status_code === 'OK' &&
+        response.data.data[0]?.b_stt === '계속사업자'
+      ) {
+        setIsVerified(true);
+        alert('사업자 등록번호 확인이 완료되었습니다.');
+      } else {
+        alert('유효하지 않은 사업자 등록번호입니다.');
+      }
+    } catch (error) {
+      console.error('API 요청 중 오류 발생:', error);
+      alert('사업자 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
+    }
+  };
 
   const closeModal = () => {
     doLogout();
@@ -201,7 +239,7 @@ const LeftModifyInfoComponent = () => {
 
                     <div className="col-span-full">
                       <label className="block text-sm/6 font-medium text-gray-900">
-                        닉네임
+                        닉네임*
                       </label>
                       <div className="mt-1">
                         <input
@@ -220,7 +258,7 @@ const LeftModifyInfoComponent = () => {
 
                     <div className="col-span-full">
                       <label className="block text-sm/6 font-medium text-gray-900">
-                        연락처
+                        연락처*
                       </label>
                       <div className="mt-1">
                         <input
@@ -249,7 +287,7 @@ const LeftModifyInfoComponent = () => {
                         className="flex items-center"
                       >
                         <input
-                          defaultChecked={notificationMethod.id === 'user'}
+                          defaultChecked={notificationMethod.id === 'USER'}
                           id={notificationMethod.id}
                           name="memberType"
                           type="radio"
@@ -269,60 +307,126 @@ const LeftModifyInfoComponent = () => {
 
                   <div className="col-span-full">
                     {memberType === 'OWNER' ? (
-                      <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
-                        <div className="text-center">
-                          {certimage ? (
-                            <img
-                              src={certimage}
-                              alt="Preview"
-                              className="mx-auto rounded-lg max-w-full h-auto"
-                              style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
-                            />
-                          ) : (
-                            <PhotoIcon
-                              aria-hidden="true"
-                              className="mx-auto size-14 text-gray-300"
-                            />
-                          )}
-                          {!certimage && (
-                            <>
-                              <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
-                                <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                  <span>+ 사업자 등록증 첨부 필수</span>
-                                  <input
-                                    type="file"
-                                    ref={uploadRefCerti}
-                                    multiple={false}
-                                    name="certiImg"
-                                    className="sr-only"
-                                    onChange={handleCertChange}
-                                  />
-                                </label>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="mt-1 hidden justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
-                        <div className="text-center">
-                          <div className="mt-0 flex justify-center text-sm/4 text-gray-600">
-                            <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                              <span>+ 사업자 등록증 첨부</span>
-                              <input
-                                type="file"
-                                ref={uploadRefCerti}
-                                name="certiImg"
-                                className="sr-only"
+                      <>
+                        <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                          <div className="text-center">
+                            {certimage ? (
+                              <img
+                                src={certimage}
+                                alt="Preview"
+                                className="mx-auto rounded-lg max-w-full h-auto"
+                                style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
                               />
-                            </label>
+                            ) : (
+                              <PhotoIcon
+                                aria-hidden="true"
+                                className="mx-auto size-14 text-gray-300"
+                              />
+                            )}
+                            {!certimage && (
+                              <>
+                                <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
+                                  <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                    <span>+ 사업자 등록증 첨부 필수</span>
+                                    <input
+                                      type="file"
+                                      ref={uploadRefCerti}
+                                      multiple={false}
+                                      name="certiImg"
+                                      className="sr-only"
+                                      onChange={handleCertChange}
+                                    />
+                                  </label>
+                                </div>
+                              </>
+                            )}
                           </div>
                         </div>
-                      </div>
+                        <div className="mt-6 justify-center text-sm/4 text-gray-600">
+                          <label
+                            htmlFor="businessNumber"
+                            className="block mb-1"
+                          >
+                            *사업자 등록번호 확인 후 가입 가능
+                          </label>
+                          <input
+                            type="text"
+                            id="businessNumber"
+                            value={businessNumber}
+                            placeholder="-은 생략하고 숫자만 입력하세요"
+                            onChange={(e) => setBusinessNumber(e.target.value)}
+                            required
+                            className="w-full p-2 border rounded"
+                            disabled={isVerified}
+                          />
+                        </div>
+                        {!isVerified && (
+                          <button
+                            type="button"
+                            onClick={handleVerify}
+                            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                          >
+                            사업자 등록번호 확인
+                          </button>
+                        )}
+                        <div className="mt-6 flex items-center justify-center gap-x-6">
+                          <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                            className="rounded-md bg-orange-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                          >
+                            취소
+                          </button>
+                          {isVerified && (
+                            <button
+                              type="button"
+                              onClick={handleClickModifyInfo}
+                              className="rounded-md bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            >
+                              수정 완료
+                            </button>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="mt-1 hidden justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                          <div className="text-center">
+                            <div className="mt-0 flex justify-center text-sm/4 text-gray-600">
+                              <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                <span>+ 사업자 등록증 첨부</span>
+                                <input
+                                  type="file"
+                                  ref={uploadRefCerti}
+                                  name="certiImg"
+                                  className="sr-only"
+                                />
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-6 flex items-center justify-center gap-x-6">
+                          <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                            className="rounded-md bg-orange-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                          >
+                            취소
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={handleClickModifyInfo}
+                            className="rounded-md bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          >
+                            수정 완료
+                          </button>
+                        </div>
+                      </>
                     )}
                   </div>
                 </fieldset>
-
+                {/* 
                 <div className="mt-6 flex items-center justify-center gap-x-6">
                   <button
                     type="button"
@@ -338,7 +442,7 @@ const LeftModifyInfoComponent = () => {
                   >
                     수정완료
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </section>
