@@ -102,7 +102,7 @@ export default function HeaderFilter({
     onFilterClick(itemName);
     setSelected(itemName);
 
-    // 필터 초기화 클릭 시 모든 상태값 초기화, all/0/0으로 요청
+    // 필터 초기화 클릭 시 모든 상태값 초기화, all으로 요청
     if (itemName === '초기화') {
       setNavigation(initialNavigation);
       // setCertification(initialCertification);

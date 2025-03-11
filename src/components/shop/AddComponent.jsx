@@ -185,9 +185,9 @@ const AddComponent = () => {
   };
   const activeButton = () => {
     console.log('enter!');
-    console.log('검색값: ', searchText);
+    console.log('검색값:', searchText);
     setSearchAddress(searchText);
-    console.log('클릭 후: ', searchAddress);
+    console.log('클릭 후:', searchAddress);
   };
   const enter = (e) => {
     if (e.key === 'Enter') {

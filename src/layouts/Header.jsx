@@ -20,7 +20,7 @@ import { API_SERVER_HOST } from '../api/todoApi';
 
 const host = API_SERVER_HOST;
 const user = {
-  name: '붕찾사',
+  name: '',
   // email: 'boongeubbang@example.com',
   imageUrl: '/src/assets/icon/profile.png',
 };

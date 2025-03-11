@@ -19,6 +19,8 @@ import myLocation from '../../assets/icon/curloc3.png';
 import research from '../../assets/icon/researchCur.png';
 import searchLoc from '../../assets/icon/searchLoc.png';
 import whereami from '../../assets/icon/whereami.png';
+import mapCenterIcon from '../../assets/icon/mapCenter.png';
+import redDot from '../../assets/icon/location-red.png';
 const { kakao } = window;
 
 function MapComponent({
@@ -40,6 +42,9 @@ function MapComponent({
   const [permission, setPermission] = useState('');
   const { moveToShop } = useCustomMove(); // 해당 가게 정보로 이동
   const [result, setResult] = useState(null);
+  const [mapCenter, SetMapCenter] = useState({
+    center: { lat: '', lng: '' },
+  });
 
   // 버튼 노출 유무
   const [showButton, setShowButton] = useState(false);
@@ -63,13 +68,12 @@ function MapComponent({
   // 현재 위치
   const [curLoc, setCurLoc] = useState({
     // 지도의 초기 위치
-    center: { lat: '37.55522248964399', lng: '126.93696829042793' },
+    center: { lat: '', lng: '' },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
     isPanto: true,
   });
 
-  // 이유는 알 수 없으나 이 상태값을 사용하면 기본 위치가 부산으로 찍힘 (내장된 함수에 뭔가 있는 듯)
-  // 엮여있는 게 많아서 주석처리는 하지 않지만 사용은 지양할 것 (기능 자체에 오류가 있는 것은 아님)
+  // 지도 기본 위치 설정
   const [state, setState] = useState({
     // 지도의 초기 위치
     center: { lat: '37.55522248964399', lng: '126.93696829042793' },
@@ -78,10 +82,7 @@ function MapComponent({
   });
 
   // 검색한 위치의 중심 좌표
-  const [searchAddress, setSearchAddress] = useState({
-    lat: '37.55522248964399',
-    lng: '126.93696829042793',
-  });
+  const [searchAddress, setSearchAddress] = useState('');
 
   // 권한 정보 확인 (permission api)
   useEffect(() => {
@@ -142,44 +143,46 @@ function MapComponent({
 
   // 카테고리별 조회
   useEffect(() => {
-    getMapList(transFilterData).then((data) => {
-      console.log('isCloseData: ', isCloseData);
-      console.log('현재 영역: ', mapLoc.bound);
-      console.log('transFilterData: ', transFilterData);
-      // setRole(transCertData); // 인증값
-      setServerData(data); // 점포 목록 데이터 (전체)
-      console.log('serverData: ', serverData);
-      // 렌더링할 마커 (조건: 전체 목록(data 혹은 serverData) 중 화면 범위(ne/sw)에 들어오는 것)
-      setRenderingMarker(
-        data.filter(
-          (e) =>
-            e.lat > mapLoc.bound.southLat &&
-            e.lat < mapLoc.bound.northLat &&
-            e.lng > mapLoc.bound.westlng &&
-            e.lng < mapLoc.bound.eastlng
-        )
-      );
-      console.log('렌더링되는 마커: ', renderingMarker);
-      setCate(transFilterData); // 카테고리값
-      // 렌더링할 마커 중에서 영업 중
-      // 렌더링할 마커가 없으면 data에서 가져오기(초기 마커용)
-      if (renderingMarker) {
-        setIsOpenData(renderingMarker.filter((e) => e.status == 'opened')); // (...영업 중)
-        console.log('isOpenData: ', isOpenData);
-        // 렌더링할 마커 중에서 준비 중
-        setIsCloseData(renderingMarker.filter((e) => e.status == 'closed')); // (...준비 중)
+    if (!showButton) {
+      getMapList(transFilterData).then((data) => {
         console.log('isCloseData: ', isCloseData);
-      } else {
-        setIsOpenData(data.filter((e) => e.status == 'opened')); // (...영업 중)
-        console.log('isOpenData: ', isOpenData);
-        // 렌더링할 마커 중에서 준비 중
-        setIsCloseData(data.filter((e) => e.status == 'closed')); // (...준비 중)
-        console.log('isCloseData: ', isCloseData);
-      }
-      if (isOpenData) {
-        setOpen(transOpenData); // 영업값
-      }
-    });
+        console.log('현재 영역: ', mapLoc.bound);
+        console.log('transFilterData: ', transFilterData);
+        // setRole(transCertData); // 인증값
+        setServerData(data); // 점포 목록 데이터 (전체)
+        console.log('serverData: ', serverData);
+        // 렌더링할 마커 (조건: 전체 목록(data 혹은 serverData) 중 화면 범위(ne/sw)에 들어오는 것)
+        setRenderingMarker(
+          data.filter(
+            (e) =>
+              e.lat > mapLoc.bound.southLat &&
+              e.lat < mapLoc.bound.northLat &&
+              e.lng > mapLoc.bound.westlng &&
+              e.lng < mapLoc.bound.eastlng
+          )
+        );
+        console.log('렌더링되는 마커: ', renderingMarker);
+        setCate(transFilterData); // 카테고리값
+        // 렌더링할 마커 중에서 영업 중
+        // 렌더링할 마커가 없으면 data에서 가져오기(초기 마커용)
+        if (renderingMarker) {
+          setIsOpenData(renderingMarker.filter((e) => e.status == 'opened')); // (...영업 중)
+          console.log('isOpenData: ', isOpenData);
+          // 렌더링할 마커 중에서 준비 중
+          setIsCloseData(renderingMarker.filter((e) => e.status == 'closed')); // (...준비 중)
+          console.log('isCloseData: ', isCloseData);
+        } else {
+          setIsOpenData(data.filter((e) => e.status == 'opened')); // (...영업 중)
+          console.log('isOpenData: ', isOpenData);
+          // 렌더링할 마커 중에서 준비 중
+          setIsCloseData(data.filter((e) => e.status == 'closed')); // (...준비 중)
+          console.log('isCloseData: ', isCloseData);
+        }
+        if (isOpenData) {
+          setOpen(transOpenData); // 영업값
+        }
+      });
+    }
   }, [transFilterData, cate, transOpenData, rendering, showButton]);
 
   // 주소에 해당하는 마커 표시
@@ -197,6 +200,9 @@ function MapComponent({
         // 넘어온 검색값(data)이 있을 때만 state값 설정 (초기 설정(부산) 방지)
         if (data) {
           setState({
+            center: { lat: newSearch.y, lng: newSearch.x },
+          });
+          SetMapCenter({
             center: { lat: newSearch.y, lng: newSearch.x },
           });
         }
@@ -350,6 +356,13 @@ function MapComponent({
     setShowButton(false);
     // Rendering true로 변경
     setRendering(true);
+    // 지도 중심 마커 표시
+    SetMapCenter({
+      center: {
+        lat: mapLoc.position.lat,
+        lng: mapLoc.position.lng,
+      },
+    });
   };
 
   // 현 위치에서 재검색 버튼 컨테이너
@@ -433,6 +446,20 @@ function MapComponent({
                 },
               }}
               title="나는 여기에 있어용"
+            />
+          )}
+          {/* 지도의 중심 마커. 모든 마커는 반드시 맵 다음에 와야 함 */}
+          {!mapCenter.isLoading && (
+            <MapMarker
+              position={mapCenter.center} // curLoc 값에 따라 마커 설정 (고정)
+              image={{
+                src: `${redDot}`,
+                size: {
+                  width: 55,
+                  height: 55,
+                },
+              }}
+              title="현재 지도의 중심입니다."
             />
           )}
           {/* 내 위치 버튼 */}
