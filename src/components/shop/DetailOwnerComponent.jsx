@@ -1,27 +1,11 @@
 import React, { useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { Fragment, useState } from 'react';
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
-} from '@headlessui/react';
-import {
-  Bars3Icon,
-  MagnifyingGlassIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
+import { Menu, MenuButton, MenuItem } from '@headlessui/react';
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { StarIcon } from '@heroicons/react/20/solid';
+import { useNavigate } from 'react-router-dom';
 import {
   Map as KakaoMap,
   MapMarker,
@@ -30,153 +14,33 @@ import {
   Toolbox,
   useMap,
 } from 'react-kakao-maps-sdk';
-import { useTimeStamp } from '../../hooks/useTimeAgo';
 
-import { useNavigate } from 'react-router-dom';
+import '../../css/animate.css'; // 스크롤 애니메이션용 css
+import '../../css/hoverText.css'; // 텍스트 잘림 방지
+import '../../css/scrollbar.css';
+import '../../css/scrollbar2.css';
+
+import { useTimeStamp } from '../../hooks/useTimeAgo';
 import useCustomMove from '../../hooks/useCustomMove';
 import { getCookie } from '../../util/cookieUtil';
 import { createRoom } from '../../api/roomApi';
 import axios from 'axios';
 
+import AddReviewModal from '../common/AddReviewModal';
+import ResultModal from '../common/ResultModal';
+import AddMenuModal from './AddMenuModal';
+import { deleteMenu, getMenuList } from '../../api/shopApi';
+
+// 메뉴 등록할때 입력받는 데이터 담는 menu state
+const initState = {
+  menuFile: null,
+  menuName: '',
+  price: '',
+};
+
 const host = `${API_SERVER_HOST}`;
 const memberInfo = getCookie('member');
 
-const navigation = {
-  categories: [
-    {
-      id: 'wireframe',
-      name: 'Wireframe Kits',
-      featured: [
-        {
-          name: 'Scaffold',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/plus/img/ecommerce-images/product-page-05-menu-03.jpg',
-          imageAlt:
-            'Pricing page screenshot with tiered plan options and comparison table on colorful blue and green background.',
-        },
-        {
-          name: 'Bones',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/plus/img/ecommerce-images/product-page-05-menu-04.jpg',
-          imageAlt:
-            'Application screenshot with tiered navigation and account settings form on color red and purple background.',
-        },
-      ],
-      sections: [
-        {
-          id: 'application',
-          name: 'Application UI',
-          items: [
-            { name: 'Home Screens', href: '#' },
-            { name: 'Detail Screens', href: '#' },
-            { name: 'Settings Screens', href: '#' },
-          ],
-        },
-        {
-          id: 'marketing',
-          name: 'Marketing',
-          items: [
-            { name: 'Landing Pages', href: '#' },
-            { name: 'Pricing Pages', href: '#' },
-            { name: 'Contact Pages', href: '#' },
-          ],
-        },
-        {
-          id: 'ecommerce',
-          name: 'Ecommerce',
-          items: [
-            { name: 'Storefront Pages', href: '#' },
-            { name: 'Product Pages', href: '#' },
-            { name: 'Category Pages', href: '#' },
-            { name: 'Shopping Cart Pages', href: '#' },
-            { name: 'Checkout Pages', href: '#' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'icons',
-      name: 'Icons',
-      featured: [
-        {
-          name: 'Application UI Pack',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/plus/img/ecommerce-images/product-page-05-menu-01.jpg',
-          imageAlt:
-            'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
-        },
-        {
-          name: 'Marketing Icon Pack',
-          href: '#',
-          imageSrc:
-            'https://tailwindui.com/plus/img/ecommerce-images/product-page-05-menu-02.jpg',
-          imageAlt:
-            'Calendar user interface screenshot with icon buttons and orange-yellow theme.',
-        },
-      ],
-      sections: [
-        {
-          id: 'general',
-          name: 'General Use',
-          items: [
-            { name: 'Heroicons Solid', href: '#' },
-            { name: 'Heroicons Outline', href: '#' },
-            { name: 'Line Illustrations', href: '#' },
-            { name: 'Hero Illustrations', href: '#' },
-            { name: 'Branded Illustrations', href: '#' },
-            { name: 'Skeuomorphic Illustrations', href: '#' },
-            { name: 'Hand Drawn Illustrations', href: '#' },
-          ],
-        },
-        {
-          id: 'application',
-          name: 'Application UI',
-          items: [
-            { name: 'Outlined', href: '#' },
-            { name: 'Solid', href: '#' },
-            { name: 'Branded', href: '#' },
-            { name: 'Small', href: '#' },
-            { name: 'Illustrations', href: '#' },
-          ],
-        },
-        {
-          id: 'marketing',
-          name: 'Marketing',
-          items: [
-            { name: 'Outlined', href: '#' },
-            { name: 'Solid', href: '#' },
-            { name: 'Branded', href: '#' },
-            { name: 'Small', href: '#' },
-            { name: 'Illustrations', href: '#' },
-          ],
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: 'UI Kits', href: '#' },
-    { name: 'Themes', href: '#' },
-  ],
-};
-const product = {
-  name: 'Application UI Icon Pack',
-  version: { name: '1.0', date: 'June 5, 2021', datetime: '2021-06-05' },
-  price: '$220',
-  description:
-    'The Application UI Icon Pack comes with over 200 icons in 3 styles: outline, filled, and branded. This playful icon pack is tailored for complex application user interfaces with a friendly and legible look.',
-  highlights: [
-    '200+ SVG icons in 3 unique styles',
-    'Compatible with Figma, Sketch, and Adobe XD',
-    'Drawn on 24 x 24 pixel grid',
-  ],
-  imageSrc:
-    'https://tailwindui.com/plus/img/ecommerce-images/product-page-05-product-01.jpg',
-  imageAlt:
-    'Sample of 30 icons with friendly and fun details in outline, filled, and brand color styles.',
-};
 const reviews = {
   average: 4,
   featured: [
@@ -207,95 +71,27 @@ const reviews = {
     // More reviews...
   ],
 };
-const faqs = [
-  {
-    question: 'What format are these icons?',
-    answer:
-      'The icons are in SVG (Scalable Vector Graphic) format. They can be imported into your design tool of choice and used directly in code.',
-  },
-  {
-    question: 'Can I use the icons at different sizes?',
-    answer:
-      "Yes. The icons are drawn on a 24 x 24 pixel grid, but the icons can be scaled to different sizes as needed. We don't recommend going smaller than 20 x 20 or larger than 64 x 64 to retain legibility and visual balance.",
-  },
-  // More FAQs...
-];
-const license = {
-  href: '#',
-  summary:
-    'For personal and professional use. You cannot resell or redistribute these icons in their original or modified state.',
-  content: `
-      <h4>Overview</h4>
-      
-      <p>For personal and professional use. You cannot resell or redistribute these icons in their original or modified state.</p>
-      
-      <ul role="list">
-      <li>You\'re allowed to use the icons in unlimited projects.</li>
-      <li>Attribution is not required to use the icons.</li>
-      </ul>
-      
-      <h4>What you can do with it</h4>
-      
-      <ul role="list">
-      <li>Use them freely in your personal and professional work.</li>
-      <li>Make them your own. Change the colors to suit your project or brand.</li>
-      </ul>
-      
-      <h4>What you can\'t do with it</h4>
-      
-      <ul role="list">
-      <li>Don\'t be greedy. Selling or distributing these icons in their original or modified state is prohibited.</li>
-      <li>Don\'t be evil. These icons cannot be used on websites or applications that promote illegal or immoral beliefs or activities.</li>
-      </ul>
-    `,
-};
-const relatedProducts = [
-  {
-    id: 1,
-    name: 'Fusion',
-    category: 'UI Kit',
-    href: '#',
-    price: '$49',
-    imageSrc:
-      'https://tailwindui.com/plus/img/ecommerce-images/product-page-05-related-product-01.jpg',
-    imageAlt:
-      'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
-  },
-  // More products...
-];
-const footerNavigation = {
-  products: [
-    { name: 'Wireframe Kits', href: '#' },
-    { name: 'Icons', href: '#' },
-    { name: 'UI Kits', href: '#' },
-    { name: 'Themes', href: '#' },
-  ],
-  company: [
-    { name: 'Who we are', href: '#' },
-    { name: 'Open Source', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Careers', href: '#' },
-    { name: 'License', href: '#' },
-    { name: 'Privacy', href: '#' },
-  ],
-  customerService: [
-    { name: 'Chat', href: '#' },
-    { name: 'Contact', href: '#' },
-    { name: 'Secure Payments', href: '#' },
-    { name: 'FAQ', href: '#' },
-  ],
-};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
+const DetailOwnerComponent = ({
+  shop,
+  shopId,
+  infoType,
+  mapData,
+  storeLoc,
+}) => {
   console.log('shop : ', shop);
   console.log('shopId : ', shopId);
 
-  const navigate = useNavigate();
+  // 메뉴 목록 뿌려줄때 필요한 것들
+  const [menuItems, setMenuItems] = useState([]);
+  const [menu, setMenu] = useState({ ...initState });
 
+  const navigate = useNavigate();
+  const [result, setResult] = useState(null);
   const [ownerEmail, setOwnerEmail] = useState(null);
 
   useEffect(() => {
@@ -341,16 +137,41 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
   };
 
   // 메뉴 추가버튼 클릭시 이벤트
+  const closeModal = () => {
+    setResult(null);
+  };
+
+  // 리뷰 추가 버튼 클릭시 이벤트
+  const handleClickReview = () => {
+    setResult('review'); // 리뷰 모달 열기
+  };
+
+  // 메뉴 추가 버튼 클릭시 이벤트
   const handleClickAddMenu = () => {
-    navigate({
-      pathname: `/shop/addMenu/${shopId}/${shop.shopOwnerDTO.shopOwnerId}/OWNER`,
+    setResult('menu'); // 메뉴 모달 열기
+  };
+
+  // DB에서 메뉴목록 불러오기
+  useEffect(() => {
+    getMenuList(shopId, infoType).then((data) => {
+      console.log(data.RESULT);
+      setMenuItems(data.RESULT); // DB에서 가져온 목록을 menuItems state에 저장
+    });
+  }, [shopId, infoType, result]);
+
+  //메뉴 삭제 (받을 인자 값)
+  const handleMenuRemove = (menuId) => {
+    console.log('삭제할 menuId : ', menuId);
+    deleteMenu(menuId, infoType).then((data) => {
+      console.log(data.RESULT);
+      // 메뉴 항목 업데이트 후 즉시 화면에 반영
+      setMenuItems((prevItems) =>
+        prevItems.filter((menu) => menu.menuId !== menuId)
+      );
     });
   };
 
-  console.log(shop);
-  console.log(shopId);
-
-  //점포 수정 페이지로 이동 이벤트
+  // 점포 수정 페이지로 이동 이벤트
   const handleModify = () => {
     navigate({
       pathname: `/shop/modify/${shopId}/${shop.shopOwnerDTO.shopOwnerId}/OWNER`,
@@ -358,9 +179,25 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
   };
 
   const { moveToBack } = useCustomMove();
+
   return (
     <>
-      {/* Product */}
+      {result === 'review' && (
+        <AddReviewModal
+          title={'리뷰 작성'}
+          content={`리뷰를 작성해주세요`}
+          callbackFn={closeModal}
+        />
+      )}
+      {result === 'menu' && (
+        <AddMenuModal
+          shopId={shopId}
+          shopDetailId={shop.shopOwnerDTO.shopOwnerId}
+          infoType={infoType}
+          callbackFn={closeModal}
+        />
+      )}
+
       <div className="lg:grid lg:grid-cols-4 lg:grid-rows-1 lg:gap-y-5">
         {/* Product image */}
         <div className="lg:col-span-2 lg:row-end-1">
@@ -411,6 +248,7 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
               <p className="sr-only">{reviews.average} out of 5 stars</p>
             </div>
           </div>
+
           <div id="mapWrap">
             {/* 카카오맵 */}
             <KakaoMap
@@ -421,8 +259,6 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
                 height: '35vh', // v: view height
                 borderRadius: '15px',
                 boxShadow: '3px 3px gray',
-                // position: 'relative', // 지도 위에 버튼 깔기 위해 설정
-                // float: 'right', // 상동
               }}
               level={3} // 확대 레벨
               draggable={false} // 지도 드래그 불가
@@ -546,6 +382,7 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
               </TabPanel>
 
               {/* 메뉴 */}
+              {/* 메뉴 */}
               <TabPanel className="text-sm text-gray-500 py-3 px-4 rounded-lg mt-2">
                 <h3 className="sr-only">User Menu</h3>
 
@@ -553,7 +390,9 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
                 {shop.menuOwnerList ? (
                   <dl>
                     {shop.menuOwnerList.map((menuOwner) => (
-                      <Fragment key={menuOwner}>
+                      <Fragment key={menuOwner.menuId}>
+                        {' '}
+                        {/* menuId 사용 */}
                         <div className="flex items-center py-4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200">
                           <img
                             alt={menuOwner.menuName}
@@ -567,6 +406,38 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
                             <dd className="text-sm text-gray-600">
                               {menuOwner.price}
                             </dd>
+                          </div>
+
+                          {/* 각 메뉴 항목마다 삭제 버튼을 추가 */}
+                          <div className="ml-auto flex items-center gap-x-6">
+                            <Menu as="div" className="relative flex-none">
+                              <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
+                                <span className="sr-only">Open options</span>
+                                <EllipsisVerticalIcon
+                                  aria-hidden="true"
+                                  className="size-5"
+                                />
+                              </MenuButton>
+                              <Menu.Items
+                                transition
+                                className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5"
+                              >
+                                <MenuItem>
+                                  <a
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleMenuRemove(menuOwner.menuId); // 메뉴 삭제 함수 호출
+                                    }}
+                                    className="block px-3 py-1 text-sm text-gray-900"
+                                  >
+                                    삭제하기
+                                    <span className="sr-only">
+                                      , {menuOwner.menuId}
+                                    </span>
+                                  </a>
+                                </MenuItem>
+                              </Menu.Items>
+                            </Menu>
                           </div>
                         </div>
                       </Fragment>
@@ -645,11 +516,22 @@ const DetailOwnerComponent = ({ shop, shopId, mapData, storeLoc }) => {
                     </div>
                   </div>
                 ))}
+                {/* 리뷰 추가 버튼 */}
+                <div className="flex">
+                  <div className="mt-6 m-auto">
+                    <button
+                      type="button"
+                      onClick={handleClickReview}
+                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50 transition-all duration-300"
+                    >
+                      리뷰 작성
+                    </button>
+                  </div>
+                </div>
               </TabPanel>
             </TabPanels>
           </TabGroup>
         </div>
-        {/*  */}
       </div>
     </>
   );
