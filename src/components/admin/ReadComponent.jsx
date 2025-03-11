@@ -21,7 +21,7 @@ const ReadComponent = ({ email }) => {
   // API 서버에 email주고 해당 member 받아오기
   useEffect(() => {
     getOneMember(email).then((data) => {
-      console.log(data);
+      console.log('어드민 Read Component 확인: {}', data);
       setMember(data);
     });
   }, [email]);
@@ -72,7 +72,8 @@ const ReadComponent = ({ email }) => {
         <div className="mt-6 border-t border-gray-100">
           <dl className="divide-y divide-gray-100">
             {makeDiv('이메일', member.email)}
-            {makeDiv('이름', member.nickname)}
+            {makeDiv('닉네임', member.nickname)}
+            {makeDiv('사업자 등록번호', member.businessNumber)}
             {makeDiv(
               '회원상태',
               member.memberStat == 2

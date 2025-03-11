@@ -30,7 +30,7 @@ const ListMemberComponent = () => {
   const handlePageChange = (newPage) => {
     // 페이지 변경 시 데이터 조회
     getAdminMemberList({ page: newPage, size: 10 }).then((data) => {
-      console.log(data);
+      console.log('멤버리스트 data 확인: {}', data);
       setServerData(data);
     });
   };
@@ -52,7 +52,19 @@ const ListMemberComponent = () => {
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  이름
+                  닉네임
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  전화번호
+                </th>
+                <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  사업자 등록번호
                 </th>
                 <th
                   scope="col"
@@ -71,18 +83,24 @@ const ListMemberComponent = () => {
                   }
                   className={`${member.memberStat === 2 ? 'hover:bg-purple-100 cursor-pointer bg-yellow-100' : ''}`}
                 >
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                  <td className="whitespace-nowrap py-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                     {member.email}
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     {member.nickname}
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {member.phone}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    {member.businessNumber}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                     {member.memberStat == 2
-                      ? '승인대기'
+                      ? '승인 대기'
                       : member.memberStat == 1
-                        ? '일반회원'
-                        : '탈퇴회원'}
+                        ? '활동 가능 회원'
+                        : '탈퇴 회원'}
                   </td>
                 </tr>
               ))}
@@ -90,7 +108,10 @@ const ListMemberComponent = () => {
           </table>
         </div>
       </div>
-      <PageComponent serverData={serverData} move={moveToListmem}></PageComponent>
+      <PageComponent
+        serverData={serverData}
+        move={moveToListmem}
+      ></PageComponent>
     </>
   );
 };

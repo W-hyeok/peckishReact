@@ -26,6 +26,9 @@ const LeftModifyInfoComponent = () => {
   const [phoneMessage, setPhoneMessage] = useState('');
   const [isPhone, setIsPhone] = useState(false);
 
+  const [businessNumber, setBusinessNumber] = useState('');
+  const [isVerified, setIsVerified] = useState(false);
+
   const [result, setResult] = useState(null);
 
   const { moveToPath, doLogout, exceptionHandle } = useCustomLogin();
@@ -37,6 +40,7 @@ const LeftModifyInfoComponent = () => {
     setProfileFilename(cookieMember.profileFilename);
     setNickname(cookieMember.nickname);
     setPhone(cookieMember.phone);
+    setBusinessNumber(cookieMember.businessNumber);
     setMemberType(cookieMember.roleNames.length === 2 ? 'OWNER' : 'USER');
     setRoleNames(cookieMember.roleNames);
   }, []);
@@ -134,8 +138,13 @@ const LeftModifyInfoComponent = () => {
 
     putMemberModifyInfo(email, formData)
       .then((data) => {
-        console.log('회원 일반 정보 수정 data 확인: {}', data);
-        setResult(data);
+        if (data.RESULT === 'existPhone') {
+          setResult('failExistPhone');
+        } else if (data.RESULT === 'existBusinessNumber') {
+          setResult('failExistBusinessNumber');
+        } else {
+          setResult(data);
+        }
       })
       .catch((err) => exceptionHandle(err));
   };
@@ -144,9 +153,6 @@ const LeftModifyInfoComponent = () => {
     { id: 'USER', title: '일반회원' },
     { id: 'OWNER', title: '사업자회원' },
   ];
-
-  const [businessNumber, setBusinessNumber] = useState('');
-  const [isVerified, setIsVerified] = useState(false);
 
   const API_KEY =
     'aG6IoC0RqTa0qlI%2F1IYOFwZ6WYoBl75hFPreoQ7XfRLta6XWPS2g9r%2BY1ljasxvxdeC%2BEsDL8uoQ5v4LEwsBMg%3D%3D';
@@ -184,13 +190,24 @@ const LeftModifyInfoComponent = () => {
     moveToPath(`/member/login`);
   };
 
+  const closeModalFail = () => {
+    setResult(null);
+    moveToPath(`/member/modifyInfo/${email}`);
+  };
+
   return (
     <>
-      {result ? (
+      {result && result !== 'failExistBusinessNumber' ? (
         <ResultModal
           title={'일반 정보 수정 완료'}
           content={`${result}님 다시 로그인 해 주세요`}
           callbackFn={closeModal}
+        />
+      ) : result === 'failExistBusinessNumber' ? (
+        <ResultModal
+          title={'정보 수정 실패'}
+          content={`이미 가입된 사업자 등록번호입니다. !`}
+          callbackFn={closeModalFail}
         />
       ) : (
         <></>
@@ -352,6 +369,7 @@ const LeftModifyInfoComponent = () => {
                           <input
                             type="text"
                             id="businessNumber"
+                            name="businessNumber"
                             value={businessNumber}
                             placeholder="-은 생략하고 숫자만 입력하세요"
                             onChange={(e) => setBusinessNumber(e.target.value)}
@@ -426,23 +444,6 @@ const LeftModifyInfoComponent = () => {
                     )}
                   </div>
                 </fieldset>
-                {/* 
-                <div className="mt-6 flex items-center justify-center gap-x-6">
-                  <button
-                    type="button"
-                    className="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={() => moveToPath(`/member/read/${email}`)}
-                  >
-                    취소
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleClickModifyInfo}
-                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    수정완료
-                  </button>
-                </div> */}
               </div>
             </div>
           </section>

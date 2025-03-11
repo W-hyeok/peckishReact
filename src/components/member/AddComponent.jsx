@@ -214,6 +214,8 @@ const AddComponent = () => {
             setResult('failExist');
           } else if (data.RESULT === 'existPhone') {
             setResult('failExistPhone');
+          } else if (data.RESULT === 'existBusinessNumber') {
+            setResult('failExistBusinessNumber');
           } else {
             setResult(data.RESULT);
           }
@@ -260,7 +262,7 @@ const AddComponent = () => {
     }
   };
 
-  
+
   const closeModal = () => {
     setResult(null);
     moveToPath('/member/login');
@@ -279,7 +281,8 @@ const AddComponent = () => {
       result !== 'failNickname' &&
       result !== 'failPhone' &&
       result !== 'failExist' &&
-      result !== 'failExistPhone' ? (
+      result !== 'failExistPhone' &&
+      result !== 'failExistBusinessNumber' ? (
         <ResultModal
           title={'회원 가입 완료'}
           content={`${result}님, 가입을 축하합니다!!!`}
@@ -319,6 +322,12 @@ const AddComponent = () => {
         <ResultModal
           title={'회원 가입 실패'}
           content={`동일한 연락처 회원이 존재합니다 !`}
+          callbackFn={closeModalFail}
+        />
+      ) : result === 'failExistBusinessNumber' ? (
+        <ResultModal
+          title={'회원 가입 실패'}
+          content={`이미 가입된 사업자 등록번호입니다. !`}
           callbackFn={closeModalFail}
         />
       ) : (

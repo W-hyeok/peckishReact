@@ -1,5 +1,3 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
-import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
