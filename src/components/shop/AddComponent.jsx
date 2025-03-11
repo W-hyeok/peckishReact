@@ -55,11 +55,13 @@ const AddComponent = () => {
   const checkRole = loginState.roleNames;
   //console.log('*********', loginState.roleNames);
 
-  if (checkRole == 'USER') {
-    console.log('I am USER');
-  } else if (checkRole == 'OWNER') {
-    console.log('I am OWNER');
-  }
+  useEffect(() => {
+    if (checkRole == 'USER') {
+      console.log('I am USER');
+    } else if (checkRole == 'OWNER') {
+      console.log('I am OWNER');
+    }
+  }, []);
 
   // useKakaoLoader();
   // 지도 좌표값 설정

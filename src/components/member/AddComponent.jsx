@@ -171,15 +171,15 @@ const AddComponent = () => {
   };
 
   const handleClickSignup = () => {
-    // shopfile 상태가 제대로 설정되었는지 확인
+    // 사진을 제대로 올렸는지 확인 과정 
     if (!profileFile) {
       console.error('프로필 사진 파일이 없습니다!');
       alert('프로필 사진 파일이 없습니다!');
       return; // 파일이 없으면 저장하지 않음
     }
     if (memberType === 'OWNER' && !certfile) {
-      console.error('사업자 등록증 사진 없습니다!');
-      alert('사업자 등록증 사진 없습니다!');
+      console.error('사업자 등록증 사진이 없습니다!');
+      alert('사업자 등록증 사진이 없습니다!');
       return; // 파일이 없으면 저장하지 않음
     }
 
@@ -198,7 +198,6 @@ const AddComponent = () => {
     console.log(email);
     console.log(formData);
     console.log(memberType);
-    console.log(phone);
 
     if (!isEmail) {
       setResult('failEmail');
@@ -260,6 +259,8 @@ const AddComponent = () => {
       alert('사업자 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
+
+  
   const closeModal = () => {
     setResult(null);
     moveToPath('/member/login');
