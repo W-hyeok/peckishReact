@@ -223,11 +223,11 @@ export default function Header() {
                 <img
                   src={profileIcon}
                   aria-hidden="true"
-                  className="block size-6 group-data-[open]:hidden"
+                  className="block size-9 group-data-[open]:hidden"
                 />
                 <XMarkIcon
                   aria-hidden="true"
-                  className="hidden size-6 group-data-[open]:block"
+                  className="hidden size-9 group-data-[open]:block"
                 />
               </PopoverButton>
             </div>

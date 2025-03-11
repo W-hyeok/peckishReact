@@ -1,7 +1,10 @@
+import { getCookie } from '../../util/cookieUtil';
 import LeftModifyInfoComponent from './LeftModifyInfoComponent';
 import RightComponent from './RightComponent';
 
 const ModifyInfoComponent = () => {
+  const cookieMember = getCookie('member');
+
   return (
     <div>
       <main className="mt-10 pb-4">
@@ -10,7 +13,7 @@ const ModifyInfoComponent = () => {
           {/* Main 3 column grid */}
           <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
             <LeftModifyInfoComponent />
-            <RightComponent />
+            <RightComponent email={cookieMember.email} />
           </div>
         </div>
       </main>

@@ -72,15 +72,15 @@ function MapComponent({
   // 엮여있는 게 많아서 주석처리는 하지 않지만 사용은 지양할 것 (기능 자체에 오류가 있는 것은 아님)
   const [state, setState] = useState({
     // 지도의 초기 위치
-    center: { lat: '', lng: '' },
+    center: { lat: '37.55522248964399', lng: '126.93696829042793' },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
     isPanto: true,
   });
 
   // 검색한 위치의 중심 좌표
   const [searchAddress, setSearchAddress] = useState({
-    lat: '',
-    lng: '',
+    lat: '37.55522248964399',
+    lng: '126.93696829042793',
   });
 
   // 권한 정보 확인 (permission api)
@@ -194,9 +194,12 @@ function MapComponent({
     let callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         const newSearch = result[0];
-        setState({
-          center: { lat: newSearch.y, lng: newSearch.x },
-        });
+        // 넘어온 검색값(data)이 있을 때만 state값 설정 (초기 설정(부산) 방지)
+        if (data) {
+          setState({
+            center: { lat: newSearch.y, lng: newSearch.x },
+          });
+        }
       }
     };
     geocoder.addressSearch(`${searchAddress}`, callback); // 주소 → 좌표
@@ -384,8 +387,8 @@ function MapComponent({
       <div id="mapwrap" className="">
         {/* 카카오맵 */}
         <Map
-          center={curLoc.center} // state값에 따라 지도 중심 설정 (state: 페이지 로딩, 검색 시 변동)
-          isPanto={curLoc.isPanto}
+          center={state.center} // state값에 따라 지도 중심 설정 (state: 페이지 로딩, 검색 시 변동)
+          isPanto={state.isPanto}
           style={{
             width: '100%',
             height: '75vh',

@@ -55,11 +55,13 @@ const AddComponent = () => {
   const checkRole = loginState.roleNames;
   //console.log('*********', loginState.roleNames);
 
-  if (checkRole == 'USER') {
-    console.log('I am USER');
-  } else if (checkRole == 'OWNER') {
-    console.log('I am OWNER');
-  }
+  useEffect(() => {
+    if (checkRole == 'USER') {
+      console.log('I am USER');
+    } else if (checkRole == 'OWNER') {
+      console.log('I am OWNER');
+    }
+  }, []);
 
   // useKakaoLoader();
   // 지도 좌표값 설정
@@ -124,9 +126,13 @@ const AddComponent = () => {
     let callback = function (result, status) {
       if (status === kakao.maps.services.Status.OK) {
         const newSearch = result[0];
-        setPosition({
-          center: { lat: newSearch.y, lng: newSearch.x },
-        });
+        // 검색값이 없을 떄(= 기본값일 때) 실행 방지
+        // 방지 안하면 자꾸 부산으로 감
+        if (searchText != '') {
+          setPosition({
+            center: { lat: newSearch.y, lng: newSearch.x },
+          });
+        }
       }
     };
     geocoder.addressSearch(`${searchAddress}`, callback); // 주소 → 좌표
