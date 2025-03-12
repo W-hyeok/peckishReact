@@ -61,15 +61,6 @@ export const getMenuList = async (shopId, infoType) => {
   return result.data;
 };
 
-//방문 횟수
-export const putVisited = async (shopId, infoType) => {
-  const header = { headers: { 'Content-Type ': 'multipart/form-data' } };
-  const result = await jwtAxios.put(
-    `${host}/shop/detail/${shopId}/${infoType}`,
-    header
-  );
-  return result.data;
-};
 //상점 수정
 export const putOne = async (shopId, shopData, shopDetailId, infoType) => {
   const header = { headers: { 'Content-Type ': 'multipart/form-data' } };

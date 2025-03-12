@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { Fragment, useState } from 'react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
-import { Menu, MenuButton, MenuItem } from '@headlessui/react';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -27,51 +25,13 @@ import { createRoom } from '../../api/roomApi';
 import axios from 'axios';
 
 import AddReviewModal from '../common/AddReviewModal';
-import ResultModal from '../common/ResultModal';
 import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, getMenuList } from '../../api/shopApi';
 import DetailOwnerMenuComponent from './DetailOwnerMenuComponent';
-
-// 메뉴 등록할때 입력받는 데이터 담는 menu state
-const initState = {
-  menuFile: null,
-  menuName: '',
-  price: '',
-};
+import DetailOwnerReviewComponent from '../review/DetailOwnerReviewComponent';
 
 const host = `${API_SERVER_HOST}`;
 const memberInfo = getCookie('member'); //채팅
-
-const reviews = {
-  average: 4,
-  featured: [
-    {
-      id: 1,
-      rating: 5,
-      content: `
-          <p>This icon pack is just what I need for my latest project. There's an icon for just about anything I could ever need. Love the playful look!</p>
-        `,
-      date: 'July 16, 2021',
-      datetime: '2021-07-16',
-      author: 'Emily Selman',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    {
-      id: 2,
-      rating: 5,
-      content: `
-          <p>Blown away by how polished this icon pack is. Everything looks so consistent and each SVG is optimized out of the box so I can use it directly with confidence. It would take me several hours to create a single icon this good, so it's a steal at this price.</p>
-        `,
-      date: 'July 12, 2021',
-      datetime: '2021-07-12',
-      author: 'Hector Gibbons',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    // More reviews...
-  ],
-};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -89,10 +49,12 @@ const DetailOwnerComponent = ({
 
   // 메뉴 목록 뿌려줄때 필요한 것들
   const [menuItems, setMenuItems] = useState([]);
-  const [menu, setMenu] = useState({ ...initState });
-
+  // 리뷰 목록 뿌려줄때 필요한 것들
+  const [review, setReview] = useState([]);
   const navigate = useNavigate();
   const [result, setResult] = useState(null);
+  const [refresh, setRefresh] = useState(false);
+  const [fetch, setFetch] = useState(false);
   const [ownerEmail, setOwnerEmail] = useState(null);
 
   useEffect(() => {
@@ -138,28 +100,43 @@ const DetailOwnerComponent = ({
     }
   };
 
-  // 메뉴 추가버튼 클릭시 이벤트
   const closeModal = () => {
     setResult(null);
   };
 
   // 리뷰 추가 버튼 클릭시 이벤트
   const handleClickReview = () => {
+    console.log('리뷰모달 보여줘라');
     setResult('review'); // 리뷰 모달 열기
   };
 
   // 메뉴 추가 버튼 클릭시 이벤트
   const handleClickAddMenu = () => {
+    console.log('메뉴모달 보여줘라');
     setResult('menu'); // 메뉴 모달 열기
   };
 
   // DB에서 메뉴목록 불러오기
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
+      setFetch(false);
       console.log(data.RESULT);
       setMenuItems(data.RESULT); // DB에서 가져온 목록을 menuItems state에 저장
+      setFetch(true);
+      console.log('메뉴 목록 업데이트:', data.RESULT);
     });
   }, [shopId, infoType, result]);
+
+  // 리뷰 목록 조회
+  useEffect(() => {
+    getReview(shopId, shopDetailId, infoType).then((data) => {
+      setFetch(false);
+      console.log('리뷰 조회');
+      console.log(date.RESULT);
+      setReview(data.RESULT);
+      setFetch(true);
+    });
+  }, [shopId, infoType, refresh]);
 
   //메뉴 삭제 (받을 인자 값)
   const handleMenuRemove = (menuId) => {
@@ -170,6 +147,7 @@ const DetailOwnerComponent = ({
       setMenuItems((prevItems) =>
         prevItems.filter((menu) => menu.menuId !== menuId)
       );
+      setResult(false);
     });
   };
 
@@ -177,6 +155,9 @@ const DetailOwnerComponent = ({
     <>
       {result === 'review' && (
         <AddReviewModal
+          shopId={shopId}
+          shopDetailId={shop.shopOwnerDTO.shopOwnerId}
+          infoType={infoType}
           title={'리뷰 작성'}
           content={`리뷰를 작성해주세요`}
           callbackFn={closeModal}
@@ -336,22 +317,21 @@ const DetailOwnerComponent = ({
               </TabPanel>
 
               {/* 메뉴 */}
-              {/* 메뉴 */}
               <TabPanel className="text-sm text-gray-500 py-3 px-4 rounded-lg mt-2">
                 <h3 className="sr-only">User Menu</h3>
 
                 {/* 메뉴 항목 목록 */}
-                {menuItems ? (
+                {menuItems && fetch ? (
                   <DetailOwnerMenuComponent
                     menuItems={menuItems}
                     handleMenuRemove={handleMenuRemove}
                   />
-                ) : (
+                ) : !menuItems ? (
                   // 등록된 메뉴가 하나도 없으면 노출
                   <p className="text-center mt-2 text-gray-600">
                     메뉴를 추가해주세요!
                   </p>
-                )}
+                ) : null}
 
                 {/* 메뉴 추가 버튼 */}
                 <div className="flex">
@@ -361,76 +341,21 @@ const DetailOwnerComponent = ({
                       onClick={handleClickAddMenu}
                       className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 transition-all duration-300"
                     >
-                      메뉴 정보 변경
+                      메뉴 추가
                     </button>
                   </div>
                 </div>
               </TabPanel>
 
               {/* 리뷰 */}
-              <TabPanel className="-mb-10">
-                <h3 className="sr-only">Customer Reviews</h3>
-
-                {reviews.featured.map((review, reviewIdx) => (
-                  <div
-                    key={review.id}
-                    className="flex space-x-4 text-sm text-gray-500"
-                  >
-                    <div className="flex-none py-10">
-                      <img
-                        alt=""
-                        src={review.avatarSrc}
-                        className="size-10 rounded-full bg-gray-100"
-                      />
-                    </div>
-                    <div
-                      className={classNames(
-                        reviewIdx === 0 ? '' : 'border-t border-gray-200',
-                        'flex-1 py-10'
-                      )}
-                    >
-                      <h3 className="font-medium text-gray-900">
-                        {review.author}
-                      </h3>
-                      <p>
-                        <time dateTime={review.datetime}>{review.date}</time>
-                      </p>
-
-                      <div className="mt-4 flex items-center">
-                        {[0, 1, 2, 3, 4].map((rating) => (
-                          <StarIcon
-                            key={rating}
-                            aria-hidden="true"
-                            className={classNames(
-                              review.rating > rating
-                                ? 'text-yellow-400'
-                                : 'text-gray-300',
-                              'size-5 shrink-0'
-                            )}
-                          />
-                        ))}
-                      </div>
-                      <p className="sr-only">{review.rating} out of 5 stars</p>
-
-                      <div
-                        dangerouslySetInnerHTML={{ __html: review.content }}
-                        className="mt-4 text-sm/6 text-gray-500"
-                      />
-                    </div>
-                  </div>
-                ))}
-                {/* 리뷰 추가 버튼 */}
-                <div className="flex">
-                  <div className="mt-6 m-auto">
-                    <button
-                      type="button"
-                      onClick={handleClickReview}
-                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50 transition-all duration-300"
-                    >
-                      리뷰 작성
-                    </button>
-                  </div>
-                </div>
+              <TabPanel className="-mb-10 pb-10 max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
+                <DetailOwnerReviewComponent
+                  shopId={shopId}
+                  shopDetailId={shop.shopOwnerDTO.shopOwnerId}
+                  infoType={infoType}
+                  reviews={reviews}
+                  handleClickReview={handleClickReview}
+                />
               </TabPanel>
             </TabPanels>
           </TabGroup>
