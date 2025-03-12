@@ -17,7 +17,6 @@ const initState = {
 const DetailPage = () => {
   // router에 지정한 주소 값 -> 주소값에서 shopId 뽑아서 DB데이터 불러오기
   const { shopId } = useParams();
-
   const [shop, setShop] = useState();
   const [fetch, setFetch] = useState(true); // 로딩중 모달 on/off
   const [loaded, setLoaded] = useState(true);
