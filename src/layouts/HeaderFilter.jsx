@@ -15,7 +15,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { useState } from 'react';
 import BreadIcon from '../assets/icon/bread.png';
 import SnackIcon from '../assets/icon/tteok.png';
-import SweetPotato from '../assets/icon/sweetpotato.png';
+import SweetPotato from '../assets/icon/sweetPotato.png';
 import Hotteok from '../assets/icon/hotteok2.png';
 import useCustomMove from '../hooks/useCustomMove';
 import resetIcon from '../assets/icon/reset.png';
@@ -205,13 +205,15 @@ export default function HeaderFilter({
               {/* 필터 선택 부분 */}
               <div className="col-span-4">
                 <nav className="flex">
-                  <PopoverGroup className="rounded-md px-3 py-2 mx-1 text-sm font-black bg-white hover:bg-yellow-950/10">
+                  <PopoverGroup className="rounded-md px-3 py-2 mx-1 text-sm font-black bg-white shadow-lg hover:bg-yellow-950/10">
                     <Popover className="relative min-w-full">
                       <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
                         {selected && selected !== '초기화' ? (
                           <span className="">{selected}</span>
                         ) : (
-                          <span className="text-gray-500">카테고리 선택</span>
+                          <span className="text-gray-500 whitespace-nowrap">
+                            카테고리 선택
+                          </span>
                         )}
                         <ChevronDownIcon
                           aria-hidden="true"
@@ -231,7 +233,7 @@ export default function HeaderFilter({
                               key={item.name}
                               className={classNames(
                                 item.current ? 'bg-yellow-200' : 'text-black',
-                                'rounded-lg px-4 py-2 text-base bg-white hover:bg-yellow-950/10',
+                                'whitespace-nowrap rounded-lg px-4 py-2 text-base bg-white hover:bg-yellow-950/10',
                                 'group relative flex items-center gap-x-6 p-4 hover:bg-gray-50'
                               )}
                               onClick={() => clickEvent(item.name)} // 필터 클릭 시 '카테고리값' 요청
@@ -254,7 +256,7 @@ export default function HeaderFilter({
                       onClick={() => openClick(open.name)} // 필터 클릭 시 '영업 중' 요청
                       className={classNames(
                         open.current ? 'bg-yellow-300' : 'text-black', // 논리 상 이상은 없으나 안먹는 색상(green-300 같이)이 있음...
-                        'rounded-md px-3 py-2 mx-1 text-sm font-black bg-white hover:bg-yellow-950/10 flex items-center'
+                        'whitespace-nowrap shadow-lg rounded-md px-3 py-2 mx-1 text-sm font-black bg-white hover:bg-yellow-950/10 flex items-center'
                       )}
                     >
                       {open.name}
@@ -265,7 +267,10 @@ export default function HeaderFilter({
                     className="rounded-md px-2 text-sm font-black"
                     onClick={() => clickEvent('초기화')}
                   >
-                    <img src={resetIcon} className="h-6 w-auto mx-auto" />{' '}
+                    <img
+                      src={resetIcon}
+                      className="h-6 w-auto mx-auto min-w-max"
+                    />{' '}
                   </button>
                 </nav>
               </div>
@@ -280,7 +285,7 @@ export default function HeaderFilter({
                   placeholder="위치/주소 검색..."
                   aria-label="Search"
                   className="peer col-start-1 row-start-1 block w-full rounded-md bg-white/50 py-1.5 pl-10 pr-3 
-                  text-sm/6 text-black outline-none 
+                  text-sm/6 text-black outline-none shadow-md
                   focus:bg-white focus:text-gray-900 
                   focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
                 />
@@ -295,7 +300,7 @@ export default function HeaderFilter({
               <div className="col-span-4">
                 {' '}
                 <button
-                  className="rounded-md px-3 py-2 ml-auto text-sm font-black bg-white hover:bg-yellow-950/10 flex items-center"
+                  className="shadow-lg rounded-md px-3 py-2 ml-auto text-sm font-black bg-white hover:bg-yellow-950/10 flex items-center"
                   onClick={cookieMember ? moveToPost : moveToLogin}
                 >
                   {' '}

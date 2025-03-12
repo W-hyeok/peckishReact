@@ -17,6 +17,7 @@ import fishLogo from '/src/assets/fish_logo.png';
 import profile from '/src/assets/icon/profile.png';
 import profileIcon from '../assets/icon/profileIcon.png';
 import { API_SERVER_HOST } from '../api/todoApi';
+import GoogleTranslate from '../components/common/GoogleTranslate';
 
 const host = API_SERVER_HOST;
 const user = {
@@ -24,7 +25,6 @@ const user = {
   // email: 'boongeubbang@example.com',
   imageUrl: '/src/assets/icon/profile.png',
 };
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -106,19 +106,20 @@ export default function Header() {
 
             {/* Right section on desktop */}
             <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
-              <button
+              {/* <button
                 type="button"
                 className="relative shrink-0 rounded-full p-1 text-gray-100 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
               >
                 <span className="absolute -inset-1.5" />
                 <span className="sr-only">View notifications</span>
                 <BellIcon aria-hidden="true" className="size-6" />
-              </button>
+              </button> */}
+              <GoogleTranslate className="absolute" />
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative ml-4 shrink-0">
                 <div>
-                  <MenuButton className="relative flex rounded-full bg-white text-sm ring-2 ring-white/20 focus:outline-none focus:ring-white">
+                  <MenuButton className="relative flex rounded-full shadow-xl bg-white text-sm ring-2 ring-white/20 focus:outline-none focus:ring-white">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     <img

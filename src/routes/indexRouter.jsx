@@ -5,6 +5,7 @@ import memberRouter from './memberRouter';
 import shopRouter from './shopRouter';
 import adminRouter from './adminRouter';
 import reviewRouter from './reviewRouter';
+import About2 from '../pages/About2';
 
 // 지연 로딩 처리 : dynamic import
 const Main = lazy(() => import('../pages/MainPage'));
@@ -39,6 +40,14 @@ const Router = () => {
       element: (
         <Suspense fallback={<LoadingPage />}>
           <About />
+        </Suspense>
+      ),
+    }, //about
+    {
+      path: 'about2',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <About2 />
         </Suspense>
       ),
     }, //about

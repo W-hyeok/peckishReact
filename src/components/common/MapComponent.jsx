@@ -332,7 +332,7 @@ function MapComponent({
           }}
         >
           <img
-            className="rounded-3xl w-auto h-auto"
+            className="rounded-3xl w-auto h-auto shadow-slate-400 shadow-lg"
             src={whereami}
             title="현재 위치로 이동"
           />
@@ -380,15 +380,9 @@ function MapComponent({
               width: '200px',
               transform: 'translateX(-50%)',
             }}
+            className="rounded-3xl bg-yellow-800/90 text-white py-2 shadow-lg"
           >
-            <img
-              src={searchLoc}
-              title="현 위치에서 재검색"
-              style={{
-                width: '100%',
-                justifyItems: 'center',
-              }}
-            />
+            현 위치에서 검색
           </button>
         )}
       </>
@@ -484,6 +478,7 @@ function MapComponent({
                 textAlign: 'center',
                 fontWeight: 'bold',
                 lineHeight: '31px',
+                boxShadow: '0 2px 2px 3px rgba(0,0,0,0.4)',
               },
             ]}
           >
@@ -498,7 +493,7 @@ function MapComponent({
                     content={
                       <div
                         style={{
-                          width: '100%',
+                          width: 'max-content',
                           whiteSpace: 'nowrap',
                           height: '100%',
                           overflow: 'hidden',
@@ -547,7 +542,7 @@ function MapComponent({
                     content={
                       <div
                         style={{
-                          width: '100%',
+                          width: 'max-content',
                           whiteSpace: 'nowrap',
                           height: '100%',
                           overflow: 'hidden',
