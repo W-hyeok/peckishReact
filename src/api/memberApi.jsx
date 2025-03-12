@@ -26,6 +26,20 @@ export const getOneMemberByPhone = async (phone) => {
   return resultMemberByPhone.data;
 };
 
+// 회원 리스트 조회 (사업자 등록번호로 조회)
+export const getOneMemberByBusinessNumber = async (businessNumber) => {
+
+  const resultMemberByBusinessNumber = await axios.get(
+    `${host}/businessNumber/${businessNumber}`
+  );
+  console.log(
+    '사업자 등록번호 조회 결과 배열 크기 확인: {}',
+    resultMemberByBusinessNumber.data.length
+  );
+  
+  return resultMemberByBusinessNumber.data;
+};
+
 export const loginPost = async (loginParam) => {
   const header = { headers: { 'Content-Type': 'x-www-form-urlencoded' } };
   const form = new FormData();
