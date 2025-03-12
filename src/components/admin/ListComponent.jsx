@@ -63,7 +63,7 @@ const ListComponent = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {serverData.list.map((member) => (
-                <tr key={member.email}>
+                <tr key={member.email} onClick={() => moveToRead(member.email)}>
                   <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                     {member.email}
                   </td>
