@@ -4,6 +4,7 @@ import DetailUserComponent from './DetailUserComponent';
 import DetailOwnerComponent from './DetailOwnerComponent';
 import { getMap } from '../../api/mapApi';
 import { Navigate, useNavigate } from 'react-router-dom';
+import '../../css/common.css';
 
 /*
 // shop state 초기화 객체
@@ -115,7 +116,7 @@ const DetailComponent = ({ shop, shopId }) => {
                       <button
                         type="button"
                         onClick={handleAddShopUSER}
-                        className="mt-4 w-auto rounded-md border border-transparent bg-yellow-500 px-8 py-3 font-extrabold text-lg text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
+                        className="defaultBtn"
                       >
                         제보 정보 추가하기
                       </button>

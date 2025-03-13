@@ -69,7 +69,7 @@ const RightComponent = ({ email }) => {
               <select
                 defaultValue={tabs.find((tab) => tab.current).name}
                 aria-label="Select a tab"
-                className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-orange-200 shadow py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white shadow py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
               >
                 {tabs.map((tab) => (
                   <option key={tab.name}>{tab.name}</option>
@@ -78,10 +78,7 @@ const RightComponent = ({ email }) => {
             </div>
             <div className="hidden sm:block">
               <div className="border-b border-gray-300">
-                <nav
-                  aria-label="Tabs"
-                  className="-mb-px flex  bg-orange-200 shadow"
-                >
+                <nav aria-label="Tabs" className="-mb-px flex  bg-white shadow">
                   {tabs.map((tab) => (
                     <Link
                       key={tab.name}
@@ -93,7 +90,7 @@ const RightComponent = ({ email }) => {
                       className={classNames(
                         tab.current
                           ? 'border-indigo-500 text-indigo-600'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 hover:bg-orange-100',
+                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 hover:bg-white',
                         'w-1/3 border-b-2 px-1 py-4 text-center text-sm font-medium'
                       )}
                     >
@@ -105,15 +102,15 @@ const RightComponent = ({ email }) => {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-lg bg-orange-200 shadow">
+          <div className="overflow-hidden rounded-lg bg-white shadow">
             <table className="w-full p-6">
               {/* Your content */}
               <tbody>
-                <tr role="list" className="divide-y divide-orange-100">
+                <tr role="list" className="divide-y divide-white-100">
                   {shops.map((shop, index) => (
                     <td
                       key={index}
-                      className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-orange-100 sm:px-6 lg:px-8"
+                      className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-white sm:px-6 lg:px-8"
                       onClick={() => {
                         clickList(shop.shopId);
                       }}
