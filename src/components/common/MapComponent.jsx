@@ -21,6 +21,7 @@ import searchLoc from '../../assets/icon/searchLoc.png';
 import whereami from '../../assets/icon/whereami.png';
 import mapCenterIcon from '../../assets/icon/mapCenter.png';
 import redDot from '../../assets/icon/location-red.png';
+import currentLocation from '../../assets/icon/currentLocation_faca15.png';
 const { kakao } = window;
 
 function MapComponent({
@@ -143,15 +144,17 @@ function MapComponent({
 
   // 카테고리별 조회
   useEffect(() => {
-    if (!showButton) {
+    // 최초로 한 번은 데이터 불러오기
+    if (renderingMarker.length == 0 && serverData.length == 0) {
       getMapList(transFilterData).then((data) => {
-        console.log('isCloseData: ', isCloseData);
+        console.log('cate:', cate);
         console.log('현재 영역: ', mapLoc.bound);
         console.log('transFilterData: ', transFilterData);
         // setRole(transCertData); // 인증값
         setServerData(data); // 점포 목록 데이터 (전체)
         console.log('serverData: ', serverData);
         // 렌더링할 마커 (조건: 전체 목록(data 혹은 serverData) 중 화면 범위(ne/sw)에 들어오는 것)
+        // 재검색 버튼이 없거나 카테고리 값이 all이 아닐 경우(= 카테고리를 선택한 경우)
         setRenderingMarker(
           data.filter(
             (e) =>
@@ -163,9 +166,52 @@ function MapComponent({
         );
         console.log('렌더링되는 마커: ', renderingMarker);
         setCate(transFilterData); // 카테고리값
+
         // 렌더링할 마커 중에서 영업 중
         // 렌더링할 마커가 없으면 data에서 가져오기(초기 마커용)
-        if (renderingMarker) {
+        if (renderingMarker.length != 0) {
+          setIsOpenData(renderingMarker.filter((e) => e.status == 'opened')); // (...영업 중)
+          console.log('isOpenData: ', isOpenData);
+          // 렌더링할 마커 중에서 준비 중
+          setIsCloseData(renderingMarker.filter((e) => e.status == 'closed')); // (...준비 중)
+          console.log('isCloseData: ', isCloseData);
+        } else {
+          setIsOpenData(data.filter((e) => e.status == 'opened')); // (...영업 중)
+          console.log('isOpenData: ', isOpenData);
+          // 렌더링할 마커 중에서 준비 중
+          setIsCloseData(data.filter((e) => e.status == 'closed')); // (...준비 중)
+          console.log('isCloseData: ', isCloseData);
+        }
+        if (isOpenData) {
+          setOpen(transOpenData); // 영업값
+        }
+      });
+      // 이후 데이터들은 렌더링된 마커가 있을 때만 불러오기
+    } else if (renderingMarker.length > 0) {
+      getMapList(transFilterData).then((data) => {
+        console.log('cate:', cate);
+        console.log('현재 영역: ', mapLoc.bound);
+        console.log('transFilterData: ', transFilterData);
+        // setRole(transCertData); // 인증값
+        setServerData(data); // 점포 목록 데이터 (전체)
+        console.log('serverData: ', serverData);
+        // 렌더링할 마커 (조건: 전체 목록(data 혹은 serverData) 중 화면 범위(ne/sw)에 들어오는 것)
+        // 재검색 버튼이 없거나 카테고리 값이 all이 아닐 경우(= 카테고리를 선택한 경우)
+        setRenderingMarker(
+          data.filter(
+            (e) =>
+              e.lat > mapLoc.bound.southLat &&
+              e.lat < mapLoc.bound.northLat &&
+              e.lng > mapLoc.bound.westlng &&
+              e.lng < mapLoc.bound.eastlng
+          )
+        );
+        console.log('렌더링되는 마커: ', renderingMarker);
+        setCate(transFilterData); // 카테고리값
+
+        // 렌더링할 마커 중에서 영업 중
+        // 렌더링할 마커가 없으면 data에서 가져오기(초기 마커용)
+        if (renderingMarker.length != 0) {
           setIsOpenData(renderingMarker.filter((e) => e.status == 'opened')); // (...영업 중)
           console.log('isOpenData: ', isOpenData);
           // 렌더링할 마커 중에서 준비 중
@@ -433,10 +479,10 @@ function MapComponent({
             <MapMarker
               position={curLoc.center} // curLoc 값에 따라 마커 설정 (고정)
               image={{
-                src: `${myLocation}`,
+                src: `${currentLocation}`,
                 size: {
-                  width: 40,
-                  height: 40,
+                  width: 45,
+                  height: 45,
                 },
               }}
               title="나는 여기에 있어용"

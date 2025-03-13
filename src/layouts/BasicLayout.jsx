@@ -8,7 +8,7 @@ const BasicLayout = ({ children }) => {
       <Header />
       <div className="">{children}</div>{' '}
       {/* 남은 공간 차지 / footer는 항상 페이지 하단에 고정 */}
-      <Footer className="" />
+      <Footer className="h-auto" />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 const MemberIndex = () => {
   return (
     <BasicLayout>
-      <div className="">
+      <div className="flex min-h-full items-center justify-center mx-auto px-4 sm:px-6 lg:px-8">
         <main>
           <Outlet />
         </main>

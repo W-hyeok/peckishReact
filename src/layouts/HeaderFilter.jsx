@@ -205,13 +205,13 @@ export default function HeaderFilter({
               {/* 필터 선택 부분 */}
               <div className="col-span-4">
                 <nav className="flex">
-                  <PopoverGroup className="rounded-md px-3 py-2 mx-1 text-sm font-black bg-white shadow-lg hover:bg-yellow-950/10">
+                  <PopoverGroup className="h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white">
                     <Popover className="relative min-w-full">
-                      <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900">
+                      <PopoverButton className="flex items-center gap-x-1">
                         {selected && selected !== '초기화' ? (
                           <span className="">{selected}</span>
                         ) : (
-                          <span className="text-gray-500 whitespace-nowrap">
+                          <span className="whitespace-nowrap">
                             카테고리 선택
                           </span>
                         )}
@@ -256,7 +256,7 @@ export default function HeaderFilter({
                       onClick={() => openClick(open.name)} // 필터 클릭 시 '영업 중' 요청
                       className={classNames(
                         open.current ? 'bg-yellow-300' : 'text-black', // 논리 상 이상은 없으나 안먹는 색상(green-300 같이)이 있음...
-                        'whitespace-nowrap shadow-lg rounded-md px-3 py-2 mx-1 text-sm font-black bg-white hover:bg-yellow-950/10 flex items-center'
+                        'h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white'
                       )}
                     >
                       {open.name}
@@ -300,7 +300,8 @@ export default function HeaderFilter({
               <div className="col-span-4">
                 {' '}
                 <button
-                  className="shadow-lg rounded-md px-3 py-2 ml-auto text-sm font-black bg-white hover:bg-yellow-950/10 flex items-center"
+                  className="ml-auto hover:bg-yellow-950/10 flex items-center
+                  h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
                   onClick={cookieMember ? moveToPost : moveToLogin}
                 >
                   {' '}

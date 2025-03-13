@@ -87,7 +87,7 @@ export default function Header() {
   // console.log('authCookie : ' + authCookie);
 
   return (
-    <div className="min-h-full">
+    <div className="">
       <Popover as="header" className="bg-[#f9dfb1]">
         <div className="mx-10">
           <div className="relative flex items-center justify-center pt-4 pb-2 lg:justify-between">
