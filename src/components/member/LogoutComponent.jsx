@@ -4,6 +4,7 @@ import ResultModal from '../common/ResultModal';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import fishLogo from '/src/assets/fish_logo.png';
+import '../../css/common.css';
 
 const LogoutComponent = () => {
   const { doLogout, moveToPath } = useCustomLogin();
@@ -44,12 +45,12 @@ const LogoutComponent = () => {
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-          <div className="bg-white px-6 py-6 shadow sm:rounded-lg sm:px-12">
+        <div className="mt-10 sm:mx-auto border sm:w-full sm:max-w-[480px]">
+          <div className="bg-white px-6 py-6 sm:rounded-lg sm:px-12">
             <div className="mt-2 flex items-center justify-center gap-x-6">
               <button
                 type="button"
-                className="flex w-1/2 justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                className="positiveBtn"
                 onClick={() => navigate(-1)}
               >
                 취소
@@ -57,9 +58,9 @@ const LogoutComponent = () => {
               <button
                 type="button"
                 onClick={handleClickLogout}
-                className="flex w-1/2 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="negativeBtn"
               >
-                Logout
+                확인
               </button>
             </div>
           </div>

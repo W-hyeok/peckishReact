@@ -44,7 +44,7 @@ const AddComponent = () => {
       setEmailMessage('이메일의 형식이 올바르지 않습니다!');
       setIsEmail(false);
     } else {
-      setEmailMessage('사용 가능한 이메일 입니다.');
+      setEmailMessage('올바른 형식의 이메일 입니다.');
       setIsEmail(true);
     }
   };
@@ -63,7 +63,7 @@ const AddComponent = () => {
       );
       setIsPassword(false);
     } else {
-      setPasswordMessage('안전한 비밀번호 입니다.');
+      setPasswordMessage('안전한 형식의 비밀번호 입니다.');
       setIsPassword(true);
     }
   };
@@ -94,7 +94,7 @@ const AddComponent = () => {
       setNicknameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요!');
       setIsNickname(false);
     } else {
-      setNicknameMessage('사용가능한 닉네임 입니다.');
+      setNicknameMessage('올바른 형식의 닉네임 입니다.');
       setIsNickname(true);
     }
   };
@@ -111,7 +111,7 @@ const AddComponent = () => {
       setPhoneMessage('올바른 형식이 아닙니다!');
       setIsPhone(false);
     } else {
-      setPhoneMessage('사용 가능한 번호입니다!');
+      setPhoneMessage('올바른 형식의 전화 번호입니다!');
       setIsPhone(true);
     }
   };
@@ -171,7 +171,7 @@ const AddComponent = () => {
   };
 
   const handleClickSignup = () => {
-    // 사진을 제대로 올렸는지 확인 과정 
+    // 사진을 제대로 올렸는지 확인 과정
     if (!profileFile) {
       console.error('프로필 사진 파일이 없습니다!');
       alert('프로필 사진 파일이 없습니다!');
@@ -261,7 +261,6 @@ const AddComponent = () => {
       alert('사업자 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
-
 
   const closeModal = () => {
     setResult(null);
@@ -576,22 +575,22 @@ const AddComponent = () => {
                           </button>
                         )}
                         <div className="mt-6 flex items-center justify-center gap-x-6">
-                          <button
-                            type="button"
-                            onClick={() => navigate(-1)}
-                            className="rounded-md bg-orange-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                          >
-                            취소
-                          </button>
                           {isVerified && (
                             <button
                               type="button"
                               onClick={handleClickSignup}
-                              className="rounded-md bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                              className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                             >
-                              가입 완료
+                              가입
                             </button>
                           )}
+                          <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                            className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                          >
+                            취소
+                          </button>
                         </div>
                       </>
                     ) : (
@@ -614,18 +613,17 @@ const AddComponent = () => {
                         <div className="mt-6 flex items-center justify-center gap-x-6">
                           <button
                             type="button"
-                            onClick={() => navigate(-1)}
-                            className="rounded-md bg-orange-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                            onClick={handleClickSignup}
+                            className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                           >
-                            취소
+                            가입
                           </button>
-
                           <button
                             type="button"
-                            onClick={handleClickSignup}
-                            className="rounded-md bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            onClick={() => navigate(-1)}
+                            className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
                           >
-                            가입 완료
+                            취소
                           </button>
                         </div>
                       </>

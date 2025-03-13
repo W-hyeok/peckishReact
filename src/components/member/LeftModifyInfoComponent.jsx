@@ -7,6 +7,7 @@ import ResultModal from '../../components/common/ResultModal';
 import { PhotoIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../../css/common.css';
 
 const host = API_SERVER_HOST;
 
@@ -215,20 +216,20 @@ const LeftModifyInfoComponent = () => {
       <form>
         <div className="grid grid-cols-1 gap-4">
           <section aria-labelledby="section-2-title">
-            <h2 id="section-2-title" className="sr-only">
-              Section Left
-            </h2>
+            <h1 id="section-2-title" className="text-xl">
+              개인정보 수정 페이지
+            </h1>
             <div className="overflow-hidden rounded-lg bg-white shadow">
               <div className="p-6">
                 {/* Your content */}
                 <div className="space-y-12">
-                  <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6 ">
+                  <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 ">
                     <div className="col-span-full flex items-center justify-center">
                       <div className="mt-2 flex items-center gap-x-3">
                         <img
                           alt={email}
                           src={`${host}/api/member/view/${profileFilename}`}
-                          className="size-52 rounded-full"
+                          className="size-64 rounded-full"
                         />
                       </div>
                     </div>
@@ -391,7 +392,7 @@ const LeftModifyInfoComponent = () => {
                           <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="rounded-md bg-orange-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                            className="negativeBtn"
                           >
                             취소
                           </button>
@@ -399,9 +400,9 @@ const LeftModifyInfoComponent = () => {
                             <button
                               type="button"
                               onClick={handleClickModifyInfo}
-                              className="rounded-md bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                              className="positiveBtn"
                             >
-                              수정 완료
+                              완료
                             </button>
                           )}
                         </div>
@@ -427,7 +428,7 @@ const LeftModifyInfoComponent = () => {
                           <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="rounded-md bg-orange-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                            className="negativeBtn"
                           >
                             취소
                           </button>
@@ -435,9 +436,9 @@ const LeftModifyInfoComponent = () => {
                           <button
                             type="button"
                             onClick={handleClickModifyInfo}
-                            className="rounded-md bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            className="positiveBtn"
                           >
-                            수정 완료
+                            수정
                           </button>
                         </div>
                       </>

@@ -6,6 +6,7 @@ import useCustomLogin from '../../hooks/useCustomLogin';
 import { getCookie } from '../../util/cookieUtil';
 
 import fishLogo from '/src/assets/fish_logo.png';
+import '../../css/common.css';
 
 const LeaveComponent = () => {
   const cookieMember = getCookie('member');
@@ -58,16 +59,16 @@ const LeaveComponent = () => {
               className="mx-auto h-10 w-auto"
             />
             <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-              미련없이 탈퇴 하시겠어요?
+              탈퇴 하시겠습니까?
             </h2>
           </div>
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-            <div className="bg-white px-6 py-6 shadow sm:rounded-lg sm:px-12">
+            <div className="bg-white px-6 py-6 border sm:rounded-lg sm:px-12">
               <div className="mt-2 flex items-center justify-center gap-x-6">
                 <button
                   type="button"
-                  className="flex w-1/2 justify-center rounded-md bg-yellow-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
+                  className="positiveBtn"
                   onClick={() => navigate(-1)}
                 >
                   취소
@@ -75,9 +76,9 @@ const LeaveComponent = () => {
                 <button
                   type="button"
                   onClick={handleClickLeave}
-                  className="flex w-1/2 justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="negativeBtn"
                 >
-                  회원탈퇴
+                  확인
                 </button>
               </div>
             </div>

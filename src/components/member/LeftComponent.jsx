@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { getOneMember } from '../../api/memberApi';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { getCookie } from '../../util/cookieUtil';
+import '../../css/common.css';
 
 const host = API_SERVER_HOST;
 
@@ -38,9 +39,9 @@ const LeftComponent = () => {
   return (
     <div className="grid grid-cols-1 gap-4">
       <section aria-labelledby="section-2-title">
-        <h2 id="section-2-title" className="sr-only">
-          Section Left
-        </h2>
+        <h1 id="section-2-title" className="text-xl">
+          내 프로필
+        </h1>
         <div className="overflow-hidden rounded-lg bg-white shadow">
           <div className="p-6">
             {/* Your content */}
@@ -48,17 +49,17 @@ const LeftComponent = () => {
               <div className="space-y-12">
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 ">
                   <div className="col-span-full flex items-center justify-center">
-                    <div className="mt-2 flex items-center gap-x-3">
+                    <div className="mt-4 mb-4 flex items-center gap-x-3">
                       <img
                         alt={cookieMember.email}
                         src={`${host}/api/member/view/${cookieMember.profileFilename}`}
-                        className="size-52 rounded-full"
+                        className="size-64 rounded-full"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                {/* <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                   <div className="col-span-full">
                     <label
                       htmlFor="email"
@@ -118,21 +119,21 @@ const LeftComponent = () => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
-              <div className="mt-6 flex items-center justify-center gap-x-6">
+              <div className="mt-6 mb-6 flex items-center justify-center gap-x-6">
                 <button
                   type="button"
                   onClick={() => moveToModifyInfo(cookieMember.email)}
-                  className="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="defaultBtn"
                 >
                   개인정보 수정
                 </button>
                 <button
                   type="button"
                   onClick={() => moveToModifyPassword(cookieMember.email)}
-                  className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="defaultBtn"
                 >
                   비밀번호 변경
                 </button>

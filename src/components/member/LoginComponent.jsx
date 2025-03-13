@@ -47,7 +47,7 @@ const LoginComponent = () => {
 
   const closeModal = () => {
     setResult(null);
-    moveToPath(`/member/read/${email}`);
+    moveToPath(`/`);
   };
 
   const closeModalError = () => {
@@ -103,7 +103,7 @@ const LoginComponent = () => {
             className="mx-auto h-8 w-auto"
           />
           <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            로그인 해 주세요
+            로 그 인
           </h2>
         </div>
 
@@ -112,7 +112,7 @@ const LoginComponent = () => {
             <div className="space-y-6">
               <div>
                 <label className="block text-sm/6 font-medium text-gray-900">
-                  Email address
+                  이메일 주소
                 </label>
                 <div className="mt-2">
                   <input

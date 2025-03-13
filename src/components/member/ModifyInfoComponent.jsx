@@ -9,11 +9,10 @@ const ModifyInfoComponent = () => {
     <div>
       <main className="mt-10 pb-4">
         <div className="mx-auto max-w-3xl px-2 sm:px-6 lg:max-w-7xl lg:px-8">
-          <h1 className="sr-only">Main Page</h1>
-          {/* Main 3 column grid */}
+          <h1 className="object-center sr-only">내 페이지</h1>
           <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-3 lg:gap-8">
             <LeftModifyInfoComponent />
-            <RightComponent email={cookieMember.email} />
+            {/* <RightComponent email={cookieMember.email} /> */}
           </div>
         </div>
       </main>

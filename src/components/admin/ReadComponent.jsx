@@ -195,7 +195,7 @@ const ReadComponent = ({ email }) => {
           )}
           <button
             type="button"
-            onClick={handleGoToList}
+            onClick={() => navigate(-1)}
             className="will-change-auto bg-cyan-600 text-white px-3 py-2 rounded hover:bg-cyan-400"
           >
             목록
