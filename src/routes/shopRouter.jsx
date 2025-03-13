@@ -13,7 +13,7 @@ const ModifyShop = lazy(() => import('../pages/shop/ModifyPage'));
 const DetailShop = lazy(() => import('../pages/shop/DetailPage'));
 const DetailShopMoon = lazy(() => import('../pages/shop/DetailPageMoon'));
 // const DetailMenuShop = lazy(() => import('../pages/shop/MenuPage'));
-const DetailReviewShop = lazy(() => import('../pages/shop/ReviewPage'));
+//const DetailReviewShop = lazy(() => import('../pages/shop/ReviewPage'));
 
 // 화면상에 보이는 URL
 const shopRouter = () => {
@@ -88,15 +88,6 @@ const shopRouter = () => {
       element: (
         <Suspense fallback={<LoadingPage />}>
           <ModifyShop />
-        </Suspense>
-      ),
-    },
-    {
-      // 리뷰 보기
-      path: 'detail/review',
-      element: (
-        <Suspense fallback={<LoadingPage />}>
-          <DetailReviewShop />
         </Suspense>
       ),
     },
