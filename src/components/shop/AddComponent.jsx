@@ -366,7 +366,7 @@ const AddComponent = () => {
 
       {/* 검색(엔터)용 버튼(히든) */}
       <button type="button" onClick={activeButton} className="hidden"></button>
-
+      {/* 뒷 배경 양식 */}
       <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
         {/*첫번째 레이아웃*/}
         <div>
