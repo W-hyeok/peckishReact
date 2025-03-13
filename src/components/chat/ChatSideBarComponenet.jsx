@@ -5,7 +5,7 @@ import { getListDetail } from '../../api/roomApi';
 import { Link } from 'react-router-dom';
 
 const memberInfo = getCookie('member');
-const memberName = memberInfo.membername;
+const memberEmail = memberInfo.email;
 
 const ChatSideBarComponenet = () => {
   const [chatList, setChatList] = useState([]);
@@ -13,8 +13,9 @@ const ChatSideBarComponenet = () => {
   useEffect(() => {
     const loadChatList = async () => {
       try {
-        const data = await getListDetail(memberName);
+        const data = await getListDetail(memberEmail);
         setChatList(data);
+        console.log('채팅 data', data);
       } catch (error) {
         console.error('채팅 목록 불러오기 실패:', error);
       }
@@ -37,11 +38,11 @@ const ChatSideBarComponenet = () => {
               className="h-[44px] w-[40px] rounded-full ring-4 ring-blue-400 m-1 p-1"
               alt="member Avatar"
             />
-          </div>
-          <div className="flex-grow ml-2">
-            <div className="text-lg font-semibold">{chat.membername}</div>
-            <span className="text-gray-500">{chat.lastMessage}</span>{' '}
-            {/* 마지막 메시지 표시 */}
+            {chat.unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                {chat.unreadCount}
+              </span>
+            )}
           </div>
         </Link>
       ))}

@@ -126,7 +126,7 @@ const Router = () => {
       path: '/roomList/room/:room_ID',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <RoomComponent />
+          <RoomPage />
         </Suspense>
       ),
     },

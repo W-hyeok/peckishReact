@@ -56,6 +56,7 @@ export default function Header() {
     { name: '내 프로필 보기', href: `/member/read/${cookieMember.email}` },
     { name: '점포관리', href: `/shop/detailMoon/${cookieMember.email}` },
     { name: '영업 시작/종료', href: `/member/openClose/${cookieMember.email}` },
+    { name: '문의 사항', href: '/roomList' },
     { name: '로그아웃', href: '/member/logout' },
     { name: '회원탈퇴', href: '/member/leave' },
   ];
