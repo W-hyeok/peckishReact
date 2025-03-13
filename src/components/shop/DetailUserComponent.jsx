@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { Fragment, useState } from 'react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-
 import { StarIcon } from '@heroicons/react/20/solid';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -13,53 +12,20 @@ import {
   Toolbox,
   useMap,
 } from 'react-kakao-maps-sdk';
-
 import '../../css/animate.css'; // 스크롤 애니메이션용 css
 import '../../css/hoverText.css'; // 텍스트 잘림 방지
 import '../../css/scrollbar.css';
 import '../../css/scrollbar2.css';
-
 import { useTimeStamp } from '../../hooks/useTimeAgo';
 import useCustomMove from '../../hooks/useCustomMove';
 import AddReviewModal from '../common/AddReviewModal';
-import ResultModal from '../common/ResultModal';
 import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, getMenuList } from '../../api/shopApi';
 import DetailUserMenuComponent from './DetailUserMenuComponent';
+import DetailUserReviewComponent from '../review/DetailUserReviewComponent';
+import { getReview, getUserRating } from '../../api/reviewApi';
 
 const host = `${API_SERVER_HOST}`;
-
-const reviews = {
-  average: 4,
-  featured: [
-    {
-      id: 1,
-      rating: 5,
-      content: `
-          <p>맛이 young하네요 mz하네요</p>
-        `,
-      date: 'July 16, 2021',
-      datetime: '2021-07-16',
-      author: 'youngman',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    {
-      id: 2,
-      rating: 5,
-      content: `
-          <p>변비 특효약!!</p>
-        `,
-      date: 'July 12, 2021',
-      datetime: '2021-07-12',
-      author: 'hero zealot',
-      avatarSrc:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=256&h=256&q=80',
-    },
-    // More reviews...
-  ],
-};
-
 const { kakao } = window;
 
 function classNames(...classes) {
@@ -69,47 +35,48 @@ function classNames(...classes) {
 const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
   // 메뉴 목록 뿌려줄때 필요한 것들
   const [menuItems, setMenuItems] = useState([]);
-  const navigate = useNavigate();
-  const { moveToBack } = useCustomMove();
-  const [result, setResult] = useState(null);
-
+  // 리뷰 목록 뿌려줄때 필요한 것들
+  const [review, setReview] = useState([]);
+  // 리뷰 별점계산
+  const [ratingAvg, setRatingAvg] = useState(null);
+  const [result, setResult] = useState(null); // 모달 띄워주기 위해서
   const [refresh, setRefresh] = useState(false);
-  const [fetch, setFetch] = useState(false);
+  const [fetch, setFetch] = useState(false); // 시간차
 
   // DB에서 메뉴목록 불러오기
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
       setFetch(false);
-      setMenuItems(data.RESULT);
+      setMenuItems(data.RESULT); // DB에서 가져온 목록을 menuItems state에 저장
       setFetch(true);
-      console.log('메뉴 목록 업데이트:', data.RESULT);
+      console.log('메뉴 목록 :', data.RESULT);
     });
-  }, [shopId, infoType, refresh]); // ✅ menuItems 제거, refresh 추가
+  }, [shopId, infoType, refresh]);
 
-  //메뉴 삭제 (받을 인자 값)
-  const handleMenuRemove = (menuId) => {
-    console.log('삭제할 menuId : ', menuId);
-    deleteMenu(menuId, infoType).then((data) => {
-      console.log(data.RESULT);
-      // 메뉴 항목 업데이트 후 즉시 화면에 반영
-      setMenuItems((prevItems) =>
-        prevItems.filter((menu) => menu.menuId !== menuId)
-      );
+  // DB에서 리뷰목록 불러오기
+  useEffect(() => {
+    getReview(shopId, infoType).then((data) => {
+      setFetch(false);
+      console.log('리뷰 목록 : ', data.Result);
+      setReview(data.Result);
+      setFetch(true);
     });
-  };
+  }, [shopId, infoType, refresh]);
 
-  console.log(mapData);
-  console.log(storeLoc);
+  // USER - 리뷰 평점 계산
+  useEffect(() => {
+    getUserRating(shopId).then((data) => {
+      console.log('USER 리뷰 평균 : ', data);
+      setRatingAvg(data);
+    });
+  });
+
+  //console.log(mapData);
+  //console.log(storeLoc);
 
   const closeModal = () => {
     setResult(null);
     setRefresh((prev) => !prev);
-  };
-
-  // 메뉴 추가 버튼 클릭시 이벤트
-  const handleClickAddMenu = () => {
-    console.log('메뉴모달 보여줘라');
-    setResult('menu');
   };
 
   // 리뷰 추가 버튼 클릭시 이벤트
@@ -118,13 +85,33 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
     setResult('review');
   };
 
-  console.log(shop);
-  console.log(shopId);
+  // 메뉴 추가 버튼 클릭시 이벤트
+  const handleClickAddMenu = () => {
+    console.log('메뉴모달 보여줘라');
+    setResult('menu');
+  };
+
+  //메뉴 삭제 (받을 인자 값)
+  const handleMenuRemove = (menuId) => {
+    console.log('삭제할 menuId : ', menuId);
+    deleteMenu(menuId, infoType).then((data) => {
+      console.log('메뉴 삭제 : ', data.RESULT);
+      // 메뉴 항목 업데이트 후 즉시 화면에 반영
+
+      setMenuItems((prevItems) =>
+        prevItems.filter((menu) => menu.menuId !== menuId)
+      );
+      setResult(false);
+    });
+  };
 
   return (
     <>
       {result === 'review' && (
         <AddReviewModal
+          shopId={shopId}
+          shopDetailId={shop.shopUserDTO.shopUserId}
+          infoType={infoType}
           title={'리뷰 작성'}
           content={`리뷰를 작성해주세요`}
           callbackFn={closeModal}
@@ -175,26 +162,40 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                 <span>{useTimeStamp(shop.shopUserDTO.updateDate)}</span>
               </p>
             </div>
+            {/* 리뷰 별점 아이콘 */}
+            <h3 className="sr-only">Reviews</h3>
+            <div className="flex items-center space-x-2">
+              {/* ⭐ 별 아이콘 */}
+              <div className="flex space-x-0.5">
+                {[0, 1, 2, 3, 4].map((index) => {
+                  const wholeStars = Math.floor(ratingAvg); // 정수 별 개수
+                  const hasHalfStar = ratingAvg % 1 >= 0.5; // 반쪽 별 여부
 
-            <div>
-              <h3 className="sr-only">Reviews</h3>
-              <div className="flex items-center">
-                {[0, 1, 2, 3, 4].map((rating) => (
-                  <StarIcon
-                    key={rating}
-                    aria-hidden="true"
-                    className={classNames(
-                      reviews.average > rating
-                        ? 'text-yellow-400'
-                        : 'text-gray-300',
-                      'size-5 shrink-0'
-                    )}
-                  />
-                ))}
+                  return (
+                    <span key={index} className="relative flex">
+                      {index < wholeStars ? (
+                        <StarIcon className="size-5 text-yellow-400" />
+                      ) : index === wholeStars && hasHalfStar ? (
+                        <div className="relative w-5">
+                          <StarIcon className="size-5 text-gray-300 absolute" />
+                          <StarIcon
+                            className="size-5 text-yellow-400 absolute left-0 top-0"
+                            style={{ clipPath: 'inset(0 50% 0 0)' }}
+                          />
+                        </div>
+                      ) : (
+                        <StarIcon className="size-5 text-gray-300" />
+                      )}
+                    </span>
+                  );
+                })}
               </div>
-              <p className="sr-only">{reviews.average} out of 5 stars</p>
+              <span className="text-sm font-semibold text-gray-800">
+                ({typeof ratingAvg === 'number' ? ratingAvg.toFixed(1) : '0.0'})
+              </span>
             </div>
           </div>
+
           <div id="mapWrap">
             {/* 카카오맵 */}
             <KakaoMap
@@ -277,25 +278,22 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                 </div>
               </TabPanel>
 
+              {/* 메뉴 */}
               <TabPanel className="text-sm text-gray-500 py-3 px-4 rounded-lg mt-2">
                 <h3 className="sr-only">User Menu</h3>
 
-                {/* 메뉴 목록 */}
-                {menuItems ? (
-                  fetch ? (
-                    <DetailUserMenuComponent
-                      menuItems={menuItems}
-                      handleMenuRemove={handleMenuRemove}
-                    />
-                  ) : (
-                    <></>
-                  )
-                ) : (
+                {/* 메뉴 항목 목록 */}
+                {menuItems && fetch ? (
+                  <DetailUserMenuComponent
+                    menuItems={menuItems}
+                    handleMenuRemove={handleMenuRemove}
+                  />
+                ) : !menuItems ? (
                   // 등록된 메뉴가 하나도 없으면 노출
                   <p className="text-center mt-2 text-gray-600">
                     메뉴를 추가해주세요!
                   </p>
-                )}
+                ) : null}
 
                 {/* 메뉴 추가 버튼 */}
                 <div className="flex">
@@ -303,9 +301,9 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                     <button
                       type="button"
                       onClick={handleClickAddMenu}
-                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50 transition-all duration-300"
+                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 transition-all duration-300"
                     >
-                      메뉴 정보 변경
+                      메뉴 추가
                     </button>
                   </div>
                 </div>
@@ -314,67 +312,13 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
               {/* 리뷰 */}
               <TabPanel className="-mb-10">
                 <h3 className="sr-only">Customer Reviews</h3>
-
-                {reviews.featured.map((review, reviewIdx) => (
-                  <div
-                    key={review.id}
-                    className="flex space-x-4 text-sm text-gray-500"
-                  >
-                    <div className="flex-none py-10">
-                      <img
-                        alt=""
-                        src={review.avatarSrc}
-                        className="size-10 rounded-full bg-gray-100"
-                      />
-                    </div>
-                    <div
-                      className={classNames(
-                        reviewIdx === 0 ? '' : 'border-t border-gray-200',
-                        'flex-1 py-10'
-                      )}
-                    >
-                      <h3 className="font-medium text-gray-900">
-                        {review.author}
-                      </h3>
-                      <p>
-                        <time dateTime={review.datetime}>{review.date}</time>
-                      </p>
-
-                      <div className="mt-4 flex items-center">
-                        {[0, 1, 2, 3, 4].map((rating) => (
-                          <StarIcon
-                            key={rating}
-                            aria-hidden="true"
-                            className={classNames(
-                              review.rating > rating
-                                ? 'text-yellow-400'
-                                : 'text-gray-300',
-                              'size-5 shrink-0'
-                            )}
-                          />
-                        ))}
-                      </div>
-                      <p className="sr-only">{review.rating} out of 5 stars</p>
-
-                      <div
-                        dangerouslySetInnerHTML={{ __html: review.content }}
-                        className="mt-4 text-sm/6 text-gray-500"
-                      />
-                    </div>
-                  </div>
-                ))}
-                {/* 리뷰 추가 버튼 */}
-                <div className="flex">
-                  <div className="mt-6 m-auto">
-                    <button
-                      type="button"
-                      onClick={handleClickReview}
-                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-yellow-500 px-8 py-3 text-base font-medium text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50 transition-all duration-300"
-                    >
-                      리뷰 작성
-                    </button>
-                  </div>
-                </div>
+                <DetailUserReviewComponent
+                  shopId={shopId}
+                  shopDetailId={shop.shopUserDTO.shopUserId}
+                  infoType={infoType}
+                  review={review}
+                  handleClickReview={handleClickReview}
+                />
               </TabPanel>
             </TabPanels>
           </TabGroup>

@@ -10,13 +10,21 @@ import React from 'react';
 import Star from '../review/Star';
 import { getCookie } from '../../util/cookieUtil';
 import ResultModal from './ResultModal';
+import { postReview } from '../../api/reviewApi';
 
 const initState = {
   content: '',
   rating: 0, // 별점 추가
 };
 
-const AddReviewModal = ({ title, content, callbackFn }) => {
+const AddReviewModal = ({
+  shopId,
+  shopDetailId,
+  infoType,
+  title,
+  content,
+  callbackFn,
+}) => {
   const [open, setOpen] = useState(true);
   const [review, setReview] = useState({ ...initState });
   const [result, setResult] = useState(false); // ResultModal을 열기 위한 상태
@@ -34,12 +42,20 @@ const AddReviewModal = ({ title, content, callbackFn }) => {
     }
   };
 
+  // Enter 키 입력 처리
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault(); // 기본 엔터 키 동작 방지 (줄바꿈 X)
+      handleSave(); // 리뷰 저장 실행
+    }
+  };
+
   // 리뷰 저장
   const handleSave = () => {
     // 유효성 검사
     if (review.rating === 0) {
       setErrorMessage('별점을 선택해주세요.');
-      return; // 별점이 선택되지 않으면 저장되지 않도록 처리
+      return;
     }
 
     if (!review.content.trim()) {
@@ -53,16 +69,28 @@ const AddReviewModal = ({ title, content, callbackFn }) => {
     setErrorMessage(''); // 오류 메시지 초기화
     console.log('저장된 리뷰:', review);
 
-    // 리뷰 저장 로직을 여기에 추가해야 합니다.
-    // 예시: 서버로 리뷰 데이터를 보내고 성공하면 아래를 실행
-    setResult(true); // 리뷰 저장 후 ResultModal을 열도록 상태 업데이트
+    // 리뷰 저장할 내용을 담은 formData
+    const formData = new FormData();
+
+    formData.append('rating', review.rating);
+    formData.append('content', review.content);
+    formData.append('email', writerEmail);
+
+    // 리뷰 저장 api 요청
+    postReview(shopId, shopDetailId, infoType, formData)
+      .then((data) => {
+        console.log('리뷰저장버튼 클릭', data);
+        setResult(true);
+        console.log('DB 저장완료');
+      })
+      .catch((err) => console.log('전송실패', err));
   };
 
   // ResultModal 닫기
   const closeModal = () => {
     setResult(false); // ResultModal 닫을 때 result를 false로 설정
     handleClose();
-    console.log('리뷰 저장 완료!!');
+    console.log('리뷰 저장확인 모달 닫기');
   };
 
   // 별점 변경 핸들러
@@ -147,6 +175,7 @@ const AddReviewModal = ({ title, content, callbackFn }) => {
                 rows={3}
                 value={review.content}
                 onChange={handleChangeReview}
+                onKeyDown={handleKeyDown}
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 border border-gray-300 placeholder-gray-400 focus:border-indigo-600"
               ></textarea>
             </div>
