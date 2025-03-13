@@ -19,6 +19,20 @@ export const getList = async (memberEmail) => {
     throw error;
   }
 };
+
+export const getListOwner = async (ownerEmail) => {
+  try {
+    const result = await axios.get(
+      `${API_SERVER_HOST}/room/listOwner/${ownerEmail}`,
+      header
+    );
+    return result.data;
+  } catch (error) {
+    console.error('getList ERROR ! :', error);
+    throw error;
+  }
+};
+
 export const getListDetail = async (memberEmail) => {
   try {
     const result = await axios.get(
@@ -56,6 +70,7 @@ export const createRoom = async ({ member1, member2, shopId }) => {
       },
       header
     );
+    console.log('방생성 반환결과', result.data);
     return result.data;
   } catch (error) {
     console.error('채팅방 생성 오류:', error);

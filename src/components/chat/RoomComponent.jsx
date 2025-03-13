@@ -5,6 +5,7 @@ import { getCookie } from '../../util/cookieUtil';
 import axios from 'axios';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import PropTypes from 'prop-types';
+import ChatSideBarComponenet from './ChatSideBarComponenet';
 
 const memberInfo = getCookie('member');
 const memberEmail = memberInfo.email;
@@ -28,14 +29,11 @@ const RoomComponent = () => {
   ];
 
   useEffect(() => {
-    const searchBox = document.querySelector('nav.search_box');
-    if (searchBox) {
-      searchBox.style.display = 'none';
-    }
     const fetchMessages = async () => {
       try {
         const data = await getMsgs(room_ID);
         setMessages(data);
+        console.log('메세지 요청 데이터의 이메일', data);
       } catch (error) {
         console.error('메시지 불러오기 실패:', error);
       }
@@ -46,9 +44,22 @@ const RoomComponent = () => {
     const ws = new WebSocket(wsUrl);
     let isRoomEntered = false;
 
+    // 메세지 보낼때 defualt는 영국시간기준으로 되어있어서 서울 시간을 기준으로 하기위해서 설정
+    const now = new Date();
+    const seoulTime = now.toLocaleString('ko-KR', {
+      timeZone: 'Asia/Seoul',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+
     ws.onopen = () => {
       console.log('[open] 커넥션이 만들어졌습니다.');
       if (!isRoomEntered) {
+        console.log('member 이메일 확인', memberEmail);
         ws.send(
           JSON.stringify({
             room_ID: room_ID,
@@ -60,7 +71,7 @@ const RoomComponent = () => {
             ch: '我连接了聊天室。',
             en: "I've logged on to the chat room.",
             selectedLanguage: selectedLanguage,
-            reg_date: new Date().toISOString().replace('T', ' ').split('.')[0],
+            reg_date: seoulTime.replace('-'), // ISO 8601 형식으로 변환
           })
         );
         isRoomEntered = true;
@@ -124,7 +135,7 @@ const RoomComponent = () => {
         email: memberEmail,
         content: inputMessage,
         selectedLanguage: selectedLanguage, // 드롭박스에서 선택한 번역 대상 언어
-        reg_date: new Date().toISOString().replace('T', ' ').split('.')[0],
+        reg_date: seoulTime.replace('-'),
       };
       socket.send(JSON.stringify(messagePayload));
       setInputMessage('');
@@ -137,6 +148,7 @@ const RoomComponent = () => {
     <>
       <main className="mb-[100px] max-w-screen-xl p-4 relative justify-center">
         <div className="flex flex-row justify-center bg-[#F9DFB1] w-full max-w-5xl mx-auto h-[40rem] ">
+          <ChatSideBarComponenet />
           <div className="flex flex-col flex-grow bg-gray-200 w-full max-w-xl mx-auto rounded-lg p-2 relative border-t border-gray-200 shadow-md">
             {/* 메시지 창 */}
             <div
@@ -157,7 +169,7 @@ const RoomComponent = () => {
                         index === messages.length - 1 ? 'mb-[50px]' : ''
                       }
                     >
-                      {msg.email === memberEmail ? (
+                      {msg.username === memberEmail ? (
                         <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
                           <div>
                             <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">

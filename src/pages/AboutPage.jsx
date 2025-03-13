@@ -19,7 +19,7 @@ import useCustomMove from '../hooks/useCustomMove';
 import { getCookie } from '../util/cookieUtil';
 import { API_SERVER_HOST } from '../api/todoApi';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { href, Link } from 'react-router-dom';
 import fishLogo from '/src/assets/fish_logo.png';
 
 // const navigation = [
@@ -71,6 +71,7 @@ const AboutPage = () => {
     { name: '영업 시작/종료', href: `/member/openClose/${cookieMember.email}` },
     { name: '로그아웃', href: '/member/logout' },
     { name: '회원탈퇴', href: '/member/leave' },
+    { name: '문의 사항', href: '/roomList' },
   ];
 
   // 로그인한 관리자만 볼 수 있는 링크
