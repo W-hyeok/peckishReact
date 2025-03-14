@@ -95,9 +95,8 @@ const ButtonCotainer = styled.li`
   cursor: pointer;
   background-color: #ffffff;
   outline: none;
-  border: none;
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  border: 2px solid #000000;
+  border-radius: 8px;
   font-size: 14px;
   position: relative;
   z-index: 999;
@@ -105,14 +104,14 @@ const ButtonCotainer = styled.li`
 
 const LanguageList = styled.ul`
   position: absolute;
-  top: 5.8vh;
+  top: 0vh;
   left: 0;
   background-color: white;
-  border: 1px solid #ccc;
+  border: 2px solid #000000;
   list-style: none;
   padding: 10px;
+  padding-top: 5px;
   margin: 0;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: max-content;
   height: 80vh;
   overflow-y: auto;

@@ -19,6 +19,7 @@ import SweetPotato from '../assets/icon/sweetPotato.png';
 import Hotteok from '../assets/icon/hotteok2.png';
 import useCustomMove from '../hooks/useCustomMove';
 import resetIcon from '../assets/icon/reset.png';
+import resetButton from '../assets/icon/resetButton.png';
 import filterIcon from '../assets/icon/filterIcon.png';
 
 // 카테고리값 초기화 객체(배열)
@@ -205,11 +206,14 @@ export default function HeaderFilter({
               {/* 필터 선택 부분 */}
               <div className="col-span-4">
                 <nav className="flex">
-                  <PopoverGroup className="h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white">
+                  <PopoverGroup
+                    className="h-fit w-fit px-4 py-2 bg-white rounded-[8px] border-[2px] border-yellow-400 hover:bg-yellow-400
+                  text-yellow-400 text-md font-semibold mt-2 hover:text-white"
+                  >
                     <Popover className="relative min-w-full">
                       <PopoverButton className="flex items-center gap-x-1">
                         {selected && selected !== '초기화' ? (
-                          <span className="">{selected}</span>
+                          <span className="whitespace-nowrap">{selected}</span>
                         ) : (
                           <span className="whitespace-nowrap">
                             카테고리 선택
@@ -255,7 +259,7 @@ export default function HeaderFilter({
                       href={open.href}
                       onClick={() => openClick(open.name)} // 필터 클릭 시 '영업 중' 요청
                       className={classNames(
-                        open.current ? 'bg-yellow-300' : 'text-black', // 논리 상 이상은 없으나 안먹는 색상(green-300 같이)이 있음...
+                        open.current ? 'bg-yellow-800' : 'text-black', // 논리 상 이상은 없으나 안먹는 색상(green-300 같이)이 있음...
                         'h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white'
                       )}
                     >
@@ -263,20 +267,14 @@ export default function HeaderFilter({
                     </a>
                   ))}
                   {/* 필터 초기화 */}
-                  <button
-                    className="rounded-md px-2 text-sm font-black"
-                    onClick={() => clickEvent('초기화')}
-                  >
-                    <img
-                      src={resetIcon}
-                      className="h-6 w-auto mx-auto min-w-max"
-                    />{' '}
+                  <button className="px-4" onClick={() => clickEvent('초기화')}>
+                    <img src={resetButton} className="h-9" />{' '}
                   </button>
                 </nav>
               </div>
 
               {/* 검색창 부분 */}
-              <div className="grid col-span-3">
+              <div className="grid col-span-3 mt-2 items-center">
                 <input
                   onChange={handleInputChange}
                   onKeyDown={enter}
@@ -284,10 +282,10 @@ export default function HeaderFilter({
                   type="search"
                   placeholder="위치/주소 검색..."
                   aria-label="Search"
-                  className="peer col-start-1 row-start-1 block w-full rounded-md bg-white/50 py-1.5 pl-10 pr-3 
-                  text-sm/6 text-black outline-none shadow-md
-                  focus:bg-white focus:text-gray-900 
-                  focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
+                  className="peer col-start-1 row-start-1 block w-full rounded-[8px] border-[2px] border-yellow-400 bg-white/50 py-1.5 pl-10 pr-3 
+                  text-md font-semibold outline-none shadow-md
+                  focus:bg-white focus:text-gray-600
+                  focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-300"
                 />
                 <button onClick={activeButton} className="hidden"></button>
                 <MagnifyingGlassIcon
@@ -341,7 +339,7 @@ export default function HeaderFilter({
                       className="rounded-md px-2 text-sm font-black flex justify-center"
                       onClick={() => clickEvent('초기화')}
                     >
-                      <img src={resetIcon} className="h-6 mx-auto" />{' '}
+                      <img src={resetButton} className="h-8 mx-auto" />{' '}
                     </button>
                   </div>
                 </div>

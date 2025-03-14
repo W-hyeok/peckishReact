@@ -423,10 +423,10 @@ function MapComponent({
               zIndex: '3', // 최소 지도 레이어(1)보다 높아야 함
               marginTop: '10px',
               left: '50%',
-              width: '200px',
               transform: 'translateX(-50%)',
+              boxShadow: '0 2px 2px 2px rgba(0,0,0,0.4)',
             }}
-            className="rounded-3xl bg-yellow-800/90 text-white py-2 shadow-lg"
+            className="rounded-3xl bg-white border-[2px] border-blue-600 text-blue-600 font-semibold px-4 py-2 h-fit w-fit hover:bg-blue-600 hover:text-white"
           >
             현 위치에서 검색
           </button>

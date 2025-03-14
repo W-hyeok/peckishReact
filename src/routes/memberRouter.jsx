@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react';
 import LoadingPage from '../components/common/LoadingPage';
 import { Navigate } from 'react-router-dom';
+import LoginRequired from './loginRequiredRouter';
+import LogoutRequired from './logoutRequiredRouter';
 
 const Login = lazy(() => import('../pages/member/LoginPage'));
 const Logout = lazy(() => import('../pages/member/LogoutPage'));
@@ -23,7 +25,9 @@ const memberRouter = () => {
       path: 'add',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <MemberAdd />
+          <LogoutRequired>
+            <MemberAdd />
+          </LogoutRequired>
         </Suspense>
       ),
     },
@@ -31,7 +35,9 @@ const memberRouter = () => {
       path: 'login',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <Login />
+          <LogoutRequired>
+            <Login />
+          </LogoutRequired>
         </Suspense>
       ),
     },
@@ -43,7 +49,9 @@ const memberRouter = () => {
       path: 'logout',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <Logout />
+          <LoginRequired>
+            <Logout />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -56,10 +64,22 @@ const memberRouter = () => {
       ),
     },
     {
+      path: 'read',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <LoginRequired>
+            <MemberRead />
+          </LoginRequired>
+        </Suspense>
+      ),
+    },
+    {
       path: 'read/:email',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <MemberRead />
+          <LoginRequired>
+            <MemberRead />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -67,7 +87,9 @@ const memberRouter = () => {
       path: 'modify',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <MemberModify />
+          <LoginRequired>
+            <MemberModify />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -75,7 +97,9 @@ const memberRouter = () => {
       path: 'modifyInfo/:email',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <MemberModifyInfo />
+          <LoginRequired>
+            <MemberModifyInfo />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -83,7 +107,9 @@ const memberRouter = () => {
       path: 'modifyPassword/:email',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <MemberModifyPassword />
+          <LoginRequired>
+            <MemberModifyPassword />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -91,7 +117,9 @@ const memberRouter = () => {
       path: 'leave',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <Leave />
+          <LoginRequired>
+            <Leave />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -99,7 +127,9 @@ const memberRouter = () => {
       path: 'searchEmail',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <SearchEmail />
+          <LoginRequired>
+            <SearchEmail />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -107,7 +137,9 @@ const memberRouter = () => {
       path: 'searchPassword',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <SearchPassword />
+          <LoginRequired>
+            <SearchPassword />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -115,7 +147,9 @@ const memberRouter = () => {
       path: 'openClose/:email',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <OpenClose />
+          <LoginRequired>
+            <OpenClose />
+          </LoginRequired>
         </Suspense>
       ),
     },

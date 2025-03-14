@@ -219,7 +219,12 @@ const AddComponent = () => {
 
   // 유저, 사장인지
   const handleCheckboxCertificate = (isChecked) => {
-    if (isChecked) {
+    // 체크박스 체크 시 owned 체크
+    if (memberCookie.owned == true) {
+      alert('인증된 점포가 이미 존재합니다.');
+      setShop({ ...shop, certificate: false });
+      return;
+    } else if (isChecked) {
       setShop({ ...shop, certificate: true });
     } else {
       setShop({ ...shop, certificate: false });
@@ -267,7 +272,7 @@ const AddComponent = () => {
     }
     if (!shop.location) {
       console.error('위치를 입력해주세요');
-      alert('위치를 입력해주세요요');
+      alert('위치를 입력해주세요');
       return;
     }
     if (!shop.category) {
@@ -280,17 +285,21 @@ const AddComponent = () => {
       alert('요일을 선택해주세요');
       return;
     }
+    if (memberCookie.owned == true) {
+      alert('인증된 점포가 이미 존재합니다.');
+      return;
+    }
 
     // const shopfile = uploadRef.current.files[0];
-    console.log('사진 파일은 : ', shopfile);
-    console.log('제목 :', shop.title);
-    console.log('위치는 : ', shop.location);
-    console.log('경도 : ', position.center.lng);
-    console.log('위도 : ', position.center.lat);
-    console.log('선택된 요일 : ', selectedDayNames);
-    console.log('영업시작 시간 : ', openTime);
-    console.log('영업시간 종료 : ', closeTime);
-    console.log('카테고리 : ', shop.category);
+    console.log('사진 파일은:', shopfile);
+    console.log('제목:', shop.title);
+    console.log('위치는:', shop.location);
+    console.log('경도:', position.center.lng);
+    console.log('위도:', position.center.lat);
+    console.log('선택된 요일:', selectedDayNames);
+    console.log('영업시작 시간:', openTime);
+    console.log('영업시간 종료:', closeTime);
+    console.log('카테고리:', shop.category);
 
     // console.log(shop);
 
@@ -314,7 +323,7 @@ const AddComponent = () => {
         console.log(data);
         setResult(data.RESULT);
       })
-      .catch((err) => console.log('전송실패', err));
+      .catch((err) => console.log(err));
   };
 
   const { moveToMain } = useCustomMove();
@@ -623,30 +632,73 @@ const AddComponent = () => {
                 </div>
               </div>
               {/* '사업자 인증' 버튼 */}
+              {/* 일반 유저 및 사업자+인증 이력 있을 시 체크 불가, 문구 달라짐 */}
               {checkRole == 'USER' ? (
-                <></>
+                <>
+                  <div className="flex h-auto shrink-0 items-center space-x-4">
+                    <div className="group grid size-4 grid-cols-1">
+                      <input
+                        name="certificate"
+                        type="checkbox"
+                        disabled
+                        className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                      />
+                    </div>
+                    <div className="flex text-lg">
+                      <label className="select-none font-medium text-gray-700">
+                        내 점포 인증하기
+                        <span className="ml-2 text-gray-600">
+                          (회원정보 수정 - 사업자 정보 추가 필요)
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </>
               ) : (
-                <div className="flex h-auto shrink-0 items-center space-x-4">
-                  <div className="group grid size-4 grid-cols-1">
-                    <input
-                      name="certificate"
-                      value={shop.certificate}
-                      onChange={(e) =>
-                        handleCheckboxCertificate(e.target.checked)
-                      }
-                      type="checkbox"
-                      className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                    />
-                  </div>
-                  <div className="flex text-lg">
-                    <label className="select-none font-medium text-gray-900">
-                      인증된 정보
-                      <span className="text-gray-400">
-                        (사업자 권한이 필요합니다.)
-                      </span>
-                    </label>
-                  </div>
-                </div>
+                <>
+                  {memberCookie.owned == true ? (
+                    <div className="flex h-auto shrink-0 items-center space-x-4">
+                      <div className="group grid size-4 grid-cols-1">
+                        <input
+                          name="certificate"
+                          type="checkbox"
+                          disabled
+                          className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                        />
+                      </div>
+                      <div className="flex text-lg">
+                        <label className="select-none font-medium text-gray-500">
+                          내 점포 인증하기
+                          <span className="text-gray-400">
+                            (이미 점포를 인증하셨습니다.)
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex h-auto shrink-0 items-center space-x-4">
+                      <div className="group grid size-4 grid-cols-1">
+                        <input
+                          name="certificate"
+                          value={shop.certificate}
+                          onChange={(e) =>
+                            handleCheckboxCertificate(e.target.checked)
+                          }
+                          type="checkbox"
+                          className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                        />
+                      </div>
+                      <div className="flex text-lg">
+                        <label className="select-none font-medium text-gray-900">
+                          내 점포 인증하기
+                          <span className="text-gray-400">
+                            (해당 점포의 사장님일 경우 체크해주세요.)
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

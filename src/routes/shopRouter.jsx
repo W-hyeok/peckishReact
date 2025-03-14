@@ -1,5 +1,7 @@
 import { lazy, Suspense } from 'react';
 import LoadingPage from '../components/common/LoadingPage';
+import { getCookie } from '../util/cookieUtil';
+import LoginRequired from './loginRequiredRouter';
 
 const AddShop = lazy(() => import('../pages/shop/AddShopPage'));
 const AddShopExtraUSER = lazy(
@@ -17,13 +19,17 @@ const DetailShopMoon = lazy(() => import('../pages/shop/DetailPageMoon'));
 
 // 화면상에 보이는 URL
 const shopRouter = () => {
+  // 등록, 수정 등은 로그인 해야 접속 가능
   return [
     {
       // 최초 상점 등록
       path: 'add',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <AddShop />
+          <LoginRequired>
+            <AddShop />
+          </LoginRequired>
+          <LoginRequired></LoginRequired>
         </Suspense>
       ),
     },
@@ -32,7 +38,9 @@ const shopRouter = () => {
       path: 'add/:shopId/USER',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <AddShopExtraUSER />
+          <LoginRequired>
+            <AddShopExtraUSER />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -41,7 +49,9 @@ const shopRouter = () => {
       path: 'add/:shopId/OWNER',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <AddShopExtraOWNER />
+          <LoginRequired>
+            <AddShopExtraOWNER />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -51,7 +61,20 @@ const shopRouter = () => {
       path: 'addMenu/:shopId/:shopDetailId/:infoType',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <AddMenu />
+          <LoginRequired>
+            <AddMenu />
+          </LoginRequired>
+        </Suspense>
+      ),
+    },
+    {
+      // infoType에 따라 상점 정보 수정
+      path: 'modify/:shopId/:shopDetailId/:infoType',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <LoginRequired>
+            <ModifyShop />
+          </LoginRequired>
         </Suspense>
       ),
     },
@@ -79,15 +102,6 @@ const shopRouter = () => {
       element: (
         <Suspense fallback={<LoadingPage />}>
           {/* <DetailMenuShop /> */}
-        </Suspense>
-      ),
-    },
-    {
-      // infoType에 따라 상점 정보 수정
-      path: 'modify/:shopId/:shopDetailId/:infoType',
-      element: (
-        <Suspense fallback={<LoadingPage />}>
-          <ModifyShop />
         </Suspense>
       ),
     },
