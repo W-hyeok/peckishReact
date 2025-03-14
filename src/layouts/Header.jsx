@@ -93,16 +93,16 @@ export default function Header() {
           <div className="relative flex items-center justify-center pt-4 pb-2 lg:justify-between">
             {/* Logo */}
             <div className="absolute flex left-0 shrink-0 lg:static">
-              <Link to={'/'}>
+              <Link to={'/'} className="flex items-center">
                 <img
                   alt="Your Company"
                   src={fishLogo}
-                  className="h-10 w-auto"
+                  className="h-[40px] w-auto"
                 />
+                <span className="h-[40px] px-4 text-3xl font-extrabold flex items-center justify-center text-[#422006]">
+                  배고픈 순간!
+                </span>
               </Link>
-              <span className="px-4 py-2 text-2xl font-bold text-[#422006]">
-                배고픈 순간!
-              </span>
             </div>
 
             {/* Right section on desktop */}
