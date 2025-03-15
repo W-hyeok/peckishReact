@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { getCookie } from '../../util/cookieUtil';
 
-import fishLogo from '/src/assets/fish_logo.png';
 import '../../css/common.css';
 
 const LeaveComponent = () => {
@@ -51,37 +50,27 @@ const LeaveComponent = () => {
         <></>
       )}
       <form>
-        <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="flex min-h-full flex-col items-center justify-center sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
-            <img
-              alt="Your Company"
-              src={fishLogo}
-              className="mx-auto h-10 w-auto"
-            />
-            <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+            <h2 className="mt-2 text-center text-2xl font-bold tracking-tight text-gray-900">
               탈퇴 하시겠습니까?
             </h2>
           </div>
-
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-            <div className="bg-white px-6 py-6 border sm:rounded-lg sm:px-12">
-              <div className="mt-2 flex items-center justify-center gap-x-6">
-                <button
-                  type="button"
-                  className="positiveBtn"
-                  onClick={() => navigate(-1)}
-                >
-                  취소
-                </button>
-                <button
-                  type="button"
-                  onClick={handleClickLeave}
-                  className="negativeBtn"
-                >
-                  확인
-                </button>
-              </div>
-            </div>
+          <div className="mt-2 flex items-center justify-center gap-x-6">
+            <button
+              type="button"
+              className="positiveBtn"
+              onClick={() => navigate(-1)}
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              onClick={handleClickLeave}
+              className="negativeBtn"
+            >
+              확인
+            </button>
           </div>
         </div>
       </form>

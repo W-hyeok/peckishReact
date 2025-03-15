@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import ResultModal from '../common/ResultModal';
-
 import { getOneMemberByPhone } from '../../api/memberApi';
 import { useNavigate } from 'react-router-dom';
 
-import fishLogo from '/src/assets/fish_logo.png';
+import '../../css/common.css';
 
 const SearchEmailComponent = () => {
   const { moveToLogin, moveToPath, exceptionHandle } = useCustomLogin();
@@ -107,56 +106,46 @@ const SearchEmailComponent = () => {
         <></>
       )}
       <form>
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <img
-            alt="Your Company"
-            src={fishLogo}
-            className="mx-auto h-10 w-auto"
-          />
-          <h3 className="mt-1 text-center text-1x1/9 font-bold tracking-tight text-gray-900">
+        {/* <div className="sm:mx-auto sm:w-full sm:max-w-md"> */}
+          <h2 className="mt-2 text-center text-2xl font-bold tracking-tight text-gray-900">
             이메일 주소 찾기
-          </h3>
-          <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-[480px]">
-            <div className="bg-white px-6 py-4 shadow sm:rounded-lg sm:px-12">
-              <div className="space-y-2">
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    연락처*
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      name="phone"
-                      type="text"
-                      value={phone}
-                      required
-                      onChange={addHyphen}
-                      onKeyDown={enter}
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                    <p className="text-sm text-gray-900">{phoneMessage}</p>
-                  </div>
-                </div>
-
-                <div className="mt-6 flex items-center justify-center gap-x-6">
-                  <button
-                    type="button"
-                    onClick={() => navigate(-1)}
-                    className="rounded-md bg-orange-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
-                  >
-                    취소
-                  </button>
-                  <button
+          </h2>
+          <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-[300px]">
+            {/* <div className="bg-white px-6 py-4 shadow sm:rounded-lg sm:px-12"> */}
+              <label className="block text-sm/6 font-medium text-gray-900">
+                연락처*
+              </label>
+              <div className="mt-1">
+                <input
+                  name="phone"
+                  type="text"
+                  value={phone}
+                  required
+                  onChange={addHyphen}
+                  onKeyDown={enter}
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+                <p className="text-sm text-gray-900">{phoneMessage}</p>
+              </div>
+              <div className="mt-2 flex items-center justify-center gap-x-6">
+                <button
                     type="button"
                     onClick={handleClickSearchEmail}
-                    className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="positiveBtn"
                   >
                     제출
                   </button>
-                </div>
+                  <button
+                    type="button"
+                    onClick={() => navigate(-1)}
+                    className="negativeBtn"
+                  >
+                    취소
+                  </button>
               </div>
-            </div>
+            {/* </div> */}
           </div>
-        </div>
+        {/* </div> */}
       </form>
     </>
   );

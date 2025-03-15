@@ -119,7 +119,7 @@ const RightComponent = ({ email }) => {
                         <img
                           alt={shop.title}
                           src={`${host}/${shop.filename}`}
-                          className="size-16 flex-none bg-gray-50"
+                          className="size-16 flex-none rounded-lg bg-gray-50"
                         />
                       </div>
                       <div className="min-w-0 flex-auto justify-center">

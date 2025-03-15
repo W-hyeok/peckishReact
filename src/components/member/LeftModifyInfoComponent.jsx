@@ -215,21 +215,19 @@ const LeftModifyInfoComponent = () => {
       )}
       <form>
         <div className="grid grid-cols-1 gap-4">
-          {/* <section aria-labelledby="section-2-title"> */}
             <h1 id="section-2-title" className="mt-4 text-center text-2xl font-bold tracking-tight text-gray-900">
               정보 수정 페이지
             </h1>
             {/* <div className="overflow-hidden rounded-lg bg-white shadow"> */}
               {/* <div className="p-6"> */}
-                {/* Your content */}
                 {/* <div className="space-y-12"> */}
-                  <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 ">
+                  <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 ">
                     <div className="col-span-full flex items-center justify-center">
                       <div className="mt-2 flex items-center gap-x-3">
                         <img
                           alt={email}
                           src={`${host}/api/member/view/${profileFilename}`}
-                          className="size-64 rounded-full"
+                          className="size-64 rounded-lg"
                         />
                       </div>
                     </div>
@@ -424,7 +422,7 @@ const LeftModifyInfoComponent = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="mt-6 flex items-center justify-center gap-x-6">
+                        <div className="mt-2 flex items-center justify-center gap-x-6">
                           <button
                             type="button"
                             onClick={() => navigate(-1)}

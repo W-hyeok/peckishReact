@@ -2,10 +2,8 @@ import SearchPasswordComponent from '../../components/member/SearchPasswordCompo
 
 const SearchPasswordPage = () => {
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-    <div className="px-4 py-5 sm:p-6">
-      <SearchPasswordComponent />
-    </div>
+  <div className="px-4 py-5 sm:p-6">
+    <SearchPasswordComponent />
   </div>
   );
 };

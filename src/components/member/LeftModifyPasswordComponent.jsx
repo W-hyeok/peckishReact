@@ -4,11 +4,14 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 import { putMemberModifyPassword } from '../../api/memberApi';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import ResultModal from '../../components/common/ResultModal';
+import { useNavigate } from 'react-router-dom';
+import '../../css/common.css';
 
 const host = API_SERVER_HOST;
 
 const LeftModifyPasswordComponent = () => {
   const cookieMember = getCookie('member');
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [profileFilename, setProfileFilename] = useState('');
@@ -131,27 +134,25 @@ const LeftModifyPasswordComponent = () => {
       )}
 
       <div className="grid grid-cols-1 gap-4">
-        <section aria-labelledby="section-2-title">
-          <h2 id="section-2-title" className="sr-only">
-            Section Left
-          </h2>
-          <div className="overflow-hidden rounded-lg bg-white shadow">
-            <div className="p-6">
-              {/* Your content */}
+        {/* <section aria-labelledby="section-2-title"> */}
+          <h1 id="section-2-title" className="mt-4 text-center text-2xl font-bold tracking-tight text-gray-900">
+              비밀번호 수정 페이지
+          </h1>
+          {/* <div className="overflow-hidden rounded-lg bg-white shadow"> */}
+            {/* <div className="p-6"> */}
               <form>
-                <div className="space-y-12">
-                  <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6 ">
+                {/* <div className="space-y-12"> */}
+                  <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6 ">
                     <div className="col-span-full flex items-center justify-center">
                       <div className="mt-2 flex items-center gap-x-3">
                         <img
                           alt={email}
                           src={`${host}/api/member/view/${profileFilename}`}
-                          className="size-52 rounded-full"
+                          className="size-64 rounded-lg"
                         />
                       </div>
                     </div>
                   </div>
-
                   <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
                     <div className="col-span-full">
                       <label className="block text-sm/6 font-medium text-gray-900">
@@ -213,28 +214,28 @@ const LeftModifyPasswordComponent = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                {/* </div> */}
 
-                <div className="mt-6 flex items-center justify-center gap-x-6">
+                <div className="mt-2 flex items-center justify-center gap-x-6">
                   <button
                     type="button"
-                    className="rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-yellow-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    onClick={() => moveToPath(`/member/read/${email}`)}
+                    className="negativeBtn"
+                    onClick={() => navigate(-1)}
                   >
                     취소
                   </button>
                   <button
                     type="button"
                     onClick={handleClickModifyPassword}
-                    className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    className="positiveBtn"
                   >
-                    비밀번호 변경완료
+                    변경
                   </button>
                 </div>
               </form>
-            </div>
-          </div>
-        </section>
+            {/* </div> */}
+          {/* </div> */}
+        {/* </section> */}
       </div>
     </>
   );

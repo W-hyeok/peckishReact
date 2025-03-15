@@ -40,41 +40,39 @@ const LeftComponent = () => {
     <div className="grid grid-cols-1 gap-4">
       {/* <section aria-labelledby="section-2-title"> */}
         <h1 id="section-2-title" className="mt-4 text-center text-2xl font-bold tracking-tight text-gray-900">
-          내 프로필
+          마이 페이지
         </h1>
-        <div className="overflow-hidden rounded-lg bg-white shadow mb-4">
-          <div className="p-6">
-            <form>
-              {/* <div className="space-y-12"> */}
-                {/* <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 "> */}
-                  <div className="col-span-full flex items-center justify-center mt-0 mb-4">
-                      <img
-                        alt={cookieMember.email}
-                        src={`${host}/api/member/view/${cookieMember.profileFilename}`}
-                        className="size-64 rounded-full"
-                      />
-                  </div>
-                {/* </div> */}
-               {/* </div> */}
+        <div className="p-6">
+          <form>
+            {/* <div className="space-y-12"> */}
+              {/* <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 "> */}
+                <div className="col-span-full flex items-center justify-center mt-0 mb-4">
+                    <img
+                      alt={cookieMember.email}
+                      src={`${host}/api/member/view/${cookieMember.profileFilename}`}
+                      className="size-64 rounded-lg"
+                    />
+                </div>
+              {/* </div> */}
+              {/* </div> */}
 
-              <div className="mt-2 mb-2 flex items-center justify-center gap-x-8">
-                <button
-                  type="button"
-                  onClick={() => moveToModifyInfo(cookieMember.email)}
-                  className="defaultBtn"
-                >
-                  개인정보 수정
-                </button>
-                <button
-                  type="button"
-                  onClick={() => moveToModifyPassword(cookieMember.email)}
-                  className="defaultBtn"
-                >
-                  비밀번호 변경
-                </button>
-              </div>
-            </form>
-          </div>
+            <div className="mt-2 mb-2 flex items-center justify-center gap-x-8">
+              <button
+                type="button"
+                onClick={() => moveToModifyInfo(cookieMember.email)}
+                className="defaultBtn"
+              >
+                개인정보 수정
+              </button>
+              <button
+                type="button"
+                onClick={() => moveToModifyPassword(cookieMember.email)}
+                className="defaultBtn"
+              >
+                비밀번호 변경
+              </button>
+            </div>
+          </form>
         </div>
       {/* </section> */}
     </div>
