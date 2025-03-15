@@ -7,7 +7,7 @@ const ReadComponent = () => {
 
   return (
     <div>
-      <main className="mt-10 pb-4">
+      <main className="mt-4 pb-4">
         <div className="mx-auto max-w-3xl px-2 sm:px-6 lg:max-w-5xl lg:px-8">
           <h1 className="object-center sr-only">내 페이지</h1>
           {/* Main 3 column grid */}

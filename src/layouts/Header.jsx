@@ -90,7 +90,7 @@ export default function Header() {
     <div className="">
       <Popover as="header" className="bg-[#f9dfb1]">
         <div className="mx-10">
-          <div className="relative flex items-center justify-center pt-4 pb-2 lg:justify-between">
+          <div className="relative flex items-center justify-center pt-6 pb-6 lg:justify-between">
             {/* Logo */}
             <div className="absolute flex left-0 shrink-0 lg:static">
               <Link to={'/'} className="flex items-center">

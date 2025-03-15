@@ -127,9 +127,9 @@ const memberRouter = () => {
       path: 'searchEmail',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <LoginRequired>
+          <LogoutRequired>
             <SearchEmail />
-          </LoginRequired>
+          </LogoutRequired>
         </Suspense>
       ),
     },
@@ -137,9 +137,9 @@ const memberRouter = () => {
       path: 'searchPassword',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <LoginRequired>
+          <LogoutRequired>
             <SearchPassword />
-          </LoginRequired>
+          </LogoutRequired>
         </Suspense>
       ),
     },

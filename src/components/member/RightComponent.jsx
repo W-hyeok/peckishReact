@@ -58,7 +58,7 @@ const RightComponent = ({ email }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+    <div className="grid grid-cols-1 gap-4">
       {shops.length > 0 ? (
         <section aria-labelledby="section-1-title">
           <h2 id="section-1-title" className="sr-only">
@@ -69,7 +69,7 @@ const RightComponent = ({ email }) => {
               <select
                 defaultValue={tabs.find((tab) => tab.current).name}
                 aria-label="Select a tab"
-                className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white shadow py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                className="col-start-1 row-start-1 w-full appearance-none bg-white shadow py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
               >
                 {tabs.map((tab) => (
                   <option key={tab.name}>{tab.name}</option>
@@ -78,7 +78,7 @@ const RightComponent = ({ email }) => {
             </div>
             <div className="hidden sm:block">
               <div className="border-b border-gray-300">
-                <nav aria-label="Tabs" className="-mb-px flex  bg-white shadow">
+                <nav aria-label="Tabs" className="-mb-px flex bg-white shadow">
                   {tabs.map((tab) => (
                     <Link
                       key={tab.name}
@@ -102,7 +102,7 @@ const RightComponent = ({ email }) => {
             </div>
           </div>
 
-          <div className="overflow-hidden rounded-lg bg-white shadow">
+          <div className="overflow-hidden bg-white shadow">
             <table className="w-full p-6">
               {/* Your content */}
               <tbody>
@@ -119,7 +119,7 @@ const RightComponent = ({ email }) => {
                         <img
                           alt={shop.title}
                           src={`${host}/${shop.filename}`}
-                          className="size-16 flex-none rounded-e-full bg-gray-50"
+                          className="size-16 flex-none bg-gray-50"
                         />
                       </div>
                       <div className="min-w-0 flex-auto justify-center">
@@ -184,7 +184,7 @@ const RightComponent = ({ email }) => {
               <select
                 defaultValue={tabs.find((tab) => tab.current).name}
                 aria-label="Select a tab"
-                className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-orange-200 shadow py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                className="col-start-1 row-start-1 w-full appearance-none bg-orange-200 shadow py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
               >
                 {tabs.map((tab) => (
                   <option key={tab.name}>{tab.name}</option>

@@ -333,19 +333,13 @@ const AddComponent = () => {
         <></>
       )}
       <form>
-        <div className="flex min-h-full flex-1 flex-col justify-center py-1 sm:px-6 lg:px-8">
+        <div className="flex min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
-            <img
-              alt="Your Company"
-              src={fishLogo}
-              className="mx-auto h-8 w-auto"
-            />
-            <h2 className="mt-1 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+            <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-gray-900">
               회원가입
             </h2>
           </div>
-
-          <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-[480px]">
+          <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-[600px]">
             <div className="bg-white px-6 py-6 shadow sm:rounded-lg sm:px-12">
               <div className="space-y-4">
                 <div>
