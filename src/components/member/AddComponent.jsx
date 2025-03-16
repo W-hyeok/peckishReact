@@ -5,14 +5,15 @@ import { PhotoIcon } from '@heroicons/react/24/solid';
 import ResultModal from '../../components/common/ResultModal';
 import { useNavigate } from 'react-router-dom';
 
-import fishLogo from '/src/assets/fish_logo.png';
 import axios from 'axios';
+import '../../css/common.css';
 
 const initState = {
   email: '',
   password: '',
   nickname: '',
   phone: '',
+  businessNumber: '',
   profileImg: '',
   profileFilename: '',
   certiImg: '',
@@ -339,8 +340,8 @@ const AddComponent = () => {
               회원가입
             </h2>
           </div>
-          <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-[600px]">
-            <div className="bg-white px-6 py-6 shadow sm:rounded-lg sm:px-12">
+          <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-[400px]">
+            {/* <div className="bg-white px-6 py-6 shadow sm:rounded-lg sm:px-12"> */}
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm/6 font-medium text-gray-900">
@@ -353,7 +354,7 @@ const AddComponent = () => {
                       value={email}
                       onChange={onChangeEmail}
                       required
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                     <p className="text-sm text-gray-900">{emailMessage}</p>
                   </div>
@@ -372,7 +373,7 @@ const AddComponent = () => {
                       required
                       autoComplete="current-password"
                       placeholder="숫자+영문자+특수문자 5~15 글자 사이 입력해주세요!"
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                     <p className="text-sm text-gray-900">{passwordMessage}</p>
                   </div>
@@ -390,7 +391,7 @@ const AddComponent = () => {
                       onChange={onChangePasswordConfirm}
                       required
                       autoComplete="current-password"
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                     <p className="text-sm text-gray-900">
                       {passwordConfirmMessage}
@@ -410,7 +411,7 @@ const AddComponent = () => {
                       value={nickname}
                       onChange={onChangeNickname}
                       required
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                     <p className="text-sm text-gray-900">{nicknameMessage}</p>
                   </div>
@@ -427,7 +428,7 @@ const AddComponent = () => {
                       value={phone}
                       required
                       onChange={addHyphen}
-                      className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                     <p className="text-sm text-gray-900">{phoneMessage}</p>
                   </div>
@@ -476,7 +477,7 @@ const AddComponent = () => {
                 {/* 회원 유형 및 사업자 등록증 첨부 */}
                 <fieldset>
                   <label className="block text-sm/6 font-medium text-gray-900">
-                    회원 유형
+                    회원 유형*
                   </label>
                   <div className="mt-1 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
                     {notificationMethods.map((notificationMethod) => (
@@ -552,10 +553,10 @@ const AddComponent = () => {
                             type="text"
                             id="businessNumber"
                             value={businessNumber}
-                            placeholder="-은 생략하고 숫자만 입력하세요"
+                            placeholder='"-" 은 생략하고 숫자만 입력하세요'
                             onChange={(e) => setBusinessNumber(e.target.value)}
                             required
-                            className="w-full p-2 border rounded"
+                            className="block w-full rounded-md mt-2 bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                             disabled={isVerified}
                           />
                         </div>
@@ -563,17 +564,17 @@ const AddComponent = () => {
                           <button
                             type="button"
                             onClick={handleVerify}
-                            className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+                            className="w-full bg-blue-500 text-white mt-2 p-2 rounded hover:bg-blue-600"
                           >
                             사업자 등록번호 확인
                           </button>
                         )}
-                        <div className="mt-6 flex items-center justify-center gap-x-6">
+                        <div className="mt-0 flex items-center justify-center gap-x-6">
                           {isVerified && (
                             <button
                               type="button"
                               onClick={handleClickSignup}
-                              className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                              className="positiveBtn"
                             >
                               가입
                             </button>
@@ -581,7 +582,7 @@ const AddComponent = () => {
                           <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                            className="negativeBtn"
                           >
                             취소
                           </button>
@@ -604,18 +605,18 @@ const AddComponent = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="mt-6 flex items-center justify-center gap-x-6">
+                        <div className="mt-0 flex items-center justify-center gap-x-6">
                           <button
                             type="button"
                             onClick={handleClickSignup}
-                            className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                            className="positiveBtn"
                           >
                             가입
                           </button>
                           <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                            className="negativeBtn"
                           >
                             취소
                           </button>
@@ -625,7 +626,7 @@ const AddComponent = () => {
                   </div>
                 </fieldset>
               </div>
-            </div>
+            {/* </div> */}
           </div>
         </div>
       </form>
