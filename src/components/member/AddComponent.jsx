@@ -253,7 +253,7 @@ const AddComponent = () => {
         response.data.data[0]?.b_stt === '계속사업자'
       ) {
         setIsVerified(true);
-        alert('사업자 등록번호 확인이 완료되었습니다.');
+        alert('정상적인 사업자 등록번호로 확인되었습니다.');
       } else {
         alert('유효하지 않은 사업자 등록번호입니다.');
       }
@@ -342,270 +342,232 @@ const AddComponent = () => {
           </div>
           <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-[400px]">
             {/* <div className="bg-white px-6 py-6 shadow sm:rounded-lg sm:px-12"> */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    이메일*
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      name="email"
-                      type="text"
-                      value={email}
-                      onChange={onChangeEmail}
-                      required
-                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                    <p className="text-sm text-gray-900">{emailMessage}</p>
-                  </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  이메일*
+                </label>
+                <div className="mt-1">
+                  <input
+                    name="email"
+                    type="text"
+                    value={email}
+                    onChange={onChangeEmail}
+                    required
+                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                  <p className="text-sm text-gray-900">{emailMessage}</p>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    비밀번호*
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      name="password"
-                      type="password"
-                      value={password}
-                      onChange={onChangePassword}
-                      required
-                      autoComplete="current-password"
-                      placeholder="숫자+영문자+특수문자 5~15 글자 사이 입력해주세요!"
-                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                    <p className="text-sm text-gray-900">{passwordMessage}</p>
-                  </div>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  비밀번호*
+                </label>
+                <div className="mt-1">
+                  <input
+                    name="password"
+                    type="password"
+                    value={password}
+                    onChange={onChangePassword}
+                    required
+                    autoComplete="current-password"
+                    placeholder="숫자+영문자+특수문자 5~15 글자 사이 입력해주세요!"
+                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                  <p className="text-sm text-gray-900">{passwordMessage}</p>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    비밀번호 확인*
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      name="password"
-                      type="password"
-                      value={passwordConfirm}
-                      onChange={onChangePasswordConfirm}
-                      required
-                      autoComplete="current-password"
-                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                    <p className="text-sm text-gray-900">
-                      {passwordConfirmMessage}
-                    </p>
-                  </div>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  비밀번호 확인*
+                </label>
+                <div className="mt-1">
+                  <input
+                    name="password"
+                    type="password"
+                    value={passwordConfirm}
+                    onChange={onChangePasswordConfirm}
+                    required
+                    autoComplete="current-password"
+                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                  <p className="text-sm text-gray-900">
+                    {passwordConfirmMessage}
+                  </p>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    닉네임*
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      name="nickname"
-                      type="text"
-                      placeholder="닉네임은 2~5 사이 글자로 이용하세요"
-                      value={nickname}
-                      onChange={onChangeNickname}
-                      required
-                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                    <p className="text-sm text-gray-900">{nicknameMessage}</p>
-                  </div>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  닉네임*
+                </label>
+                <div className="mt-1">
+                  <input
+                    name="nickname"
+                    type="text"
+                    placeholder="닉네임은 2~5 사이 글자로 이용하세요"
+                    value={nickname}
+                    onChange={onChangeNickname}
+                    required
+                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                  <p className="text-sm text-gray-900">{nicknameMessage}</p>
                 </div>
+              </div>
 
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    연락처*
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      name="phone"
-                      type="text"
-                      value={phone}
-                      required
-                      onChange={addHyphen}
-                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                    <p className="text-sm text-gray-900">{phoneMessage}</p>
-                  </div>
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  연락처*
+                </label>
+                <div className="mt-1">
+                  <input
+                    name="phone"
+                    type="text"
+                    value={phone}
+                    required
+                    onChange={addHyphen}
+                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                  <p className="text-sm text-gray-900">{phoneMessage}</p>
                 </div>
+              </div>
 
-                {/* profile 사진 첨부 */}
-                <div className="col-span-full">
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    프로필 사진*
-                  </label>
-                  <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
-                    <div className="text-center">
-                      {image ? (
-                        <img
-                          src={image}
-                          alt="Preview"
-                          className="mx-auto rounded-lg max-w-full h-auto"
-                          style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
-                        />
-                      ) : (
-                        <PhotoIcon
-                          aria-hidden="true"
-                          className="mx-auto size-14 text-gray-300"
-                        />
-                      )}
-                      {!image && (
-                        <>
-                          <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
-                            <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                              <span>프로필 사진 첨부 필수</span>
-                              <input
-                                type="file"
-                                ref={uploadRef}
-                                multiple={false}
-                                name="profileImg"
-                                className="sr-only"
-                                onChange={handleImageChange}
-                              />
-                            </label>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {/* 회원 유형 및 사업자 등록증 첨부 */}
-                <fieldset>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    회원 유형*
-                  </label>
-                  <div className="mt-1 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                    {notificationMethods.map((notificationMethod) => (
-                      <div
-                        key={notificationMethod.id}
-                        className="flex items-center"
-                      >
-                        <input
-                          defaultChecked={notificationMethod.id === 'USER'}
-                          id={notificationMethod.id}
-                          name="memberType"
-                          type="radio"
-                          value={notificationMethod.id}
-                          onChange={onChangeMemberType}
-                          className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
-                        />
-                        <label
-                          htmlFor={notificationMethod.id}
-                          className="ml-3 block text-sm/6 font-medium text-gray-900"
-                        >
-                          {notificationMethod.title}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="col-span-full">
-                    {memberType === 'OWNER' ? (
+              {/* profile 사진 첨부 */}
+              <div className="col-span-full">
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  프로필 사진*
+                </label>
+                <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                  <div className="text-center">
+                    {image ? (
+                      <img
+                        src={image}
+                        alt="Preview"
+                        className="mx-auto rounded-lg max-w-full h-auto"
+                        style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
+                      />
+                    ) : (
+                      <PhotoIcon
+                        aria-hidden="true"
+                        className="mx-auto size-14 text-gray-300"
+                      />
+                    )}
+                    {!image && (
                       <>
-                        <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
-                          <div className="text-center">
-                            {certimage ? (
-                              <img
-                                src={certimage}
-                                alt="Preview"
-                                className="mx-auto rounded-lg max-w-full h-auto"
-                                style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
-                              />
-                            ) : (
-                              <PhotoIcon
-                                aria-hidden="true"
-                                className="mx-auto size-14 text-gray-300"
-                              />
-                            )}
-                            {!certimage && (
-                              <>
-                                <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
-                                  <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                    <span>+ 사업자 등록증 첨부 필수</span>
-                                    <input
-                                      type="file"
-                                      ref={uploadRefCerti}
-                                      multiple={false}
-                                      name="certiImg"
-                                      className="sr-only"
-                                      onChange={handleCertChange}
-                                    />
-                                  </label>
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        <div className="mt-6 justify-center text-sm/4 text-gray-600">
-                          <label
-                            htmlFor="businessNumber"
-                            className="block mb-1"
-                          >
-                            사업자 등록번호* (등록번호 확인되어야 가입
-                            가능합니다.)
+                        <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
+                          <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                            <span>프로필 사진 첨부 필수</span>
+                            <input
+                              type="file"
+                              ref={uploadRef}
+                              multiple={false}
+                              name="profileImg"
+                              className="sr-only"
+                              onChange={handleImageChange}
+                            />
                           </label>
-                          <input
-                            type="text"
-                            id="businessNumber"
-                            value={businessNumber}
-                            placeholder='"-" 은 생략하고 숫자만 입력하세요'
-                            onChange={(e) => setBusinessNumber(e.target.value)}
-                            required
-                            className="block w-full rounded-md mt-2 bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                            disabled={isVerified}
-                          />
-                        </div>
-                        {!isVerified && (
-                          <button
-                            type="button"
-                            onClick={handleVerify}
-                            className="w-full bg-blue-500 text-white mt-2 p-2 rounded hover:bg-blue-600"
-                          >
-                            사업자 등록번호 확인
-                          </button>
-                        )}
-                        <div className="mt-0 flex items-center justify-center gap-x-6">
-                          {isVerified && (
-                            <button
-                              type="button"
-                              onClick={handleClickSignup}
-                              className="positiveBtn"
-                            >
-                              가입
-                            </button>
-                          )}
-                          <button
-                            type="button"
-                            onClick={() => navigate(-1)}
-                            className="negativeBtn"
-                          >
-                            취소
-                          </button>
                         </div>
                       </>
-                    ) : (
-                      <>
-                        <div className="mt-1 hidden justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
-                          <div className="text-center">
-                            <div className="mt-0 flex justify-center text-sm/4 text-gray-600">
-                              <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                <span>+ 사업자 등록증 첨부</span>
-                                <input
-                                  type="file"
-                                  ref={uploadRefCerti}
-                                  name="certiImg"
-                                  className="sr-only"
-                                />
-                              </label>
-                            </div>
-                          </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* 회원 유형 및 사업자 등록증 첨부 */}
+              <fieldset>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  회원 유형*
+                </label>
+                <div className="mt-1 space-y-6 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                  {notificationMethods.map((notificationMethod) => (
+                    <div
+                      key={notificationMethod.id}
+                      className="flex items-center"
+                    >
+                      <input
+                        defaultChecked={notificationMethod.id === 'USER'}
+                        id={notificationMethod.id}
+                        name="memberType"
+                        type="radio"
+                        value={notificationMethod.id}
+                        onChange={onChangeMemberType}
+                        className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
+                      />
+                      <label
+                        htmlFor={notificationMethod.id}
+                        className="ml-3 block text-sm/6 font-medium text-gray-900"
+                      >
+                        {notificationMethod.title}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="col-span-full">
+                  {memberType === 'OWNER' ? (
+                    <>
+                      <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                        <div className="text-center">
+                          {certimage ? (
+                            <img
+                              src={certimage}
+                              alt="Preview"
+                              className="mx-auto rounded-lg max-w-full h-auto"
+                              style={{ width: 'auto', height: 'auto' }} // 이미지 크기 조정
+                            />
+                          ) : (
+                            <PhotoIcon
+                              aria-hidden="true"
+                              className="mx-auto size-14 text-gray-300"
+                            />
+                          )}
+                          {!certimage && (
+                            <>
+                              <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
+                                <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                                  <span>+ 사업자 등록증 첨부 필수</span>
+                                  <input
+                                    type="file"
+                                    ref={uploadRefCerti}
+                                    multiple={false}
+                                    name="certiImg"
+                                    className="sr-only"
+                                    onChange={handleCertChange}
+                                  />
+                                </label>
+                              </div>
+                            </>
+                          )}
                         </div>
-                        <div className="mt-0 flex items-center justify-center gap-x-6">
+                      </div>
+                      <div className="mt-6 justify-center text-sm/4 text-gray-600">
+                        <label htmlFor="businessNumber" className="block mb-1">
+                          사업자 등록번호* (등록번호 확인되어야 가입
+                          가능합니다.)
+                        </label>
+                        <input
+                          type="text"
+                          id="businessNumber"
+                          value={businessNumber}
+                          placeholder='"-" 은 생략하고 숫자만 입력하세요'
+                          onChange={(e) => setBusinessNumber(e.target.value)}
+                          required
+                          className="block w-full rounded-md mt-2 bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                          disabled={isVerified}
+                        />
+                      </div>
+                      {!isVerified && (
+                        <button
+                          type="button"
+                          onClick={handleVerify}
+                          className="w-full bg-blue-500 text-white mt-2 p-2 rounded hover:bg-blue-600"
+                        >
+                          사업자 등록번호 확인
+                        </button>
+                      )}
+                      <div className="mt-0 flex items-center justify-center gap-x-6">
+                        {isVerified && (
                           <button
                             type="button"
                             onClick={handleClickSignup}
@@ -613,19 +575,54 @@ const AddComponent = () => {
                           >
                             가입
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => navigate(-1)}
-                            className="negativeBtn"
-                          >
-                            취소
-                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => navigate(-1)}
+                          className="negativeBtn"
+                        >
+                          취소
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="mt-1 hidden justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                        <div className="text-center">
+                          <div className="mt-0 flex justify-center text-sm/4 text-gray-600">
+                            <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                              <span>+ 사업자 등록증 첨부</span>
+                              <input
+                                type="file"
+                                ref={uploadRefCerti}
+                                name="certiImg"
+                                className="sr-only"
+                              />
+                            </label>
+                          </div>
                         </div>
-                      </>
-                    )}
-                  </div>
-                </fieldset>
-              </div>
+                      </div>
+                      <div className="mt-0 flex items-center justify-center gap-x-6">
+                        <button
+                          type="button"
+                          onClick={handleClickSignup}
+                          className="positiveBtn"
+                        >
+                          가입
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => navigate(-1)}
+                          className="negativeBtn"
+                        >
+                          취소
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </fieldset>
+            </div>
             {/* </div> */}
           </div>
         </div>

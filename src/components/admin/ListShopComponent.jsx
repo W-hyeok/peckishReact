@@ -36,31 +36,37 @@ const ListShopComponent = () => {
               <tr>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  점포아이디
+                  아이디
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  삭제여부
+                  상점 이름
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
+                >
+                  운영여부
+                </th>
+                <th
+                  scope="col"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
                   제보/인증
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  이메일
+                  "제보/인증"한 회원 이메일
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
                   등록일
                 </th>
@@ -69,36 +75,42 @@ const ListShopComponent = () => {
             <tbody className="divide-y divide-gray-200">
               {serverData.list.map((shop) => (
                 <tr key={shop.shopId}>
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {shop.shopId}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
+                    {shop.title}
+                  </td>
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {shop.isExist ? (
-                      <span className="text-green-600">삭제됨</span>
+                      <span className="text-green-600">폐업중</span>
                     ) : (
                       <span className="text-red-600">운영중</span>
                     )}
                   </td>
                   <td className="whitespace-nowrap px-3 py-4 text-sm">
                     <span
-                      className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                      className={`inline-flex rounded-lg text-lg font-normal ${
                         shop.certificate
                           ? 'bg-blue-100 text-blue-800'
                           : 'bg-yellow-100 text-yellow-800'
                       }`}
                     >
-                      {shop.certificate ? '인증점포' : '제보점포'}
+                      {shop.certificate ? '사업자 인증' : '소비지 제보'}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {shop.email}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                    {new Date(shop.regDate).toLocaleDateString('ko-KR', {
-                      year: 'numeric',
-                      month: '2-digit',
-                      day: '2-digit'
-                    }).replace(/\. /g, '/').replace('.', '')}
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
+                    {new Date(shop.regDate)
+                      .toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                      })
+                      .replace(/\. /g, '/')
+                      .replace('.', '')}
                   </td>
                 </tr>
               ))}
@@ -106,7 +118,10 @@ const ListShopComponent = () => {
           </table>
         </div>
       </div>
-      <PageComponent serverData={serverData} move={moveToListshop}></PageComponent>
+      <PageComponent
+        serverData={serverData}
+        move={moveToListshop}
+      ></PageComponent>
     </>
   );
 };

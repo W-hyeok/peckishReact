@@ -8,6 +8,7 @@ import { PhotoIcon } from '@heroicons/react/24/solid';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/common.css';
+import profileMod from '/src/assets/icon/profile_mod.png';
 
 const host = API_SERVER_HOST;
 
@@ -197,7 +198,7 @@ const LeftModifyInfoComponent = () => {
         response.data.data[0]?.b_stt === '계속사업자'
       ) {
         setIsVerified(true);
-        alert('사업자 등록번호 확인이 완료되었습니다.');
+        alert('정상적인 사업자 등록번호로 확인되었습니다.');
       } else {
         alert('유효하지 않은 사업자 등록번호입니다.');
       }
@@ -255,13 +256,13 @@ const LeftModifyInfoComponent = () => {
                   className="size-64 rounded-lg"
                 />
               </div>
-              <div className="mt-1 flex justify-center text-lg text-gray-600">
+              <div className="mt-4 flex justify-center text-sm text-gray-600">
                 <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                  <PhotoIcon
-                    aria-hidden="true"
-                    className="mx-auto size-10 text-gray-500"
+                  <img
+                    src={profileMod} // 프로필 사진 변경 추가 #7
+                    className="mx-auto mb-2 size-8 text-gray-500"
                   />
-                  <span>프로필 변경</span>
+                  <span>사진 변경</span>
                   <input
                     type="file"
                     ref={uploadRef}
@@ -403,7 +404,7 @@ const LeftModifyInfoComponent = () => {
                       id="businessNumber"
                       name="businessNumber"
                       value={businessNumber}
-                      placeholder="-은 생략하고 숫자만 입력하세요"
+                      placeholder='"-" 은 생략하고 숫자만 입력하세요"'
                       onChange={(e) => setBusinessNumber(e.target.value)}
                       required
                       className="w-full p-2 border rounded"

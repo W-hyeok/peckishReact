@@ -37,43 +37,62 @@ const ListComponent = () => {
               <tr>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  회원 이메일
+                  이메일
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  회원 이름
+                  회원 유형
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  회원 전화번호
+                  닉네임
                 </th>
                 <th
                   scope="col"
-                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  회원 가입일자
+                  연락처
+                </th>
+                <th
+                  scope="col"
+                  className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
+                >
+                  가입일자
                 </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
               {serverData.list.map((member) => (
-                <tr key={member.email} onClick={() => moveToRead(member.email)}>
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                <tr
+                  key={member.email}
+                  onClick={() => moveToRead(member.email)}
+                  className="cursor-pointer"
+                >
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {member.email}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
+                    {member.roleNames[0] === 'ADMIN' ? (
+                      <span className="text-blue-600">관리자</span>
+                    ) : member.roleNames.length == 1 ? (
+                      <span className="text-green-600">일반회원</span>
+                    ) : (
+                      <span className="text-red-600">사업자 회원</span>
+                    )}
+                  </td>
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {member.nickname}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {member.phone}
                   </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {new Date(member.regDate)
                       .toLocaleDateString('ko-KR', {
                         year: 'numeric',

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { getOneMemberByBusinessNumber } from '../../api/memberApi';
 import axios from 'axios';
+import '../../css/common.css';
 
 const host = API_SERVER_HOST;
 
@@ -56,7 +57,7 @@ const ReadComponent = ({ email }) => {
         response.data.data[0]?.b_stt === '계속사업자'
       ) {
         setIsVerified(true);
-        alert('사업자 등록번호 확인이 완료되었습니다.');
+        alert('정상적인 사업자 등록번호로 확인되었습니다.');
       } else {
         alert('유효하지 않은 사업자 등록번호입니다.');
       }
@@ -162,21 +163,21 @@ const ReadComponent = ({ email }) => {
               <button
                 type="button"
                 onClick={handleVerify}
-                className="will-change-auto bg-red-600 text-white px-3 py-2 rounded hover:bg-red-400"
+                className="defaultBtn"
               >
                 사업자 등록번호 유효성 검증
               </button>
               <button
                 type="button"
                 onClick={handleVerifyExistDB}
-                className="will-change-auto bg-orange-600 text-white px-3 py-2 rounded hover:bg-orange-400"
+                className="defaultBtn"
               >
-                동일 사업자 등록번호 존재 여부 검증
+                동일 사업자 등록번호 확인
               </button>
               <button
                 type="button"
                 onClick={() => handleAction(email)}
-                className="will-change-auto bg-blue-600 text-white px-3 py-2 rounded hover:bg-blue-400"
+                className="positiveBtn"
                 // className="rounded-md bg-blue-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 승인
@@ -196,9 +197,9 @@ const ReadComponent = ({ email }) => {
           <button
             type="button"
             onClick={() => navigate(-1)}
-            className="will-change-auto bg-cyan-600 text-white px-3 py-2 rounded hover:bg-cyan-400"
+            className="negativeBtn"
           >
-            목록
+            반려
           </button>
         </div>
       </div>

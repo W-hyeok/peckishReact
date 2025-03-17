@@ -6,6 +6,7 @@ const AdminMemberIndex = () => {
   return (
     <BasicLayout>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* <PageAdminMemberHeader title={'Admin'} /> */}
         <main>
           <Outlet />
         </main>
