@@ -19,6 +19,14 @@ export const getReview = async (shopId, infoType) => {
   return result.data;
 };
 
+// 리뷰 수정
+export const updateReview = async (reviewId, infoType, review) => {
+  const result = await axios.post(
+    `${host}/modify/${reviewId}/${infoType}`,
+    review
+  );
+  return result.data;
+};
 // USER - 리뷰 평점 계산
 export const getUserRating = async (shopId) => {
   const result = await axios.get(`${host}/average/${shopId}/USER`);
@@ -32,7 +40,15 @@ export const getOwnerRating = async (shopId) => {
 };
 
 // 리뷰 삭제시에도 자동 처리
-export const DeleteReviewRating = async (shopId) => {
-  const result = await axios.get(`${host}/get/${shopId}/${infoType}`);
+// export const DeleteReviewRating = async (shopId) => {
+//   const result = await axios.get(`${host}/get/${shopId}/${infoType}`);
+//   return result.data;
+// };
+
+// 리뷰 삭제시에도 자동 처리
+export const deleteReview = async (reviewId, infoType) => {
+  const result = await jwtAxios.delete(
+    `${host}/delete/${reviewId}/${infoType}`
+  );
   return result.data;
 };
