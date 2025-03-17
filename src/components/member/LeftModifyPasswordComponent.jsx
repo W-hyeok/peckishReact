@@ -135,106 +135,105 @@ const LeftModifyPasswordComponent = () => {
 
       <div className="grid grid-cols-1 gap-4">
         {/* <section aria-labelledby="section-2-title"> */}
-          <h1 id="section-2-title" className="mt-4 text-center text-2xl font-bold tracking-tight text-gray-900">
-              비밀번호 수정 페이지
-          </h1>
-          {/* <div className="overflow-hidden rounded-lg bg-white shadow"> */}
-            {/* <div className="p-6"> */}
-              <form>
-                {/* <div className="space-y-12"> */}
-                  <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6 ">
-                    <div className="col-span-full flex items-center justify-center">
-                      <div className="mt-2 flex items-center gap-x-3">
-                        <img
-                          alt={email}
-                          src={`${host}/api/member/view/${profileFilename}`}
-                          className="size-64 rounded-lg"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
-                    <div className="col-span-full">
-                      <label className="block text-sm/6 font-medium text-gray-900">
-                        현 비밀번호 재입력
-                      </label>
-                      <div className="mt-1">
-                        <input
-                          name="password"
-                          type="password"
-                          value={password}
-                          onChange={onChangePassword}
-                          required
-                          autoComplete="current-password"
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        />
-                        <p className="text-sm text-gray-900">
-                          {PasswordMessage}
-                        </p>
-                      </div>
-                    </div>
+        <h1
+          id="section-2-title"
+          className="mt-4 text-center text-2xl font-bold tracking-tight text-gray-900"
+        >
+          비밀번호 변경 페이지
+        </h1>
+        {/* <div className="overflow-hidden rounded-lg bg-white shadow"> */}
+        {/* <div className="p-6"> */}
+        <form>
+          {/* <div className="space-y-12"> */}
+          <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6 ">
+            <div className="col-span-full flex items-center justify-center">
+              <div className="mt-2 flex items-center gap-x-3">
+                <img
+                  alt={email}
+                  src={`${host}/api/member/view/${profileFilename}`}
+                  className="size-64 rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-6">
+            <div className="col-span-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                현 비밀번호 재입력
+              </label>
+              <div className="mt-1">
+                <input
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={onChangePassword}
+                  required
+                  autoComplete="current-password"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+                <p className="text-sm text-gray-900">{PasswordMessage}</p>
+              </div>
+            </div>
 
-                    <div className="col-span-full">
-                      <label className="block text-sm/6 font-medium text-gray-900">
-                        새 비밀번호
-                      </label>
-                      <div className="mt-1">
-                        <input
-                          name="password"
-                          type="password"
-                          value={newPassword}
-                          onChange={onChangeNewPassword}
-                          required
-                          autoComplete="current-password"
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        />
-                        <p className="text-sm text-gray-900">
-                          {newPasswordMessage}
-                        </p>
-                      </div>
-                    </div>
+            <div className="col-span-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                새 비밀번호
+              </label>
+              <div className="mt-1">
+                <input
+                  name="password"
+                  type="password"
+                  value={newPassword}
+                  onChange={onChangeNewPassword}
+                  required
+                  autoComplete="current-password"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+                <p className="text-sm text-gray-900">{newPasswordMessage}</p>
+              </div>
+            </div>
 
-                    <div className="col-span-full">
-                      <label className="block text-sm/6 font-medium text-gray-900">
-                        새 비밀번호 확인
-                      </label>
-                      <div className="mt-1">
-                        <input
-                          name="password"
-                          type="password"
-                          value={newPasswordConfirm}
-                          onChange={onChangeNewPasswordConfirm}
-                          required
-                          autoComplete="current-password"
-                          className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                        />
-                        <p className="text-sm text-gray-900">
-                          {newPasswordConfirmMessage}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                {/* </div> */}
-
-                <div className="mt-2 flex items-center justify-center gap-x-6">
-                  <button
-                    type="button"
-                    className="negativeBtn"
-                    onClick={() => navigate(-1)}
-                  >
-                    취소
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleClickModifyPassword}
-                    className="positiveBtn"
-                  >
-                    변경
-                  </button>
-                </div>
-              </form>
-            {/* </div> */}
+            <div className="col-span-full">
+              <label className="block text-sm/6 font-medium text-gray-900">
+                새 비밀번호 확인
+              </label>
+              <div className="mt-1">
+                <input
+                  name="password"
+                  type="password"
+                  value={newPasswordConfirm}
+                  onChange={onChangeNewPasswordConfirm}
+                  required
+                  autoComplete="current-password"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+                <p className="text-sm text-gray-900">
+                  {newPasswordConfirmMessage}
+                </p>
+              </div>
+            </div>
+          </div>
           {/* </div> */}
+
+          <div className="mt-2 flex items-center justify-center gap-x-6">
+            <button
+              type="button"
+              className="negativeBtn"
+              onClick={() => navigate(-1)}
+            >
+              취소
+            </button>
+            <button
+              type="button"
+              onClick={handleClickModifyPassword}
+              className="positiveBtn"
+            >
+              변경
+            </button>
+          </div>
+        </form>
+        {/* </div> */}
+        {/* </div> */}
         {/* </section> */}
       </div>
     </>
