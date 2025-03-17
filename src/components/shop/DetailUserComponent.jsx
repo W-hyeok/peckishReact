@@ -29,6 +29,7 @@ import {
   getUserRating,
   updateReview,
 } from '../../api/reviewApi';
+import ResultModal from '../common/ResultModal';
 
 const host = `${API_SERVER_HOST}`;
 
@@ -43,9 +44,9 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
   const [menuItems, setMenuItems] = useState([]);
   const [updatedMenu, setUpdatedMenu] = useState([]);
 
-  useEffect(() => {
-    setMenuItems(updatedMenu);
-  }, [updatedMenu]); // updatedMenu가 변경될 때만 실행
+  // useEffect(() => {
+  //   setMenuItems(updatedMenu);
+  // }, [updatedMenu]); // updatedMenu가 변경될 때만 실행
 
   // 리뷰 목록 뿌려줄때 필요한 것들
   const [review, setReview] = useState([]);
@@ -53,44 +54,41 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
   // 리뷰 별점계산
   const [ratingAvg, setRatingAvg] = useState(null);
   const [result, setResult] = useState(null); // 모달 띄워주기 위해서
-  const [refresh, setRefresh] = useState(false);
-  const [fetch, setFetch] = useState(false); // 시간차
+  const [menuRefresh, setMenuRefresh] = useState(false);
+  const [reviewRefresh, setReviewRefresh] = useState(false);
+  const [menuFetch, setMenuFetch] = useState(false); // 시간차
+  const [reviewFetch, setReviewFetch] = useState(false); // 시간차
 
   // DB에서 메뉴목록 불러오기
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
-      setFetch(false);
-      setMenuItems(data.RESULT); // DB에서 가져온 목록을 menuItems state에 저장
-      setFetch(true);
+      setMenuFetch(false);
       console.log('메뉴 목록 :', data.RESULT);
+      setMenuItems(data.RESULT); // DB에서 가져온 목록을 menuItems state에 저장
+      setMenuFetch(true);
     });
-  }, [shopId, infoType, refresh]);
+  }, [shopId, infoType, menuRefresh]);
 
   // DB에서 리뷰목록 불러오기
   useEffect(() => {
+    setReviewFetch(false);
     getReview(shopId, infoType).then((data) => {
-      setFetch(false);
       console.log('리뷰 목록 : ', data.Result);
       setReview(data.Result);
-      setFetch(true);
+      setReviewFetch(true);
     });
-  }, [shopId, infoType, refresh]);
+  }, [shopId, infoType, reviewRefresh]);
 
-  // USER - 리뷰 평점 계산
+  //USER - 리뷰 평점 계산
   useEffect(() => {
     getUserRating(shopId).then((data) => {
       console.log('USER 리뷰 평균 : ', data);
       setRatingAvg(data);
     });
-  });
+  }, [shopId, infoType, reviewRefresh]);
 
   //console.log(mapData);
   //console.log(storeLoc);
-
-  const closeModal = () => {
-    setResult(null);
-    setRefresh((prev) => !prev);
-  };
 
   // 리뷰 추가 버튼 클릭시 이벤트
   const handleClickReview = () => {
@@ -104,49 +102,22 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
     setResult('menu');
   };
 
-  // const handleMenuRemove = useCallback((menuId) => {
-  //   deleteMenu(menuId, infoType).then((data) => {
-  //     console.log('메뉴 삭제 : ', data.RESULT);
-  //     // 메뉴 항목 업데이트 후 즉시 화면에 반영
-  //     setMenuItems((prevItems) =>
-  //       // menu.menuId :
-  //       // 외부에서 전달된 menuId랑 비교해서 두 값이 다를 때 true
-  //       // 외부에서 전달된 menuId와 일치하지 않는 메뉴들만 남겨서 새로운 배열 반환
-  //       prevItems.filter((menu) => menu.menuId !== menuId)
-  //     );
+  // 메뉴 삭제
+  const handleMenuDelete = (menuId) => {
+    console.log('삭제할 menuId : ', menuId);
+    deleteMenu(menuId, infoType).then((data) => {
+      console.log('메뉴 삭제 : ', data.RESULT);
+      // 메뉴 항목 업데이트 후 즉시 화면에 반영
+      // menu.menuId :
+      // 외부에서 전달된 menuId랑 비교해서 두 값이 다를 때 true
+      // 외부에서 전달된 menuId와 일치하지 않는 메뉴들만 남겨서 새로운 배열 반환
 
-  //     setResult(false);
-  //   });
-  // });
+      // setMenuItems((prevItems) =>
+      //   prevItems.filter((menu) => menu.menuId !== menuId)
+      // );
 
-  //메뉴 삭제 (받을 인자 값)
-  // const handleMenuRemove = (menuId) => {
-  //   console.log('삭제할 menuId : ', menuId);
-
-  //   deleteMenu(menuId, infoType).then((data) => {
-  //     console.log('메뉴 삭제 : ', data.RESULT);
-  //     // 메뉴 항목 업데이트 후 즉시 화면에 반영
-  //     setMenuItems((prevItems) =>
-  //       // menu.menuId :
-  //       // 외부에서 전달된 menuId랑 비교해서 두 값이 다를 때 true
-  //       // 외부에서 전달된 menuId와 일치하지 않는 메뉴들만 남겨서 새로운 배열 반환
-  //       prevItems.filter((menu) => menu.menuId !== menuId)
-  //     );
-  //     setResult(false);
-  //     setRefresh((prev) => !prev);
-  //   });
-  // };
-
-  // 리뷰 수정
-  const handleReviewUpdate = (reviewId) => {
-    // review : 여러개의 리뷰를 담고 있는 객체
-    // r.reviewId :
-    // reviewId : 현재 고유의 reviewId
-    const selectedReview = review.find((r) => r.reviewId === reviewId);
-    updateReview(reviewId, infoType, review).then((data) => {
-      console.log('리뷰 수정 - 백 : ', reviewId);
-      console.log(selectedReview);
-      console.log(data.Result);
+      setResult('menuRemove');
+      //setMenuRefresh((prev) => !prev);
     });
   };
 
@@ -156,11 +127,18 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
       .then((data) => {
         console.log('리뷰 삭제:', data);
         setResult('reviewRemove');
-        setReview((prevItems) =>
-          prevItems.filter((review) => review.reviewId != reviewId)
-        );
+        // setReview((prevItems) =>
+        //   prevItems.filter((review) => review.reviewId != reviewId)
+        // );
       })
       .catch((err) => console.log('전송실패', err));
+  };
+
+  const closeModal = () => {
+    // 메뉴와 리뷰목록 다시 DB에서 가져오기 시키기위해 state값 변경
+    setMenuRefresh((prev) => !prev);
+    setReviewRefresh((prev) => !prev);
+    setResult(null);
   };
 
   return (
@@ -185,8 +163,24 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
         />
       )}
 
+      {result === 'menuRemove' && (
+        <ResultModal
+          title={'메뉴 삭제'}
+          content={'메뉴가 삭제되었습니다'}
+          callbackFn={closeModal}
+        />
+      )}
+
+      {result === 'reviewRemove' && (
+        <ResultModal
+          title={'리뷰 삭제'}
+          content={'리뷰가 삭제되었습니다'}
+          callbackFn={closeModal}
+        />
+      )}
+
       {/* Product USER */}
-      <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+      <div className="lg:grid lg:grid-cols-1 lg:gap-x-12 xl:gap-x-16">
         {/* Product image */}
         <div className="lg:col-span-2 lg:row-end-1">
           <div id="mapWrap">
@@ -223,8 +217,8 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
             </KakaoMap>
           </div>
         </div>
-        {/* Product details */}
 
+        {/* Product details */}
         <div className="mx-auto mt-7 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
           <div className="flex flex-col-reverse">
             <div className="mt-4">
@@ -345,20 +339,19 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                       <TabPanel className="text-sm text-gray-500 py-3 px-4 rounded-lg mt-2">
                         <h3 className="sr-only">User Menu</h3>
                         {/* 메뉴 항목 목록 */}
-                        {menuItems && fetch ? (
+                        {menuItems.length > 0 && menuFetch ? (
                           <DetailUserMenuComponent
                             menuItems={menuItems}
-                            setMenuItems={setMenuItems}
-                            setRefresh={setRefresh}
-                            setResult={setResult}
-                            infoType={infoType}
+                            handleMenuDelete={handleMenuDelete}
                           />
                         ) : (
-                          <p>메뉴 추가 바람</p>
+                          <div className="flex flex-col items-center justify-center py-10 text-gray-600 text-base">
+                            <span className="text-4xl">🍽️</span>
+                            <p className="mt-2">메뉴를 추가해주세요!</p>
+                          </div>
                         )}
 
                         {/* 메뉴 추가 버튼 */}
-
                         <div className="flex">
                           <div className="mt-6 m-auto">
                             <button
@@ -375,21 +368,20 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                       {/* 리뷰 */}
                       <TabPanel className="min-h-[400px] w-full">
                         <h3 className="sr-only">User Reviews</h3>
-                        {review && fetch ? (
+                        {review.length > 0 && reviewFetch ? (
                           <DetailUserReviewComponent
                             shopId={shopId}
                             shopDetailId={shop.shopUserDTO.shopUserId}
                             infoType={infoType}
                             review={review}
-                            handleClickReview={handleClickReview}
                             handleReviewRemove={handleReviewRemove}
-                            handleReviewUpdate={handleReviewUpdate}
                           />
-                        ) : !review ? ( // 등록된 리뷰가 하나도 없으면 노출
-                          <p className="text-center mt-2 text-gray-600">
-                            리뷰를 추가해주세요~~~!
-                          </p>
-                        ) : null}
+                        ) : (
+                          <div className="flex flex-col items-center justify-center py-10 text-gray-600 text-base">
+                            <span className="text-2xl">✏️</span>
+                            <p className="mt-2">리뷰를 추가해주세요!</p>
+                          </div>
+                        )}
 
                         {/* 리뷰 작성 버튼 - 하단 고정 */}
 
