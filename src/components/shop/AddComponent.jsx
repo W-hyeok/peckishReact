@@ -256,6 +256,8 @@ const AddComponent = () => {
     }
   };
 
+  const { moveToMain, moveToShop } = useCustomMove();
+
   //저장시 발생할 이벤트
   const handleClickSave = () => {
     // shopfile 상태가 제대로 설정되었는지 확인
@@ -326,11 +328,9 @@ const AddComponent = () => {
       .catch((err) => console.log(err));
   };
 
-  const { moveToMain } = useCustomMove();
-
   const closeModal = () => {
     setResult(null); // result
-    moveToMain('/'); // 등록 시 메인으로 이동
+    moveToShop(result); // 등록 시 점포 상세페이지로 이동
   };
 
   // 일반 input태그 값 작성시 실행되는 함수
@@ -704,7 +704,7 @@ const AddComponent = () => {
           </div>
           {/* 버튼 시작 */}
           <div className="px-4 py-6 mt-2 sm:px-6 flex justify-end">
-            {/* 등록: 등록 성공 시 메인 페이지로 이동 */}
+            {/* 등록: 등록 성공 시 점포 상세페이지로 이동 */}
             <button
               type="button"
               onClick={handleClickSave}

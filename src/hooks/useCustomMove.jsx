@@ -88,7 +88,7 @@ const useCustomMove = () => {
 
   // 점포 상세 페이지로 이동
   const moveToShop = (sid) => {
-    navigate({ pathname: `../shop/detail/${sid}` });
+    navigate({ pathname: `../detail/${sid}` });
   };
 
   // 점포 상세 페이지로 이동(내 프로필 보기에서)
