@@ -5,25 +5,25 @@ import { getCookie } from '../../util/cookieUtil';
 import BasicLayout from '../../layouts/BasicLayout';
 
 const memberInfo = getCookie('member');
-const useremail = memberInfo ? memberInfo.email : ''; // userName을 useEffect 바깥에서 선언
+const membermail = memberInfo ? memberInfo.email : ''; // userName을 useEffect 바깥에서 선언
 const RoomList = () => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        if (!useremail) return;
-        const data = await getListOwner(useremail);
+        if (!membermail) return;
+        const data = await getListOwner(membermail);
         setRooms(data);
         console.log('응답데이터: ', data);
-        console.log('ownerEmail:', useremail);
+        console.log('ownerEmail:', membermail);
       } catch (error) {
         console.error('에러ㅠㅠ', error);
       }
     };
 
     fetchRooms();
-  }, [useremail]);
+  }, [membermail]);
 
   console.log(rooms);
   return (

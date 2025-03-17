@@ -23,8 +23,33 @@ const RoomComponent = () => {
     const fetchMessages = async () => {
       try {
         const data = await getMsgs(room_ID);
-        setMessages(data);
-        console.log('메세지 요청 데이터의 이메일', data);
+        console.log('원본 메세지 데이터', data);
+
+        // 각 메시지에 대해 프로필 이미지 URL 추가
+        const updatedData = await Promise.all(
+          data.map(async (msg) => {
+            // 만약 msg에 프로필 이미지 정보가 없다면 (즉, DB에 없으므로)
+            if (!msg.profileFilename) {
+              try {
+                // 해당 이메일의 사용자 정보를 가져와서 프로필 파일명을 얻음
+                const response = await axios.get(
+                  `${API_SERVER_HOST}/api/member/${msg.email}`
+                );
+                // 전체 URL로 보정
+                msg.profileFilename = `${API_SERVER_HOST}/api/member/view/${response.data.profileFilename}`;
+              } catch (error) {
+                console.error(
+                  `프로필 정보를 가져오는데 실패했습니다: ${msg.email}`,
+                  error
+                );
+                msg.profileFilename = '/default-profile.png'; // 기본 이미지 경로
+              }
+            }
+            return msg;
+          })
+        );
+        setMessages(updatedData);
+        console.log('보정된 메세지 데이터', updatedData);
       } catch (error) {
         console.error('메시지 불러오기 실패:', error);
       }
@@ -69,18 +94,13 @@ const RoomComponent = () => {
         const messageData = JSON.parse(event.data);
         try {
           const response = await axios.get(
-            `${API_SERVER_HOST}/api/member/${messageData.email}`,
-            {
-              headers: {
-                Authorization: `Bearer ${memberInfo.accessToken}`,
-              },
-            }
+            `${API_SERVER_HOST}/api/member/${messageData.email}`
           );
-          messageData.profileFilename =
-            response.data.profileFilename || '/default.jpg';
+          // 프로필 이미지 URL을 messageData 객체에 추가
+          messageData.profileFilename = `${API_SERVER_HOST}/api/member/view/${response.data.profileFilename}`;
         } catch (err) {
           console.error('사용자 정보를 가져오는데 실패했습니다.', err);
-          messageData.profileFilename = '/default.jpg';
+          messageData.profileFilename = '/default-profile.png'; // 기본 이미지 설정
         }
         setMessages((prevMessages) => [...prevMessages, messageData]);
       } catch (error) {
@@ -136,7 +156,7 @@ const RoomComponent = () => {
   return (
     <>
       <main className="mb-[100px] max-w-screen-xl p-4 relative justify-center">
-        <div className="flex flex-row justify-center bg-[#F9DFB1] w-full max-w-5xl mx-auto h-[40rem] ">
+        <div className="flex flex-row justify-center bg-[#FFD396] bg-opacity-15 w-full max-w-5xl mx-auto h-[40rem] ">
           <ChatSideBarComponenet />
           <div className="flex flex-col flex-grow bg-gray-200 w-full max-w-xl mx-auto rounded-lg p-2 relative border-t border-gray-200 shadow-md">
             {/* 메시지 창 */}
@@ -166,7 +186,7 @@ const RoomComponent = () => {
                           </div>
                           <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
                             <img
-                              src={`${API_SERVER_HOST}/member/view/${msg.profileFilename}`}
+                              src={msg.profileFilename}
                               alt="member Avatar"
                               className="w-10 h-10 object-cover"
                             />
@@ -176,7 +196,7 @@ const RoomComponent = () => {
                         <div className="flex w-full mt-2 space-x-3 max-w-xs">
                           <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
                             <img
-                              src={`${API_SERVER_HOST}/member/view/${msg.profileFilename}`}
+                              src={msg.profileFilename}
                               alt="member Avatar"
                               className="w-10 h-10 object-cover"
                             />
@@ -215,7 +235,7 @@ const RoomComponent = () => {
                 onClick={sendMessage}
                 className="px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
-                Send
+                전송
               </button>
             </div>
           </div>

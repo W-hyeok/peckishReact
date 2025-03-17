@@ -9,32 +9,45 @@ const memberEmail = memberInfo.email;
 
 const ChatSideBarComponenet = () => {
   const [chatList, setChatList] = useState([]);
+  const [image, setImage] = useState(null);
+
+  // 페이지 로딩 시 호출되는 함수
 
   useEffect(() => {
     const loadChatList = async () => {
       try {
         const data = await getListDetail(memberEmail);
-        setChatList(data);
-        console.log('채팅 data', data);
+        // 자신의 이메일(memberEmail)을 제외하고, 상대방 데이터만 필터링
+        const filteredData = data.filter((chat) => chat.email !== memberEmail);
+        setChatList(filteredData);
+
+        // 필터링된 데이터로 이미지 URL 배열 생성
+        const newImages = filteredData.map(
+          (chat) => `${API_SERVER_HOST}/api/member/view/${chat.photoPath}`
+        );
+        setImage(newImages);
+        console.log('newImages', newImages);
+
+        console.log('채팅 data', filteredData);
       } catch (error) {
         console.error('채팅 목록 불러오기 실패:', error);
       }
     };
 
     loadChatList();
-  }, []); // 컴포넌트가 처음 렌더링될 때만 실행
-  console.log(chatList);
+  }, []);
+  console.log('chatList: ', chatList);
   return (
-    <div className="fixed top-[65px] left-0 z-30 flex flex-col w-[78px] h-[78%] rounded-lg overflow-y-auto bg-sky-100 shadow-sm items-center">
+    <div className="fixed top-[105px] left-0 z-10 flex flex-col w-[78px] h-[calc(100vh-65px-130px)] rounded-lg overflow-y-auto bg-[#F472B6] bg-opacity-15 shadow-sm items-center">
       {chatList.map((chat, index) => (
         <Link
           key={index}
           to={`/roomList/room/${chat.roomId}`} // room 페이지로 이동
-          className="flex flex-row py-4 px-2 items-center w-full"
+          className="flex flex-row py-4 px-2 items-center w-full relative"
         >
           <div className="w-full">
             <img
-              src={`${API_SERVER_HOST}/member/view/${chat.photoPath}`}
+              src={image[index]}
               className="h-[44px] w-[40px] rounded-full ring-4 ring-blue-400 m-1 p-1"
               alt="member Avatar"
             />
