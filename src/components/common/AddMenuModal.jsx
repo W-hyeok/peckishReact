@@ -32,10 +32,6 @@ const AddMenuModal = ({
   content,
   callbackFn,
 }) => {
-  console.log('shopId : ', shopId);
-  console.log('shopDetailId : ', shopDetailId);
-  console.log('infoType: ', infoType);
-
   // 뒤로가기(useCustomMove)
   const { moveToBack } = useCustomMove();
   const [open, setOpen] = useState(true);
@@ -43,7 +39,7 @@ const AddMenuModal = ({
   // 메뉴 추가 등록에 필요한 것들
   const [menu, setMenu] = useState({ ...initState });
   // 메뉴 목록 뿌려줄때 필요한 것들
-  const [menuItems, setMenuItems] = useState([]);
+  //const [menuItems, setMenuItems] = useState([]);
   const [result, setResult] = useState(null); //등록완료 모달 보여주기 위해서
   const [errorMessage, setErrorMessage] = useState(''); // 오류메시지를 저장할 상태
   const uploadRef = useRef(); // html id속성 대신 사용
@@ -51,12 +47,12 @@ const AddMenuModal = ({
   const [image, setImage] = useState(null);
 
   // DB에서 메뉴목록 불러오기
-  useEffect(() => {
-    getMenuList(shopId, infoType).then((data) => {
-      console.log('메뉴 목록 업데이트:', data.RESULT);
-      setMenuItems([...data.RESULT]);
-    });
-  }, [shopId, infoType]);
+  // useEffect(() => {
+  //   getMenuList(shopId, infoType).then((data) => {
+  //     console.log('메뉴 목록 업데이트:', data.RESULT);
+  //     setMenuItems([...data.RESULT]);
+  //   });
+  // }, [shopId, infoType]);
 
   // 메뉴 저장 버튼 클릭
   // 메뉴 등록시 shopDetailId필요 <-- 이전 detail페이지에서 주소로 넘기기(addMenu 주소 수정필요)

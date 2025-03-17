@@ -251,7 +251,7 @@ const DetailUserComponent = ({
                             메뉴 추가
                           </button>
                         </div>
-                        <div className="overflow-x-hidden">
+                        <div className="min-h-[400px] w-full">
                           {menuItems && menuItems.length > 0 ? (
                             <DetailUserMenuComponent
                               menuItems={menuItems}

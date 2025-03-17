@@ -148,6 +148,7 @@ const DetailOwnerComponent = ({
       setMenuItems((prevItems) =>
         prevItems.filter((menu) => menu.menuId !== menuId)
       );
+
       setResult(false);
     });
   };

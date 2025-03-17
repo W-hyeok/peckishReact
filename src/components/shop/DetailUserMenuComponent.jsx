@@ -2,14 +2,49 @@ import React, { Fragment, useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { Menu, MenuButton, MenuItem } from '@headlessui/react';
+import { deleteMenu } from '../../api/shopApi';
 
 const host = `${API_SERVER_HOST}`;
 
-const DetailUserMenuComponent = ({ menuItems, handleMenuRemove }) => {
+const DetailUserMenuComponent = ({
+  menuItems,
+  setMenuItems,
+  setRefresh,
+  setResult,
+  infoType,
+}) => {
+  // 메뉴 삭제
+  const handleMenuDelete = (menuId) => {
+    console.log('삭제할 menuId : ', menuId);
+    deleteMenu(menuId, infoType).then((data) => {
+      console.log('메뉴 삭제 : ', data.RESULT);
+      // 메뉴 항목 업데이트 후 즉시 화면에 반영
+      setMenuItems((prevItems) =>
+        // menu.menuId :
+        // 외부에서 전달된 menuId랑 비교해서 두 값이 다를 때 true
+        // 외부에서 전달된 menuId와 일치하지 않는 메뉴들만 남겨서 새로운 배열 반환
+        prevItems.filter((menu) => menu.menuId !== menuId)
+      );
+      setResult(false);
+      setRefresh((prev) => !prev);
+    });
+  };
+
+  /*
+{({ close }) => (
+                          <button
+                            onClick={() => handleMenuDelete(menuUser.menuId)}
+                            className="block px-3 py-1 text-sm w-full text-left text-gray-900 hover:bg-gray-100"
+                          >
+                            삭제하기
+                          </button>
+                        )}
+  */
+
   return (
     <div className="max-h-64 max-w-full overflow-x-hidden scrollbar2">
       <dl>
-        {menuItems.length > 0 ? (
+        {menuItems?.length > 0 ? (
           menuItems.map((menuUser, index) => (
             <Fragment key={index}>
               <div className="flex items-center py-4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200">
@@ -45,21 +80,12 @@ const DetailUserMenuComponent = ({ menuItems, handleMenuRemove }) => {
                       className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5"
                     >
                       <MenuItem>
-                        {({ close }) => (
-                          <button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              close(); // 메뉴 닫기 먼저 실행
-
-                              setTimeout(() => {
-                                handleMenuRemove(menuUser.menuId); // 삭제 함수 실행
-                              }, 0); // 다음 이벤트 루프에서 실행
-                            }}
-                            className="block px-3 py-1 text-sm w-full text-left text-gray-900 hover:bg-gray-100"
-                          >
-                            삭제하기
-                          </button>
-                        )}
+                        <button
+                          onClick={() => handleMenuDelete(menuUser.menuId)}
+                          className="block px-3 py-1 text-sm w-full text-left text-gray-900 hover:bg-gray-100"
+                        >
+                          삭제하기
+                        </button>
                       </MenuItem>
                     </Menu.Items>
                   </Menu>

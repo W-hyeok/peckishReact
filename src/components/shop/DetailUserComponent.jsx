@@ -1,15 +1,9 @@
-import React, { useEffect } from 'react';
-
+import React, { useCallback, useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
-
 import { Fragment, useState } from 'react';
-
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
-
 import { StarIcon } from '@heroicons/react/20/solid';
-
 import { useNavigate } from 'react-router-dom';
-
 import {
   Map as KakaoMap,
   MapMarker,
@@ -18,29 +12,17 @@ import {
   Toolbox,
   useMap,
 } from 'react-kakao-maps-sdk';
-
 import '../../css/animate.css'; // 스크롤 애니메이션용 css
-
 import '../../css/hoverText.css'; // 텍스트 잘림 방지
-
 import '../../css/scrollbar.css';
-
 import '../../css/scrollbar2.css';
-
 import { useTimeStamp } from '../../hooks/useTimeAgo';
-
 import useCustomMove from '../../hooks/useCustomMove';
-
 import AddReviewModal from '../common/AddReviewModal';
-
 import AddMenuModal from '../common/AddMenuModal';
-
 import { deleteMenu, getMenuList } from '../../api/shopApi';
-
 import DetailUserMenuComponent from './DetailUserMenuComponent';
-
 import DetailUserReviewComponent from '../review/DetailUserReviewComponent';
-
 import {
   deleteReview,
   getReview,
@@ -59,151 +41,125 @@ function classNames(...classes) {
 const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
   // 메뉴 목록 뿌려줄때 필요한 것들
   const [menuItems, setMenuItems] = useState([]);
-
-  const [updateMenu, setUpdateMenu] = useState(menuItems);
+  const [updatedMenu, setUpdatedMenu] = useState([]);
 
   useEffect(() => {
-    setMenuItems(updateMenu);
-  }, [updateMenu]); // updateMenu가 변결될 때만 실행 )
+    setMenuItems(updatedMenu);
+  }, [updatedMenu]); // updatedMenu가 변경될 때만 실행
 
   // 리뷰 목록 뿌려줄때 필요한 것들
-
   const [review, setReview] = useState([]);
 
   // 리뷰 별점계산
-
   const [ratingAvg, setRatingAvg] = useState(null);
-
   const [result, setResult] = useState(null); // 모달 띄워주기 위해서
-
   const [refresh, setRefresh] = useState(false);
-
   const [fetch, setFetch] = useState(false); // 시간차
 
   // DB에서 메뉴목록 불러오기
-
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
       setFetch(false);
-
       setMenuItems(data.RESULT); // DB에서 가져온 목록을 menuItems state에 저장
-
       setFetch(true);
-
       console.log('메뉴 목록 :', data.RESULT);
     });
   }, [shopId, infoType, refresh]);
 
   // DB에서 리뷰목록 불러오기
-
   useEffect(() => {
     getReview(shopId, infoType).then((data) => {
       setFetch(false);
-
       console.log('리뷰 목록 : ', data.Result);
-
       setReview(data.Result);
-
       setFetch(true);
     });
   }, [shopId, infoType, refresh]);
 
   // USER - 리뷰 평점 계산
-
   useEffect(() => {
     getUserRating(shopId).then((data) => {
       console.log('USER 리뷰 평균 : ', data);
-
       setRatingAvg(data);
     });
   });
 
   //console.log(mapData);
-
   //console.log(storeLoc);
 
   const closeModal = () => {
     setResult(null);
-
     setRefresh((prev) => !prev);
   };
 
   // 리뷰 추가 버튼 클릭시 이벤트
-
   const handleClickReview = () => {
     console.log('리뷰모달 보여줘라');
-
     setResult('review');
   };
 
   // 메뉴 추가 버튼 클릭시 이벤트
-
   const handleClickAddMenu = () => {
     console.log('메뉴모달 보여줘라');
-
     setResult('menu');
   };
 
+  // const handleMenuRemove = useCallback((menuId) => {
+  //   deleteMenu(menuId, infoType).then((data) => {
+  //     console.log('메뉴 삭제 : ', data.RESULT);
+  //     // 메뉴 항목 업데이트 후 즉시 화면에 반영
+  //     setMenuItems((prevItems) =>
+  //       // menu.menuId :
+  //       // 외부에서 전달된 menuId랑 비교해서 두 값이 다를 때 true
+  //       // 외부에서 전달된 menuId와 일치하지 않는 메뉴들만 남겨서 새로운 배열 반환
+  //       prevItems.filter((menu) => menu.menuId !== menuId)
+  //     );
+
+  //     setResult(false);
+  //   });
+  // });
+
   //메뉴 삭제 (받을 인자 값)
+  // const handleMenuRemove = (menuId) => {
+  //   console.log('삭제할 menuId : ', menuId);
 
-  const handleMenuRemove = (menuId) => {
-    console.log('삭제할 menuId : ', menuId);
-
-    deleteMenu(menuId, infoType).then((data) => {
-      console.log('메뉴 삭제 : ', data.RESULT);
-
-      // 메뉴 항목 업데이트 후 즉시 화면에 반영
-
-      setMenuItems((prevItems) =>
-        // menu.menuId :
-
-        // 외부에서 전달된 menuId랑 비교해서 두 값이 다를 때 true
-
-        // 외부에서 전달된 menuId와 일치하지 않는 메뉴들만 남겨서 새로운 배열 반환
-
-        prevItems.filter((menu) => menu.menuId !== menuId)
-      );
-
-      setResult(false);
-    });
-  };
+  //   deleteMenu(menuId, infoType).then((data) => {
+  //     console.log('메뉴 삭제 : ', data.RESULT);
+  //     // 메뉴 항목 업데이트 후 즉시 화면에 반영
+  //     setMenuItems((prevItems) =>
+  //       // menu.menuId :
+  //       // 외부에서 전달된 menuId랑 비교해서 두 값이 다를 때 true
+  //       // 외부에서 전달된 menuId와 일치하지 않는 메뉴들만 남겨서 새로운 배열 반환
+  //       prevItems.filter((menu) => menu.menuId !== menuId)
+  //     );
+  //     setResult(false);
+  //     setRefresh((prev) => !prev);
+  //   });
+  // };
 
   // 리뷰 수정
-
   const handleReviewUpdate = (reviewId) => {
     // review : 여러개의 리뷰를 담고 있는 객체
-
     // r.reviewId :
-
     // reviewId : 현재 고유의 reviewId
-
     const selectedReview = review.find((r) => r.reviewId === reviewId);
-
-    console.log(r.reviewId);
-
-    console.log(reviewId);
-
     updateReview(reviewId, infoType, review).then((data) => {
       console.log('리뷰 수정 - 백 : ', reviewId);
-
       console.log(selectedReview);
+      console.log(data.Result);
     });
   };
 
   // 리뷰 삭제
-
   const handleReviewRemove = (reviewId) => {
     deleteReview(reviewId, infoType)
       .then((data) => {
         console.log('리뷰 삭제:', data);
-
         setResult('reviewRemove');
-
         setReview((prevItems) =>
           prevItems.filter((review) => review.reviewId != reviewId)
         );
       })
-
       .catch((err) => console.log('전송실패', err));
   };
 
@@ -230,44 +186,34 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
       )}
 
       {/* Product USER */}
-
       <div className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
         {/* Product image */}
-
         <div className="lg:col-span-2 lg:row-end-1">
           <div id="mapWrap">
             {/* 첫번째 레이아웃 */}
-
             {/* 카카오맵 */}
-
             <KakaoMap
               center={storeLoc.center} // state값에 따라 지도 중심 설정 (state: 페이지 로딩, 검색 시 변동)
               isPanto={storeLoc.isPanto}
               style={{
                 width: '100%',
-
                 height: '35vh', // v: view height
-
                 borderRadius: '15px',
 
                 // position: 'relative', // 지도 위에 버튼 깔기 위해 설정
-
                 // float: 'right', // 상동
               }}
               level={3} // 확대 레벨
               draggable={false} // 지도 드래그 불가
             >
               {/* 현재 내 위치 마커. 모든 마커는 반드시 맵 다음에 와야 함 */}
-
               {!storeLoc.isLoading && (
                 <MapMarker
                   position={storeLoc.center} // curLoc 값에 따라 마커 설정 (고정)
                   image={{
                     src: '../../src/assets/icon/booth_active.png',
-
                     size: {
                       width: 48,
-
                       height: 48,
                     },
                   }}
@@ -277,28 +223,22 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
             </KakaoMap>
           </div>
         </div>
-
         {/* Product details */}
 
         <div className="mx-auto mt-7 max-w-2xl sm:mt-16 lg:col-span-3 lg:row-span-2 lg:row-end-2 lg:mt-0 lg:max-w-none">
           <div className="flex flex-col-reverse">
             <div className="mt-4">
               {/* 줄바꿈 없음, overflow 자동 (줄바꿈 필요해지면 스크롤바 생성됨) */}
-
               <div
                 className={`text-2xl max-w-lg font-bold tracking-tight text-gray-900 sm:text-3xl`}
               >
                 <h1 className="scrollbar">{shop.shopUserDTO.title}</h1>
-
                 {/* 리뷰 별점 아이콘 */}
-
                 <h3 className="sr-only">Reviews</h3>
-
                 <div className="flex items-center space-x-2">
                   <div className="flex space-x-0.5">
                     {[0, 1, 2, 3, 4].map((index) => {
                       const wholeStars = Math.floor(ratingAvg); // 정수 별 개수
-
                       const hasHalfStar = ratingAvg % 1 >= 0.5; // 반쪽 별 여부
 
                       return (
@@ -339,14 +279,11 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
               <p className="mt-2 text-sm text-gray-500">
                 최근 수정:{' '}
                 {/* <time dateTime={shop.shopUserDTO.updateDate}>
-
-{format(new Date(shop.shopUserDTO.updateDate), 'yyyy-MM-dd')}{' '}
-
-</time> */}
+                {format(new Date(shop.shopUserDTO.updateDate), 'yyyy-MM-dd')}{' '}
+                 </time> */}
                 {/* customhook: 날짜 표기법 */}
                 <span>{useTimeStamp(shop.shopUserDTO.updateDate)}</span>
               </p>
-
               <div className="col-span-full">
                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <img
@@ -359,7 +296,6 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
               </div>
 
               {/* tab */}
-
               <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
                 <div className="sm:col-span-2">
                   <TabGroup>
@@ -368,11 +304,9 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                         <Tab className="whitespace-nowrap border-b-2 border-transparent py-2 mb-0 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
                           정보
                         </Tab>
-
                         <Tab className="whitespace-nowrap border-b-2 border-transparent py-2 mb-0 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
                           메뉴
                         </Tab>
-
                         <Tab className="whitespace-nowrap border-b-2 border-transparent py-2 mb-0 text-sm font-medium text-gray-700 hover:border-gray-300 hover:text-gray-800 data-[selected]:border-indigo-600 data-[selected]:text-indigo-600">
                           리뷰
                         </Tab>
@@ -381,30 +315,24 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
 
                     <TabPanels as={Fragment}>
                       {/* 상점 정보 */}
-
                       <TabPanel className="text-sm text-gray-500 py-3 px-2 rounded-lg mt-0">
                         <h3 className="sr-only">상점 정보</h3>
-
                         <div className="space-y-4">
                           {/* 영업일 */}
-
                           <dl className="p-4 bg-white rounded-lg">
                             <dt className="text-lg font-semibold text-gray-900">
                               영업일:
                             </dt>
-
                             <dd className="text-md text-gray-700">
                               {shop.shopUserDTO.days}
                             </dd>
                           </dl>
 
                           {/* 영업시간 */}
-
                           <dl className="p-4 bg-white rounded-lg">
                             <dt className="text-lg font-semibold text-gray-900">
                               영업시간:
                             </dt>
-
                             <dd className="text-md text-gray-700">
                               {shop.shopUserDTO.openTime} ~{' '}
                               {shop.shopUserDTO.closeTime}
@@ -414,24 +342,20 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                       </TabPanel>
 
                       {/* 메뉴 */}
-
                       <TabPanel className="text-sm text-gray-500 py-3 px-4 rounded-lg mt-2">
                         <h3 className="sr-only">User Menu</h3>
-
                         {/* 메뉴 항목 목록 */}
-
                         {menuItems && fetch ? (
                           <DetailUserMenuComponent
                             menuItems={menuItems}
-                            handleMenuRemove={handleMenuRemove}
+                            setMenuItems={setMenuItems}
+                            setRefresh={setRefresh}
+                            setResult={setResult}
+                            infoType={infoType}
                           />
-                        ) : !menuItems ? (
-                          // 등록된 메뉴가 하나도 없으면 노출
-
-                          <p className="text-center mt-2 text-gray-600">
-                            메뉴를 추가해주세요!
-                          </p>
-                        ) : null}
+                        ) : (
+                          <p>메뉴 추가 바람</p>
+                        )}
 
                         {/* 메뉴 추가 버튼 */}
 
@@ -449,10 +373,8 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                       </TabPanel>
 
                       {/* 리뷰 */}
-
                       <TabPanel className="min-h-[400px] w-full">
                         <h3 className="sr-only">User Reviews</h3>
-
                         {review && fetch ? (
                           <DetailUserReviewComponent
                             shopId={shopId}
@@ -465,7 +387,7 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
                           />
                         ) : !review ? ( // 등록된 리뷰가 하나도 없으면 노출
                           <p className="text-center mt-2 text-gray-600">
-                            리뷰를 추가해주세요!
+                            리뷰를 추가해주세요~~~!
                           </p>
                         ) : null}
 
