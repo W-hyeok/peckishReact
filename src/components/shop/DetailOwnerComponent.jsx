@@ -24,9 +24,14 @@ import { deleteMenu, getMenuList } from '../../api/shopApi';
 import DetailOwnerMenuComponent from './DetailOwnerMenuComponent';
 import DetailOwnerReviewComponent from '../review/DetailOwnerReviewComponent';
 import { getReview, getOwnerRating } from '../../api/reviewApi';
+import { getCookie } from '../../util/cookieUtil';
+import axios from 'axios';
+import { createRoom } from '../../api/roomApi';
+import '../../css/common.css';
 
 const host = `${API_SERVER_HOST}`;
 const { kakao } = window;
+const memberInfo = getCookie('member'); //채팅
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -45,6 +50,8 @@ const DetailOwnerComponent = ({
   const [result, setResult] = useState(null); // 모달 띄워주기 위해서
   const [refresh, setRefresh] = useState(false);
   const [fetch, setFetch] = useState(false); // 시간차
+  const [ownerEmail, setOwnerEmail] = useState(null);
+  const navigate = useNavigate();
 
   // DB에서 메뉴목록 불러오기
   useEffect(() => {
@@ -74,8 +81,46 @@ const DetailOwnerComponent = ({
     });
   });
 
-  //console.log(mapData);
-  //console.log(storeLoc);
+  useEffect(() => {
+    const fetchOwnerInfo = async () => {
+      try {
+        const response = await axios.get(`${host}/api/shop/owner/${shopId}`);
+        setOwnerEmail(response.data.email); // 사장님 이메일 저장
+        console.log('setOwnerEmail: ', response.data.email);
+      } catch (error) {
+        console.error('사장님 정보를 가져오지 못했습니다.', error);
+      }
+    };
+    fetchOwnerInfo();
+  }, [shopId]);
+
+  //채팅
+  const handleChat = async () => {
+    try {
+      const memberEmail = memberInfo.email; // JWT에서 사용자 이메일 추출
+      if (!ownerEmail) {
+        alert('사장님 이메일을 확인할 수 없습니다.');
+        return;
+      }
+      const member1 = ownerEmail;
+      const member2 = memberEmail;
+      // 두 멤버를 createRoom에 전달합니다.
+      const room = await createRoom({
+        member1,
+        member2,
+        shopId,
+      });
+      console.log('채팅방 생성 성공:', room);
+      // 반환된 room 객체의 roomId를 이용해 채팅방 페이지로 이동합니다.
+      if (room.room_ID) {
+        navigate(`/room/${room.room_ID}`);
+      } else {
+        console.error('roomId가 반환되지 않았습니다.');
+      }
+    } catch (error) {
+      console.error('채팅방 생성 실패', error);
+    }
+  };
 
   const closeModal = () => {
     setResult(null);
@@ -250,17 +295,30 @@ const DetailOwnerComponent = ({
 
                           {/* 영업일 */}
                           <dl className="p-4 bg-white rounded-lg">
-                            <dt className="text-lg text-gray-900">영업일:</dt>
+                            <dt className="text-lg text-gray-900">영업일</dt>
                             <dd className="text-md text-gray-700">
                               {shop.shopOwnerDTO.days}
                             </dd>
                           </dl>
                           {/* 영업시간 */}
                           <dl className="p-4 bg-white rounded-lg">
-                            <dt className="text-lg text-gray-900">영업시간:</dt>
+                            <dt className="text-lg text-gray-900">영업시간</dt>
                             <dd className="text-md text-gray-700">
                               {shop.shopOwnerDTO.openTime} ~{' '}
                               {shop.shopOwnerDTO.closeTime}
+                            </dd>
+                          </dl>
+
+                          <dl className="p-4 bg-white rounded-lg">
+                            <dt className="text-lg text-gray-900">문의하기</dt>
+                            <dd className="text-md text-gray-700 mt-1">
+                              <button
+                                type="button"
+                                onClick={handleChat}
+                                className="defaultBtn"
+                              >
+                                문의 하기
+                              </button>
                             </dd>
                           </dl>
                         </div>

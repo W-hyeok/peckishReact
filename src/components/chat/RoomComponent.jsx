@@ -17,16 +17,7 @@ const RoomComponent = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('ko');
   const messagesEndRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const languageOptions = [
-    { code: 'ko', name: '한국어' },
-    { code: 'en', name: '영어' },
-    { code: 'ch', name: '중국어' },
-    { code: 'ja', name: '일본어' },
-  ];
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -44,7 +35,7 @@ const RoomComponent = () => {
     const ws = new WebSocket(wsUrl);
     let isRoomEntered = false;
 
-    // 메세지 보낼때 defualt는 영국시간기준으로 되어있어서 서울 시간을 기준으로 하기위해서 설정
+    // 서울 시간 기준으로 메시지 전송 시간 설정
     const now = new Date();
     const seoulTime = now.toLocaleString('ko-KR', {
       timeZone: 'Asia/Seoul',
@@ -66,12 +57,7 @@ const RoomComponent = () => {
             messageType: 'ENTER',
             email: memberEmail,
             content: '채팅방에 접속했습니다',
-            ko: '채팅방에 접속했습니다.',
-            ja: 'チャットルームに接続しました。',
-            ch: '我连接了聊天室。',
-            en: "I've logged on to the chat room.",
-            selectedLanguage: selectedLanguage,
-            reg_date: seoulTime.replace('-'), // ISO 8601 형식으로 변환
+            reg_date: seoulTime.replace('-'),
           })
         );
         isRoomEntered = true;
@@ -80,13 +66,7 @@ const RoomComponent = () => {
 
     ws.onmessage = async (event) => {
       try {
-        // 사용자 정보 등 추가
         const messageData = JSON.parse(event.data);
-
-        // 메시지 수신 시 번역된 메시지 전체를 저장하고, content는 원본으로 유지
-        // 만약 이미 번역된 메시지가 있다면 그대로 두고, 없다면 기본 원본 사용
-        // 예: messageData.translatedMessage = { original: messageData.content, ... }
-        // (이 부분은 서버에서 이미 처리된 번역 결과를 받아오는 것으로 가정)
         try {
           const response = await axios.get(
             `${API_SERVER_HOST}/api/member/${messageData.email}`,
@@ -129,12 +109,21 @@ const RoomComponent = () => {
 
   const sendMessage = () => {
     if (socket && socket.readyState === WebSocket.OPEN) {
+      const now = new Date();
+      const seoulTime = now.toLocaleString('ko-KR', {
+        timeZone: 'Asia/Seoul',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      });
       const messagePayload = {
         room_ID: room_ID,
         messageType: 'TALK',
         email: memberEmail,
         content: inputMessage,
-        selectedLanguage: selectedLanguage, // 드롭박스에서 선택한 번역 대상 언어
         reg_date: seoulTime.replace('-'),
       };
       socket.send(JSON.stringify(messagePayload));
@@ -157,11 +146,7 @@ const RoomComponent = () => {
             >
               <ul>
                 {messages.map((msg, index) => {
-                  const displayContent =
-                    msg.translatedMessage &&
-                    msg.translatedMessage[selectedLanguage]
-                      ? msg.translatedMessage[selectedLanguage]
-                      : msg.content;
+                  const displayContent = msg.content;
                   return (
                     <li
                       key={index}
@@ -169,7 +154,7 @@ const RoomComponent = () => {
                         index === messages.length - 1 ? 'mb-[50px]' : ''
                       }
                     >
-                      {msg.username === memberEmail ? (
+                      {msg.email === memberEmail ? (
                         <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
                           <div>
                             <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
@@ -213,39 +198,8 @@ const RoomComponent = () => {
               </ul>
             </div>
 
-            {/* 언어 선택 버튼과 드롭다운을 하나의 relative 컨테이너로 묶음 */}
+            {/* 메시지 입력과 전송 영역 */}
             <div className="flex items-center space-x-2 relative p-4 bg-white border-t border-gray-200 shadow-md">
-              {/* 드롭다운 영역 */}
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="px-3 py-2 border rounded-md text-base w-24 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                >
-                  {languageOptions.find(
-                    (lang) => lang.code === selectedLanguage
-                  )?.name || '한국어'}
-                </button>
-                {isOpen && (
-                  <ul className="absolute top-full left-0 z-50 mt-1 w-24 bg-white border border-gray-300 rounded-md shadow-lg">
-                    {languageOptions.map((lang) => (
-                      <li
-                        key={lang.code}
-                        className="px-4 py-2 hover:bg-indigo-100 cursor-pointer text-gray-900"
-                        onClick={() => {
-                          setSelectedLanguage(lang.code);
-                          console.log(lang.code);
-                          setIsOpen(false);
-                        }}
-                      >
-                        {lang.name}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              {/* 메시지 입력 필드 */}
               <input
                 type="text"
                 value={inputMessage}
@@ -257,7 +211,6 @@ const RoomComponent = () => {
                 className="flex-grow p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               />
 
-              {/* Send 버튼 */}
               <button
                 onClick={sendMessage}
                 className="px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
