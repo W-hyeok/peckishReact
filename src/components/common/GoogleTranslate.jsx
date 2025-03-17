@@ -6,8 +6,8 @@ const GoogleTranslate = () => {
   const [chooseCountry, setChooseCountry] = useState(
     { code: 'ko', name: '한국어', flag: 'kr' } // 한국어
   );
-  const [isHovered, setIsHovered] = useState(false); // hover 상태 관리
-  const [isClicked, setIsClicked] = useState(false); // hover 상태 관리
+  const [isClicked, setIsClicked] = useState(false); // 클릭 여부 상태값
+  const [isTranslated, setIsTranstlated] = useState(false); // 번역 모드 상태값 (번역 중임을 알림)
 
   useEffect(() => {
     const addGoogleTranslateScript = document.createElement('script');
@@ -38,9 +38,6 @@ const GoogleTranslate = () => {
       gtCombo.value = value;
       gtCombo.dispatchEvent(new Event('change'));
     }
-    console.log('lang', lang);
-    console.log('isHover', isHovered);
-    console.log('isClick', isClicked);
     setTimeout(() => {
       setChooseCountry(lang);
     }, 500);
@@ -49,9 +46,10 @@ const GoogleTranslate = () => {
   return (
     <>
       <div id="google_translate_element" className="hidden"></div>
-      {isHovered && (
+      {isTranslated && (
         <span className="mr-4 text-gray-500 bg-yellow-200/50 rounded-lg">
-          * 번역은 정확하지 않을 수 있습니다.
+          * 번역은 정확하지 않을 수 있습니다. <br /> * Translations may not be
+          accurate.
         </span>
       )}
       <ButtonCotainer
@@ -59,7 +57,9 @@ const GoogleTranslate = () => {
         // onMouseEnter={() => setIsHovered(true)}
         // onMouseLeave={() => setIsHovered(false)}
         onClick={() => {
-          setIsClicked(!isClicked);
+          setIsClicked(!isClicked); // 버튼 클릭 시 isClicked값 전환 ('토글')
+          setIsTranstlated(true);
+          console.log('선택된 국가: ', chooseCountry);
         }}
       >
         <Flag code={chooseCountry.flag} />
