@@ -356,7 +356,7 @@ function MapComponent({
           curLoc.center.lng
         );
         map.panTo(newLatLng);
-        console.log(mapLatLng);
+        console.log('이동한 현재 위치:', mapLatLng);
       } else {
         return setResult('asdf');
       }
@@ -479,10 +479,10 @@ function MapComponent({
             <MapMarker
               position={curLoc.center} // curLoc 값에 따라 마커 설정 (고정)
               image={{
-                src: `${currentLocation}`,
+                src: `${redDot}`,
                 size: {
-                  width: 45,
-                  height: 45,
+                  width: 55,
+                  height: 55,
                 },
               }}
               title="나는 여기에 있어용"
@@ -493,10 +493,10 @@ function MapComponent({
             <MapMarker
               position={mapCenter.center} // curLoc 값에 따라 마커 설정 (고정)
               image={{
-                src: `${redDot}`,
+                src: `${currentLocation}`,
                 size: {
-                  width: 55,
-                  height: 55,
+                  width: 40,
+                  height: 40,
                 },
               }}
               title="현재 지도의 중심입니다."

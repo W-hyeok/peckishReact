@@ -6,6 +6,8 @@ import shopRouter from './shopRouter';
 import adminRouter from './adminRouter';
 import reviewRouter from './reviewRouter';
 import About2 from '../pages/About2';
+import NotFound from '../pages/NotFound';
+import BadRequest from '../pages/BadRequest';
 
 // 지연 로딩 처리 : dynamic import
 const Main = lazy(() => import('../pages/MainPage'));
@@ -140,6 +142,22 @@ const Router = () => {
       ),
       children: adminRouter(),
     }, // admin
+    {
+      path: 'badRequest',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <BadRequest />
+        </Suspense>
+      ),
+    }, // 400 에러 페이지
+    {
+      path: '*',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <NotFound />
+        </Suspense>
+      ),
+    }, // 존재하지 않는 모든 경로
   ]);
 };
 

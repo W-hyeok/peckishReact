@@ -76,6 +76,10 @@ const useCustomMove = () => {
     navigate({ pathname: '/' });
   };
 
+  const moveToAbout = () => {
+    navigate({ pathname: '/about2' });
+  };
+
   // 수정/삭제로 이동
   const moveToModify = (num) => {
     navigate({ pathname: `../modify/${num}`, search: queryDefault });
@@ -125,6 +129,7 @@ const useCustomMove = () => {
 
   return {
     moveToMain,
+    moveToAbout,
     moveToList,
     moveToShop,
     moveToShopFromMyProfile,
