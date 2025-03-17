@@ -7,6 +7,7 @@ const GoogleTranslate = () => {
     { code: 'ko', name: '한국어', flag: 'kr' } // 한국어
   );
   const [isHovered, setIsHovered] = useState(false); // hover 상태 관리
+  const [isClicked, setIsClicked] = useState(false); // hover 상태 관리
 
   useEffect(() => {
     const addGoogleTranslateScript = document.createElement('script');
@@ -38,6 +39,8 @@ const GoogleTranslate = () => {
       gtCombo.dispatchEvent(new Event('change'));
     }
     console.log('lang', lang);
+    console.log('isHover', isHovered);
+    console.log('isClick', isClicked);
     setTimeout(() => {
       setChooseCountry(lang);
     }, 500);
@@ -53,23 +56,32 @@ const GoogleTranslate = () => {
       )}
       <ButtonCotainer
         key={chooseCountry.code}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        // onMouseEnter={() => setIsHovered(true)}
+        // onMouseLeave={() => setIsHovered(false)}
+        onClick={() => {
+          setIsClicked(!isClicked);
+        }}
       >
         <Flag code={chooseCountry.flag} />
         {chooseCountry.name}
         {/* 번역버튼 hover 시 리스트 표시 */}
-        {isHovered && (
+        {isClicked && (
           <>
             <LanguageList
               onWheel={handleWheel}
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
+              // onMouseEnter={() => setIsHovered(true)}
+              // onMouseLeave={() => setIsHovered(false)}
+              onClick={() => {
+                setIsClicked(false);
+              }}
             >
               {languages.map((lang) => (
                 <LanguageItem
                   key={lang.code}
-                  onClick={() => handleLanguageChange(lang)}
+                  onClick={() => {
+                    handleLanguageChange(lang);
+                    setIsClicked(false);
+                  }}
                 >
                   <Flag code={lang.flag} />
                   {lang.name}
@@ -104,8 +116,8 @@ const ButtonCotainer = styled.li`
 
 const LanguageList = styled.ul`
   position: absolute;
-  top: 0vh;
-  left: 0;
+  top: 6vh;
+  right: 0vh;
   background-color: white;
   border: 2px solid #000000;
   list-style: none;

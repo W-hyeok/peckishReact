@@ -88,9 +88,9 @@ export default function Header() {
 
   return (
     <div className="">
-      <Popover as="header" className="bg-[#f9dfb1]">
+      <Popover as="header" className="">
         <div className="mx-10">
-          <div className="relative flex items-center justify-center pt-6 pb-6 lg:justify-between">
+          <div className="relative flex items-center justify-center pt-3 pb-3 lg:justify-between">
             {/* Logo */}
             <div className="absolute flex left-0 shrink-0 lg:static">
               <Link to={'/'} className="flex items-center">
@@ -126,7 +126,7 @@ export default function Header() {
                     <img
                       alt=""
                       src={`${host}/api/member/view/${cookieMember.profileFilename}`}
-                      className="size-12 rounded-full"
+                      className="size-12 rounded-full border-[2px] border-black border-solid"
                     />
                   </MenuButton>
                 </div>
@@ -185,13 +185,13 @@ export default function Header() {
             {/* Menu button */}
             <div className="absolute right-0 shrink-0 lg:hidden">
               {/* Mobile menu button */}
-              <PopoverButton className="group relative inline-flex items-center justify-center rounded-md bg-transparent p-2 text-indigo-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+              <PopoverButton className=" group relative inline-flex items-center justify-center bg-transparent p-2 text-indigo-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open main menu</span>
                 <img
                   src={profileIcon}
                   aria-hidden="true"
-                  className="block size-9 group-data-[open]:hidden"
+                  className=" block size-9 group-data-[open]:hidden"
                 />
                 <XMarkIcon
                   aria-hidden="true"

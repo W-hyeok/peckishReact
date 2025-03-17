@@ -151,7 +151,7 @@ export default function HeaderFilter({
   };
   return (
     <div className="min-h-full">
-      <Popover as="header" className="bg-[#f9dfb1] pb-2">
+      <Popover as="header" className="pb-2">
         <div className="mx-10">
           {/* 모바일 화면 (lg:hidden) */}
           <div className="relative flex items-center justify-center lg:justify-between">

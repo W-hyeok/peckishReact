@@ -5,7 +5,7 @@ const BasicLayout = ({ children }) => {
   return (
     <>
       {/* // flex...: 화면 전체 높이 설정 */}
-      <div className="grid grid-flow-row min-h-screen bg-yellow-100/30 ">
+      <div className="max-h-max p-3 bg-yellow-100/30 ">
         <div
           aria-hidden="true"
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -19,7 +19,7 @@ const BasicLayout = ({ children }) => {
           />
         </div>
         <Header />
-        <div className="max-h-max">{children}</div>{' '}
+        <div className="min-h-screen">{children}</div>{' '}
         {/* 남은 공간 차지 / footer는 항상 페이지 하단에 고정 */}
       </div>
       <Footer className="relative max-h-max bottom-0" />

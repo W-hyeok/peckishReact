@@ -10,7 +10,7 @@ const AddShopExtraUSER = lazy(
 const AddShopExtraOWNER = lazy(
   () => import('../pages/shop/AddShopExtraOWNERPage')
 );
-const AddMenu = lazy(() => import('../pages/shop/AddMenuPage'));
+// const AddMenu = lazy(() => import('../pages/shop/AddMenuPage'));
 const ModifyShop = lazy(() => import('../pages/shop/ModifyPage'));
 const DetailShop = lazy(() => import('../pages/shop/DetailPage'));
 const DetailShopMoon = lazy(() => import('../pages/shop/DetailPageMoon'));
@@ -29,7 +29,6 @@ const shopRouter = () => {
           <LoginRequired>
             <AddShop />
           </LoginRequired>
-          <LoginRequired></LoginRequired>
         </Suspense>
       ),
     },
@@ -56,17 +55,17 @@ const shopRouter = () => {
       ),
     },
 
-    {
-      // infoType에 따른 메뉴 추가
-      path: 'addMenu/:shopId/:shopDetailId/:infoType',
-      element: (
-        <Suspense fallback={<LoadingPage />}>
-          <LoginRequired>
-            <AddMenu />
-          </LoginRequired>
-        </Suspense>
-      ),
-    },
+    // {
+    //   // infoType에 따른 메뉴 추가
+    //   path: 'addMenu/:shopId/:shopDetailId/:infoType',
+    //   element: (
+    //     <Suspense fallback={<LoadingPage />}>
+    //       {/* <LoginRequired> */}
+    //       <AddMenu />
+    //       {/* </LoginRequired> */}
+    //     </Suspense>
+    //   ),
+    // },
     {
       // infoType에 따라 상점 정보 수정
       path: 'modify/:shopId/:shopDetailId/:infoType',
@@ -96,15 +95,15 @@ const shopRouter = () => {
         </Suspense>
       ),
     },
-    {
-      // 메뉴 상세보기
-      path: 'detail/menu',
-      element: (
-        <Suspense fallback={<LoadingPage />}>
-          {/* <DetailMenuShop /> */}
-        </Suspense>
-      ),
-    },
+    // {
+    //   // 메뉴 상세보기
+    //   path: 'detail/menu',
+    //   element: (
+    //     <Suspense fallback={<LoadingPage />}>
+    //       {/* <DetailMenuShop /> */}
+    //     </Suspense>
+    //   ),
+    // },
   ];
 };
 

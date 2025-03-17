@@ -98,7 +98,7 @@ const MainPage = () => {
           openData={openData}
           cookieMember={cookieMember}
         />
-        <main className="bg-[#f9dfb1]">
+        <main className="max-h-full">
           {/* <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8"> */}
           <div className="mx-10">
             {/* Main 3 column grid */}
@@ -109,7 +109,7 @@ const MainPage = () => {
                   <h2 id="section-1-title" className="sr-only">
                     지도에용
                   </h2>
-                  <div className="overflow-hidden rounded-lg bg-white shadow">
+                  <div className="overflow-hidden rounded-lg shadow">
                     <div className="">
                       {/* 지도 들어갈 부분 */}
                       <MapComponent

@@ -22,6 +22,7 @@ import whereami from '../../assets/icon/whereami.png';
 import mapCenterIcon from '../../assets/icon/mapCenter.png';
 import redDot from '../../assets/icon/location-red.png';
 import currentLocation from '../../assets/icon/currentLocation_faca15.png';
+import currentLocatiion2 from '../../assets/icon/current-location-final.png';
 const { kakao } = window;
 
 function MapComponent({
@@ -43,6 +44,7 @@ function MapComponent({
   const [permission, setPermission] = useState('');
   const { moveToShop } = useCustomMove(); // 해당 가게 정보로 이동
   const [result, setResult] = useState(null);
+  const [curLocBtn, setCurLocBtn] = useState(false); // 현재 위치로 이동 버튼 분기처리용
   const [mapCenter, SetMapCenter] = useState({
     center: { lat: '', lng: '' },
   });
@@ -71,7 +73,7 @@ function MapComponent({
     // 지도의 초기 위치
     center: { lat: '', lng: '' },
     // 지도 위치 변경시 panto를 이용할지(부드럽게 이동)
-    isPanto: true,
+    isPanto: false,
   });
 
   // 지도 기본 위치 설정
@@ -356,6 +358,7 @@ function MapComponent({
           curLoc.center.lng
         );
         map.panTo(newLatLng);
+        setCurLocBtn(true);
         console.log('이동한 현재 위치:', mapLatLng);
       } else {
         return setResult('asdf');
@@ -376,12 +379,21 @@ function MapComponent({
             margin: '10px',
             width: '50px',
           }}
+          className=""
         >
-          <img
-            className="rounded-3xl w-auto h-auto shadow-slate-400 shadow-lg"
-            src={whereami}
-            title="현재 위치로 이동"
-          />
+          {!curLocBtn ? (
+            <img
+              className="rounded-full w-auto h-auto shadow-md hover:bg-yellow-500 hover:shadow-yellow-500 hover:shadow-xl"
+              src={currentLocatiion2}
+              title="현재 위치로 이동"
+            />
+          ) : (
+            <img
+              className="rounded-full w-auto h-auto shadow-yellow-500 shadow-md"
+              src={currentLocatiion2}
+              title="현재 위치로 이동"
+            />
+          )}
         </button>
       </>
     );
@@ -444,7 +456,7 @@ function MapComponent({
           isPanto={state.isPanto}
           style={{
             width: '100%',
-            height: '75vh',
+            height: '100vh',
             position: 'relative', // 지도 위에 버튼 깔기 위해 설정
             float: 'right', // 상동
           }}
@@ -469,6 +481,7 @@ function MapComponent({
             });
             // console.log('지도 영역: ', mapLoc.bound);
             setShowButton(true);
+            setCurLocBtn(false);
           }}
         >
           {/* <DrawingManager> */}
