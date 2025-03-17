@@ -7,12 +7,12 @@ const host = `${API_SERVER_HOST}`;
 
 const DetailOwnerMenuComponent = ({ menuItems, handleMenuRemove }) => {
   return (
-    <div className="max-h-64 scrollbar2">
+    <div className="scrollbar2 relative">
       <dl>
         {menuItems.length > 0 ? (
           menuItems.map((menuOwner) => (
             <Fragment key={menuOwner.menuId}>
-              <div className="flex items-center overflow-x-hidden py-4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200">
+              <div className="flex items-center overflow-x-hidden overflow-y-hidden py -4 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200">
                 <img
                   alt={menuOwner.menuName}
                   src={`${host}/api/shop/view/${menuOwner.menuFilename}`}
@@ -28,7 +28,7 @@ const DetailOwnerMenuComponent = ({ menuItems, handleMenuRemove }) => {
                 <div className="ml-auto flex items-center gap-x-6">
                   <Menu as="div" className="relative flex-none">
                     <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
-                      <span className="sr-only">Open options</span>
+                      <span className="sr-only">옵션열기</span>
                       <EllipsisVerticalIcon
                         aria-hidden="true"
                         className="size-5"

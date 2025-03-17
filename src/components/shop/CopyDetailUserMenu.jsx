@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { Menu, MenuButton, MenuItem } from '@headlessui/react';
@@ -7,7 +7,7 @@ const host = `${API_SERVER_HOST}`;
 
 const DetailUserMenuComponent = ({ menuItems, handleMenuRemove }) => {
   return (
-    <div className="max-h-64 max-w-full overflow-x-hidden scrollbar2">
+    <div className="scrollbar2 relative">
       <dl>
         {menuItems.length > 0 ? (
           menuItems.map((menuUser, index) => (
