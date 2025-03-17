@@ -6,7 +6,7 @@ const PageAdminMemberHeader = ({ title }) => {
   const toListHandler = () => {
     navigate('memberlist');
   };
-   const toAddHandler = () => {
+  const toAddHandler = () => {
     navigate('add');
   };
 
@@ -17,8 +17,7 @@ const PageAdminMemberHeader = ({ title }) => {
           {title}
         </h2>
       </div>
-      <div className="mt-4 flex md:ml-4 md:mt-0">
-      </div>
+      <div className="mt-4 flex md:ml-4 md:mt-0"></div>
     </div>
   );
 };

@@ -6,7 +6,7 @@ const PageHeader = ({ title }) => {
   const toListHandler = () => {
     navigate('list');
   };
-   const toAddHandler = () => {
+  const toAddHandler = () => {
     navigate('add');
   };
 
@@ -17,9 +17,7 @@ const PageHeader = ({ title }) => {
           {title}
         </h2>
       </div>
-      <div className="mt-4 flex md:ml-4 md:mt-0">
-
-      </div>
+      <div className="mt-4 flex md:ml-4 md:mt-0"></div>
     </div>
   );
 };

@@ -5,7 +5,7 @@ const ModifyPage = () => {
   const { email } = useParams();
 
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-lg">
+    <div className="overflow-hidden">
       <div className="px-4 py-5 sm:p-6">
         <ModifyComponent email={email} />
       </div>
