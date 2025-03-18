@@ -19,7 +19,7 @@ const useCustomMove = () => {
 
   // queryString default 설정
   const page = getQuery(queryParams.get('page'), 1);
-  const size = getQuery(queryParams.get('size'), 12);
+  const size = getQuery(queryParams.get('size'), 10);
   const queryDefault = createSearchParams({ page, size }).toString(); // default querystring
 
   // 리스트로 이동 (리스트버튼, 페이지번호 눌러 이동시에도 사용)
@@ -28,7 +28,7 @@ const useCustomMove = () => {
     let queryStr = '';
     if (pageParam) {
       const pageNum = getQuery(pageParam.page, 1);
-      const sizeNum = getQuery(pageParam.size, 12);
+      const sizeNum = getQuery(pageParam.size, 10);
       queryStr = createSearchParams({
         page: pageNum,
         size: sizeNum,
@@ -44,7 +44,7 @@ const useCustomMove = () => {
     let queryStr = '';
     if (pageParam) {
       const pageNum = getQuery(pageParam.page, 1);
-      const sizeNum = getQuery(pageParam.size, 12);
+      const sizeNum = getQuery(pageParam.size, 10);
       queryStr = createSearchParams({
         page: pageNum,
         size: sizeNum,
@@ -60,7 +60,7 @@ const useCustomMove = () => {
     let queryStr = '';
     if (pageParam) {
       const pageNum = getQuery(pageParam.page, 1);
-      const sizeNum = getQuery(pageParam.size, 12);
+      const sizeNum = getQuery(pageParam.size, 10);
       queryStr = createSearchParams({
         page: pageNum,
         size: sizeNum,
@@ -88,6 +88,11 @@ const useCustomMove = () => {
   // 조회(상세) 페이지 이동
   const moveToRead = (num) => {
     navigate({ pathname: `../read/${num}`, search: queryDefault });
+  };
+
+  // 조회(상세) 페이지 이동
+  const moveToReadAll = (num) => {
+    navigate({ pathname: `../readallmember/${num}`, search: queryDefault });
   };
 
   // 점포 상세 페이지로 이동
@@ -137,6 +142,7 @@ const useCustomMove = () => {
     moveToModify,
     moveToShopModify,
     moveToRead,
+    moveToReadAll,
     moveToModifyInfo,
     moveToModifyPassword,
     moveToLogin,

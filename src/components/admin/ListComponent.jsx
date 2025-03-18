@@ -17,7 +17,8 @@ const initState = {
 };
 
 const ListComponent = () => {
-  const { page, moveToList, moveToRead, refresh } = useCustomMove();
+  const { page, moveToList, moveToRead, moveToReadAll, refresh } =
+    useCustomMove();
   const size = 10;
   const [serverData, setServerData] = useState(initState);
 
@@ -71,19 +72,24 @@ const ListComponent = () => {
               {serverData.list.map((member) => (
                 <tr
                   key={member.email}
-                  onClick={() => moveToRead(member.email)}
+                  onClick={() => moveToReadAll(member.email)}
                   className="cursor-pointer"
                 >
                   <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {member.email}
                   </td>
                   <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
-                    {member.roleNames[0] === 'ADMIN' ? (
+                    {member.roleNames[member.roleNames.length - 1] ===
+                    'ADMIN' ? (
                       <span className="text-blue-600">관리자</span>
-                    ) : member.roleNames.length == 1 ? (
+                    ) : member.roleNames[member.roleNames.length - 1] ===
+                      'USER' ? (
                       <span className="text-green-600">일반회원</span>
-                    ) : (
+                    ) : member.roleNames[member.roleNames.length - 1] ===
+                      'OWNER' ? (
                       <span className="text-red-600">사업자 회원</span>
+                    ) : (
+                      <></>
                     )}
                   </td>
                   <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">

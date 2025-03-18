@@ -8,6 +8,9 @@ const AdminList = lazy(() => import('../pages/admin/ListPage'));
 const AdminShopList = lazy(() => import('../pages/admin/ListShopPage'));
 const AdminMemberList = lazy(() => import('../pages/admin/ListMemberPage'));
 const AdminMemberRead = lazy(() => import('../pages/admin/ReadPage'));
+const AdminAllMemberRead = lazy(
+  () => import('../pages/admin/ReadAllMemberPage')
+);
 const AdminReadMemberRead = lazy(() => import('../pages/admin/ReadMemberPage'));
 const AdminMemberModify = lazy(() => import('../pages/admin/ModifyPage'));
 
@@ -19,7 +22,7 @@ const adminRouter = () => {
         <Suspense fallback={<LoadingPage />}>
           <AdminList />
         </Suspense>
-        ),
+      ),
     },
     {
       path: 'shoplist',
@@ -27,7 +30,7 @@ const adminRouter = () => {
         <Suspense fallback={<LoadingPage />}>
           <AdminShopList />
         </Suspense>
-        ),
+      ),
     },
     {
       path: 'memberlist',
@@ -35,7 +38,7 @@ const adminRouter = () => {
         <Suspense fallback={<LoadingPage />}>
           <AdminMemberList />
         </Suspense>
-        ),
+      ),
     },
     {
       path: 'read/:email',
@@ -46,13 +49,21 @@ const adminRouter = () => {
       ),
     },
     {
+      path: 'readallmember/:email',
+      element: (
+        <Suspense fallback={<LoadingPage />}>
+          <AdminAllMemberRead />
+        </Suspense>
+      ),
+    },
+    {
       path: 'readmember/:email',
       element: (
         <Suspense fallback={<LoadingPage />}>
           <AdminReadMemberRead />
         </Suspense>
       ),
-    },    
+    },
     {
       path: 'modifyInfo/:email',
       element: (

@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
-import { getOneMember, modifyMemberStat } from '../../api/adminApi';
+import {
+  getOneMember,
+  modifyMemberStat,
+  modifyMemberStat4,
+} from '../../api/adminApi';
 import useCustomMove from '../../hooks/useCustomMove';
 import { useNavigate } from 'react-router-dom';
 import { API_SERVER_HOST } from '../../api/todoApi';
@@ -22,6 +26,7 @@ const ReadComponent = ({ email }) => {
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [isConfirmModal, setIsConfirmModal] = useState(false);
+  const [isConfirmModalReturn, setIsConfirmModalReturn] = useState(false);
   const { moveToList } = useCustomMove();
   const navigate = useNavigate();
 
@@ -111,8 +116,29 @@ const ReadComponent = ({ email }) => {
     });
   };
 
+  const handleActionReturn = (email) => {
+    setIsConfirmModalReturn(true);
+    setModalMessage('반려 하시겠습니까?');
+  };
+
+  const confirmActionReturn = () => {
+    modifyMemberStat4(email).then((data) => {
+      setIsConfirmModal(false);
+      setModalMessage('반려가 완료되었습니다');
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+        navigate('/admin/memberlist');
+      }, 1500);
+    });
+  };
+
   const cancelAction = () => {
     setIsConfirmModal(false);
+  };
+
+  const cancelActionReturn = () => {
+    setIsConfirmModalReturn(false);
   };
 
   const handleGoToList = () => {
@@ -121,6 +147,7 @@ const ReadComponent = ({ email }) => {
 
   // 1 일반회원가입
   // 2 사업자회원가입 관리자 승인 대기  -> 관리자 승인 = 1로 변경
+  // 4 사업자회원가입 관리자 승인 대기  -> 관리자 반려 = 4로 변경
   // 0 탈퇴
 
   return (
@@ -129,8 +156,8 @@ const ReadComponent = ({ email }) => {
         <div className="px-4 sm:px-0">
           <h3 className="text-xl font-bold text-blue-800">대상 회원 상세</h3>
         </div>
-        <div className="mt-6 border-t border-gray-200">
-          <dl className="divide-y divide-gray-200">
+        <div className="mt-2 border-t border-gray-300">
+          <dl className="divide-y divide-gray-300">
             {makeDiv('이메일', member.email)}
             {makeDiv('연락처', member.phone)}
             {makeDiv('사업자 등록번호', member.businessNumber)}
@@ -139,8 +166,10 @@ const ReadComponent = ({ email }) => {
               member.memberStat == 2
                 ? '승인대기'
                 : member.memberStat == 1
-                  ? '일반회원'
-                  : '탈퇴회원'
+                  ? '활동중 회원'
+                  : member.memberStat == 4
+                    ? '승인 반려'
+                    : '탈퇴회원'
             )}
           </dl>
         </div>
@@ -152,11 +181,10 @@ const ReadComponent = ({ email }) => {
             <img
               alt={member.email}
               src={`${host}/api/member/view/${member.certiFilename}`}
-              className="h-80 w-auto"
+              className="max-h-80 w-auto"
             />
           </dd>
         </div>
-
         <div className="flex float-right gap-2 mb-4">
           {member.memberStat === 2 && (
             <>
@@ -182,29 +210,71 @@ const ReadComponent = ({ email }) => {
               >
                 승인
               </button>
+              <button
+                type="button"
+                onClick={() => handleActionReturn(email)}
+                className="negativeBtn"
+              >
+                반려
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="defaultBtn"
+              >
+                목록으로
+              </button>
             </>
           )}
           {member.memberStat === 1 && (
-            <button
-              type="button"
-              value={member.businessNumber}
-              onClick={() => handleAction(email)}
-              className="will-change-auto bg-yellow-600 text-white px-3 py-2 rounded hover:bg-yellow-400"
-            >
-              승인취소
-            </button>
+            <>
+              <button
+                type="button"
+                value={member.businessNumber}
+                onClick={() => handleAction(email)}
+                className="negativeBtn"
+              >
+                승인취소
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="defaultBtn"
+              >
+                목록으로
+              </button>
+            </>
           )}
-          <button
-            type="button"
-            onClick={() => navigate(-1)}
-            className="negativeBtn"
-          >
-            반려
-          </button>
+          {member.memberStat === 4 && (
+            <>
+              <button
+                type="button"
+                onClick={() => handleAction(email)}
+                className="positiveBtn"
+                // className="rounded-md bg-blue-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+              >
+                재승인
+              </button>
+              <button
+                type="button"
+                onClick={() => handleActionReturn(email)}
+                className="negativeBtn"
+              >
+                반려
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                className="defaultBtn"
+              >
+                목록으로
+              </button>
+            </>
+          )}
         </div>
       </div>
 
-      {/* 확인 모달 */}
+      {/* 확인 모달 : 사업자 등록 승인을 위한 프로세스 */}
       {isConfirmModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -212,16 +282,30 @@ const ReadComponent = ({ email }) => {
             <div className="flex flex-col items-center justify-center">
               <span className="text-xl font-semibold mb-4">{modalMessage}</span>
               <div className="flex gap-4">
-                <button
-                  onClick={confirmAction}
-                  className="rounded-md bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600"
-                >
+                <button onClick={confirmAction} className="positiveBtn">
                   확인
                 </button>
-                <button
-                  onClick={cancelAction}
-                  className="rounded-md bg-gray-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-600"
-                >
+                <button onClick={cancelAction} className="negativeBtn">
+                  취소
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 확인 모달 : 사업자 등록 반려를 위한 프로세스*/}
+      {isConfirmModalReturn && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+          <div className="relative bg-white rounded-lg px-8 py-6 shadow-xl">
+            <div className="flex flex-col items-center justify-center">
+              <span className="text-xl font-semibold mb-4">{modalMessage}</span>
+              <div className="flex gap-4">
+                <button onClick={confirmActionReturn} className="positiveBtn">
+                  확인
+                </button>
+                <button onClick={cancelActionReturn} className="negativeBtn">
                   취소
                 </button>
               </div>

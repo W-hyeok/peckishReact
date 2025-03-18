@@ -20,6 +20,7 @@ const ListPage = () => {
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
               <h1 className="text-3xl font-bold text-gray-900">
+                관리자 페이지 <span aria-hidden="true"> &rsaquo;&rsaquo; </span>
                 전체 회원 목록
               </h1>
               <p className="mt-4 text-xl text-gray-700">

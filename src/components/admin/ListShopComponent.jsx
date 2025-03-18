@@ -17,7 +17,8 @@ const initState = {
 };
 
 const ListShopComponent = () => {
-  const { page, size, moveToListshop, moveToRead, refresh } = useCustomMove();
+  const { page, size, moveToListshop, moveToShop, moveToRead, refresh } =
+    useCustomMove();
   const [serverData, setServerData] = useState(initState);
 
   useEffect(() => {
@@ -40,12 +41,12 @@ const ListShopComponent = () => {
                 >
                   아이디
                 </th>
-                <th
+                {/* <th
                   scope="col"
                   className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  상점 이름
-                </th>
+                  점포 이름
+                </th> */}
                 <th
                   scope="col"
                   className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
@@ -56,7 +57,7 @@ const ListShopComponent = () => {
                   scope="col"
                   className="py-3.5 pl-4 pr-3 text-left text-lg font-bold text-gray-900 sm:pl-0"
                 >
-                  제보/인증
+                  제보/인증 여부
                 </th>
                 <th
                   scope="col"
@@ -74,13 +75,17 @@ const ListShopComponent = () => {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {serverData.list.map((shop) => (
-                <tr key={shop.shopId}>
+                <tr
+                  key={shop.shopId}
+                  onClick={() => moveToShop(shop.shopId)}
+                  className="cursor-pointer"
+                >
                   <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {shop.shopId}
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
+                  {/* <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {shop.title}
-                  </td>
+                  </td> */}
                   <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {shop.isExist ? (
                       <span className="text-green-600">폐업중</span>
@@ -96,7 +101,7 @@ const ListShopComponent = () => {
                           : 'bg-yellow-100 text-yellow-800'
                       }`}
                     >
-                      {shop.certificate ? '사업자 인증' : '소비지 제보'}
+                      {shop.certificate ? '사업자 인증' : '소비자 제보'}
                     </span>
                   </td>
                   <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">

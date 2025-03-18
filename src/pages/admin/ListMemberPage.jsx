@@ -19,7 +19,10 @@ const ListMemberPage = () => {
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
-              <h1 className="text-3xl font-bold text-gray-900">사업자 목록</h1>
+              <h1 className="text-3xl font-bold text-gray-900">
+                관리자 페이지 <span aria-hidden="true"> &rsaquo;&rsaquo; </span>
+                사업자 목록
+              </h1>
               <p className="mt-4 text-xl text-gray-700">
                 {page} - {size}
               </p>

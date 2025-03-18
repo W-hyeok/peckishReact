@@ -45,3 +45,9 @@ export const modifyMemberStat = async (email) => {
   const result = await jwtAxios.put(`${prefix}/modifyInfo/${email}`);
   return result.data;
 };
+
+// 사업자 승인 반려 처리(동일 사업자 번호 존재 --> memberStat = 4로 처리 -> 사업자 로그인 시도시 알림 처리)
+export const modifyMemberStat4 = async (email) => {
+  const result = await jwtAxios.put(`${prefix}/modifyInfoReturn/${email}`);
+  return result.data;
+};

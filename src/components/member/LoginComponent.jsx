@@ -34,6 +34,9 @@ const LoginComponent = () => {
       } else if (data.memberStat == 2) {
         setResult('login_failure_2');
         doLogout();
+      } else if (data.memberStat == 4) {
+        setResult('login_failure_4');
+        doLogout();
       } else {
         console.log('비밀번호 불일치 ');
         setResult('fail');
@@ -81,6 +84,12 @@ const LoginComponent = () => {
             content={`${email}님은 관리자 승인 대기중입니다`}
             callbackFn={closeModalError}
           />
+        ) : result === 'login_failure_4' ? (
+          <ResultModal
+            title={'로그인 실패'}
+            content={`${email}님은 "동일한 사업자 등록번호"로 가입한 회원이 존재하여 관리자 승인이 반려 되었습니다.`}
+            callbackFn={closeModalError}
+          />
         ) : (
           <ResultModal
             title={'로그인 실패'}
@@ -100,81 +109,81 @@ const LoginComponent = () => {
           </div>
           <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-[400px]">
             {/* <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12"> */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    이메일
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      name="email"
-                      type="text"
-                      value={loginParam.email}
-                      onChange={handleChange}
-                      required
-                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    비밀번호
-                  </label>
-                  <div className="mt-2">
-                    <input
-                      name="password"
-                      type="password"
-                      value={loginParam.password}
-                      onChange={handleChange}
-                      onKeyDown={enter}
-                      required
-                      autoComplete="current-password"
-                      className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="text-sm/6">
-                    <Link
-                      to="/member/searchEmail"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    >
-                      이메일 찾기
-                    </Link>
-                  </div>
-                  <div className="text-sm/6">
-                    <Link
-                      to="/member/add"
-                      className="font-semibold text-red-500 hover:text-red-400"
-                    >
-                      회원가입
-                    </Link>
-                  </div>
-                  <div className="text-sm/6">
-                    <Link
-                      to="/member/searchPassword"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    >
-                      비밀번호 찾기
-                    </Link>
-                  </div>
-                </div>
-
-                <div>
-                  <button
-                    type="button"
-                    onClick={handleClickLogin}
-                    className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    로 그 인
-                  </button>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  이메일
+                </label>
+                <div className="mt-2">
+                  <input
+                    name="email"
+                    type="text"
+                    value={loginParam.email}
+                    onChange={handleChange}
+                    required
+                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
                 </div>
               </div>
 
-              {/* 소셜로그인 */}
-              <KakaoLoginComponent />
+              <div>
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  비밀번호
+                </label>
+                <div className="mt-2">
+                  <input
+                    name="password"
+                    type="password"
+                    value={loginParam.password}
+                    onChange={handleChange}
+                    onKeyDown={enter}
+                    required
+                    autoComplete="current-password"
+                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div className="text-sm/6">
+                  <Link
+                    to="/member/searchEmail"
+                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                  >
+                    이메일 찾기
+                  </Link>
+                </div>
+                <div className="text-sm/6">
+                  <Link
+                    to="/member/add"
+                    className="font-semibold text-red-500 hover:text-red-400"
+                  >
+                    회원가입
+                  </Link>
+                </div>
+                <div className="text-sm/6">
+                  <Link
+                    to="/member/searchPassword"
+                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                  >
+                    비밀번호 찾기
+                  </Link>
+                </div>
+              </div>
+
+              <div>
+                <button
+                  type="button"
+                  onClick={handleClickLogin}
+                  className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  로 그 인
+                </button>
+              </div>
+            </div>
+
+            {/* 소셜로그인 */}
+            <KakaoLoginComponent />
             {/* </div> */}
           </div>
         </div>
