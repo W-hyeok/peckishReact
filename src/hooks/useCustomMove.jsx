@@ -105,10 +105,15 @@ const useCustomMove = () => {
     navigate({ pathname: `/shop/detail/${sid}` });
   };
 
-  //점포 수정 페이지로 이동
-  const moveToShopModify = (shopId) => {
-    navigate({ pathname: `../shop/modify/${shopId}` });
+  //USER - 점포 수정 페이지로 이동
+  const moveToUserShopModify = (shopId) => {
+    navigate({ pathname: `/shop/modify/${shopId}/USER` });
   };
+  //OWNER - 점포 수정 페이지로 이동
+  const moveToOwnerShopModify = (shopId) => {
+    navigate({ pathname: `/shop/modify/${shopId}/OWNER` });
+  };
+
   // 점포 등록 페이지로 이동
   const moveToPost = () => {
     navigate({ pathname: `../shop/add` });
@@ -140,7 +145,8 @@ const useCustomMove = () => {
     moveToShopFromMyProfile,
     moveToPost,
     moveToModify,
-    moveToShopModify,
+    moveToUserShopModify,
+    moveToOwnerShopModify,
     moveToRead,
     moveToReadAll,
     moveToModifyInfo,
