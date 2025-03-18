@@ -7,10 +7,7 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 import PropTypes from 'prop-types';
 import ChatSideBarComponenet from './ChatSideBarComponenet';
 
-const memberInfo = getCookie('member');
-const memberEmail = memberInfo.email;
-
-const WS_SERVER_HOST = 'localhost:8080';
+export const WS_SERVER_HOST = 'localhost:8080';
 
 const RoomComponent = () => {
   const { room_ID } = useParams();
@@ -18,6 +15,10 @@ const RoomComponent = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const messagesEndRef = useRef(null);
+
+  // 컴포넌트 내부에서 최신 쿠키 값을 읽어옵니다.
+  const memberInfo = getCookie('member');
+  const memberEmail = memberInfo.email;
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -81,8 +82,9 @@ const RoomComponent = () => {
             room_ID: room_ID,
             messageType: 'ENTER',
             email: memberEmail,
-            content: '채팅방에 접속했습니다',
-            reg_date: seoulTime.replace('-'),
+            content:
+              '\"' + memberInfo.nickname + '\"' + ' 님이 채팅방에 접속했습니다',
+            reg_date: seoulTime.replace('-', ''),
           })
         );
         isRoomEntered = true;
@@ -120,8 +122,19 @@ const RoomComponent = () => {
 
     return () => {
       ws.close();
+      // 채팅방 떠날 때 읽음 처리 API 호출
+      axios
+        .put(
+          `${API_SERVER_HOST}/chat/room/markAsRead/${room_ID}?email=${memberEmail}`
+        )
+        .then(() => {
+          console.log('채팅방 나갈 때 메시지 읽음 처리 성공');
+        })
+        .catch((error) => {
+          console.error('채팅방 나갈 때 읽음 처리 실패:', error);
+        });
     };
-  }, [room_ID]);
+  }, [room_ID, memberEmail]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -144,7 +157,7 @@ const RoomComponent = () => {
         messageType: 'TALK',
         email: memberEmail,
         content: inputMessage,
-        reg_date: seoulTime.replace('-'),
+        reg_date: seoulTime.replace('-', ''),
       };
       socket.send(JSON.stringify(messagePayload));
       setInputMessage('');
@@ -166,7 +179,6 @@ const RoomComponent = () => {
             >
               <ul>
                 {messages.map((msg, index) => {
-                  const displayContent = msg.content;
                   return (
                     <li
                       key={index}
@@ -178,7 +190,7 @@ const RoomComponent = () => {
                         <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
                           <div>
                             <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-                              <p className="text-sm">{displayContent}</p>
+                              <p className="text-sm">{msg.content}</p>
                             </div>
                             <span className="text-xs text-gray-500 leading-none">
                               {msg.reg_date}
@@ -203,7 +215,7 @@ const RoomComponent = () => {
                           </div>
                           <div>
                             <div className="bg-gray-100 p-3 rounded-r-lg rounded-bl-lg">
-                              <p className="text-sm">{displayContent}</p>
+                              <p className="text-sm">{msg.content}</p>
                             </div>
                             <span className="text-xs text-gray-500 leading-none">
                               {msg.reg_date}

@@ -2,50 +2,72 @@ import { useEffect, useState } from 'react';
 import { getCookie } from '../../util/cookieUtil';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { getListDetail } from '../../api/roomApi';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-const memberInfo = getCookie('member');
-const memberEmail = memberInfo.email;
+const ChatSideBarComponent = () => {
+  const memberInfo = getCookie('member');
+  const memberEmail = memberInfo.email;
 
-const ChatSideBarComponenet = () => {
   const [chatList, setChatList] = useState([]);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState([]);
 
-  // 페이지 로딩 시 호출되는 함수
+  const navigate = useNavigate();
+
+  const markAsRead = async (roomId) => {
+    try {
+      await axios.put(
+        `${API_SERVER_HOST}/chat/room/markAsRead/${roomId}?email=${memberEmail}`
+      );
+      console.log('Messages marked as read');
+    } catch (error) {
+      console.error('Failed to mark messages as read:', error);
+    }
+  };
+
+  const handleRoomClick = async (roomId) => {
+    // 로컬 상태 업데이트: 해당 방의 unreadCount를 0으로 설정
+    setChatList((prevChatList) =>
+      prevChatList.map((chat) =>
+        chat.roomId === roomId ? { ...chat, unreadCount: 0 } : chat
+      )
+    );
+
+    // 메시지 상태를 서버에 업데이트
+    await markAsRead(roomId);
+
+    // 해당 방으로 이동
+    navigate(`/roomList/room/${roomId}`);
+  };
 
   useEffect(() => {
     const loadChatList = async () => {
       try {
         const data = await getListDetail(memberEmail);
-        // 자신의 이메일(memberEmail)을 제외하고, 상대방 데이터만 필터링
-        const filteredData = data.filter((chat) => chat.email !== memberEmail);
-        setChatList(filteredData);
+        setChatList(data);
 
-        // 필터링된 데이터로 이미지 URL 배열 생성
-        const newImages = filteredData.map(
+        // 각 대화 상대의 프로필 이미지 URL 생성
+        const newImages = data.map(
           (chat) => `${API_SERVER_HOST}/api/member/view/${chat.photoPath}`
         );
         setImage(newImages);
-        console.log('newImages', newImages);
-
-        console.log('채팅 data', filteredData);
       } catch (error) {
-        console.error('채팅 목록 불러오기 실패:', error);
+        console.error('Failed to load chat list:', error);
       }
     };
 
     loadChatList();
-  }, []);
-  console.log('chatList: ', chatList);
+  }, [memberEmail]);
+
   return (
     <div className="fixed top-[105px] left-0 z-10 flex flex-col w-[78px] h-[calc(100vh-65px-130px)] rounded-lg overflow-y-auto bg-[#F472B6] bg-opacity-15 shadow-sm items-center">
       {chatList.map((chat, index) => (
-        <Link
+        <div
           key={index}
-          to={`/roomList/room/${chat.roomId}`} // room 페이지로 이동
-          className="flex flex-row py-4 px-2 items-center w-full relative"
+          onClick={() => handleRoomClick(chat.roomId)}
+          className="flex flex-row py-4 px-2 items-center w-full relative cursor-pointer"
         >
-          <div className="w-full">
+          <div className="w-full relative">
             <img
               src={image[index]}
               className="h-[44px] w-[40px] rounded-full ring-4 ring-blue-400 m-1 p-1"
@@ -57,10 +79,10 @@ const ChatSideBarComponenet = () => {
               </span>
             )}
           </div>
-        </Link>
+        </div>
       ))}
     </div>
   );
 };
 
-export default ChatSideBarComponenet;
+export default ChatSideBarComponent;
