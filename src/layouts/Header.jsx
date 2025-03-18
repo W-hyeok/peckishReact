@@ -189,13 +189,9 @@ export default function Header() {
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open main menu</span>
                 <img
-                  src={profileIcon}
+                  src={`${host}/api/member/view/${cookieMember.profileFilename}`}
                   aria-hidden="true"
-                  className=" block size-9 group-data-[open]:hidden"
-                />
-                <XMarkIcon
-                  aria-hidden="true"
-                  className="hidden size-9 group-data-[open]:block"
+                  className="size-9 rounded-full border-[2px] border-black border-solid"
                 />
               </PopoverButton>
             </div>
@@ -232,9 +228,9 @@ export default function Header() {
                   </div>
                 </div>
               </div> */}
-              <div className="pb-2 pt-4">
+              <div className="py-2">
                 <div className="flex items-center px-5">
-                  <div className="shrink-0">
+                  {/* <div className="shrink-0">
                     {cookieMember ? (
                       <img
                         alt=""
@@ -248,7 +244,7 @@ export default function Header() {
                         className="size-10 rounded-full"
                       />
                     )}
-                  </div>
+                  </div> */}
                   <div className="ml-3 min-w-0 flex-1">
                     <div className="truncate text-base font-medium text-gray-800">
                       {user.name}
@@ -257,14 +253,14 @@ export default function Header() {
                       {user.email}
                     </div>
                   </div>
-                  <button
+                  {/* <button
                     type="button"
                     className="relative ml-auto shrink-0 rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                   >
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">View notifications</span>
                     <BellIcon aria-hidden="true" className="size-6" />
-                  </button>
+                  </button> */}
                 </div>
                 <div className="mt-3 space-y-1 px-2">
                   {/* 로그인한 사용자만 출력되는 메뉴 */}

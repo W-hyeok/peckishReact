@@ -23,7 +23,10 @@ import mapCenterIcon from '../../assets/icon/mapCenter.png';
 import redDot from '../../assets/icon/location-red.png';
 import currentLocation from '../../assets/icon/currentLocation_faca15.png';
 import currentLocatiion2 from '../../assets/icon/current-location-final.png';
+import { EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { API_SERVER_HOST } from '../../api/todoApi';
 const { kakao } = window;
+const host = `${API_SERVER_HOST}`;
 
 function MapComponent({
   data,
@@ -37,7 +40,7 @@ function MapComponent({
   const [isOpenData, setIsOpenData] = useState([]); // 서버데이터 중 open = true
   const [isCloseData, setIsCloseData] = useState([]); // 서버데이터 중 open = close
   const [renderingMarker, setRenderingMarker] = useState([]); // ...데이터 중 렌더링 할 것들
-  const [selectedMarker, setSelectedMarker] = useState();
+  const [selectedMarker, setSelectedMarker] = useState('');
   const [cate, setCate] = useState('all'); // 카테고리, 기본 all
   // const [role, setRole] = useState(0); // user: 1(true), owner: 2(false), 기본값 0 ('구분 없음')
   const [open, setOpen] = useState(''); // true: 1, 기본값: 0(준비중 포함)
@@ -45,6 +48,12 @@ function MapComponent({
   const { moveToShop } = useCustomMove(); // 해당 가게 정보로 이동
   const [result, setResult] = useState(null);
   const [curLocBtn, setCurLocBtn] = useState(false); // 현재 위치로 이동 버튼 분기처리용
+  const [popOpened, setPopOpened] = useState(false);
+  const outerBtn = () => {
+    setPopOpened(!popOpened);
+    setSelectedMarker(''); // 선택된 마커 초기화
+  };
+
   const [mapCenter, SetMapCenter] = useState({
     center: { lat: '', lng: '' },
   });
@@ -269,13 +278,23 @@ function MapComponent({
   }, [data]);
 
   // 마커: 영업 중
-  const OpenMarkerContainer = ({ position, content, onClick, isClicked }) => {
+  const OpenMarkerContainer = ({
+    position,
+    content,
+    index,
+    onClick,
+    isClicked,
+  }) => {
     const map = useMap();
     const [isVisible, setIsVisible] = useState(false);
 
-    const handleMarkerClick = () => {
-      onClick(); // 부모 컴포넌트에서 전달된 onClick 함수 호출
-    };
+    useEffect(() => {
+      if (isClicked) {
+        console.log('isClicked?', isClicked);
+        setIsVisible(false);
+        setSelectedMarker('');
+      }
+    }, [isClicked]);
 
     return (
       <>
@@ -283,9 +302,11 @@ function MapComponent({
         {renderingMarker && isOpenData && (
           <MapMarker
             position={position}
-            onClick={handleMarkerClick}
-            onMouseOver={() => setIsVisible(true)}
-            onMouseOut={() => setIsVisible(false)}
+            onClick={() => {
+              setIsVisible(!isVisible);
+            }}
+            // onMouseOver={() => setIsVisible(true)}
+            // onMouseOut={() => setIsVisible(false)}
             image={{
               // 그냥 객체로는 못 가져오고, ${} 형태로 가져와야 함
               src: `${activeBooth}`,
@@ -296,7 +317,22 @@ function MapComponent({
               }, // 마커이미지의 크기입니다
             }}
           >
-            {isVisible && content}
+            {isVisible && (
+              <div className="wrap p-2">
+                <div className="flex items-start">
+                  {content}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // 부모 onClick 전파 방지
+                      setIsVisible(false); // 해당 마커의 내용만 숨김
+                    }}
+                    className="mt-1.5"
+                  >
+                    <XMarkIcon className="close size-6" title="닫기" />
+                  </button>
+                </div>
+              </div>
+            )}
           </MapMarker>
         )}
       </>
@@ -320,18 +356,37 @@ function MapComponent({
         {renderingMarker && isCloseData && transOpenData !== 'opened' && (
           <MapMarker
             position={position}
-            onClick={handleMarkerClick}
-            onMouseOver={() => setIsVisible(true)} // 마우스 올리면 노출
-            onMouseOut={() => setIsVisible(false)} // 마커에서 마우스 벗어나면 숨김
+            onClick={() => {
+              setIsVisible(!isVisible);
+            }}
+            // onMouseOver={() => setIsVisible(true)}
+            // onMouseOut={() => setIsVisible(false)}
             image={{
-              src: `${inactiveBooth}`, // 마커이미지 주소
+              // 그냥 객체로는 못 가져오고, ${} 형태로 가져와야 함
+              src: `${inactiveBooth}`,
+              // 마커이미지 주소
               size: {
                 width: 40,
                 height: 43,
               }, // 마커이미지의 크기입니다
             }}
           >
-            {isVisible && content}
+            {isVisible && (
+              <div className="wrap p-2">
+                <div className="flex items-start">
+                  {content}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // 부모 onClick 전파 방지
+                      setIsVisible(false); // 해당 마커의 내용만 숨김
+                    }}
+                    className="mt-1.5"
+                  >
+                    <XMarkIcon className="close size-6" title="닫기" />
+                  </button>
+                </div>
+              </div>
+            )}
           </MapMarker>
         )}
       </>
@@ -546,128 +601,115 @@ function MapComponent({
                 return (
                   <OpenMarkerContainer
                     index={index}
+                    isClicked={selectedMarker === index}
                     key={`OpenMarkerContainer-${data.lat}-${data.lng}`}
                     position={{ lat: data.lat, lng: data.lng }}
                     // 마커 마우스 올리면 나타나는 화면 div
                     content={
-                      <div
-                        style={{
-                          width: 'max-content',
-                          whiteSpace: 'nowrap',
-                          height: '100%',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          padding: '10px',
-                          textAlign: 'center',
-                        }}
-                      >
-                        가게명: {data.title}
-                        <hr />
-                        카테고리:{' '}
-                        {
-                          data.category === 'bread'
-                            ? '붕어빵'
-                            : data.category === 'snack'
-                              ? '분식'
-                              : data.category === 'hotteok'
-                                ? '호떡'
-                                : data.category === 'sweetPotato'
-                                  ? '군고구마'
-                                  : data.category // 조건에 맞지 않으면(예외) 원래 값 출력
-                        }{' '}
-                        <hr />
-                        {data.status === 'opened' ? (
-                          <div>영업 중</div>
-                        ) : (
-                          <div>영업 준비 중</div>
-                        )}
+                      <div className="wrap p-2">
+                        <div className="info">
+                          <div className="title flex min-w-max">
+                            <div className="bg-gray-300">
+                              {data.title} /{' '}
+                              {
+                                data.category === 'bread'
+                                  ? '붕어빵'
+                                  : data.category === 'snack'
+                                    ? '분식'
+                                    : data.category === 'hotteok'
+                                      ? '호떡'
+                                      : data.category === 'sweetPotato'
+                                        ? '군고구마'
+                                        : data.category // 조건에 맞지 않으면(예외) 원래 값 출력
+                              }
+                            </div>
+                          </div>
+                          <hr className="my-1" />
+                          <div className="body">
+                            <img
+                              src={`${host}/api/shop/view/${data.filename}`}
+                              className="size-24"
+                            />
+                            <div className="desc min-w-max">
+                              <div className="ellipsis">{data.location}</div>
+                              <div>
+                                <button
+                                  onClick={() => {
+                                    console.log('shopId: ', data.shopId);
+                                    moveToShop(data.shopId);
+                                  }}
+                                  target="_blank"
+                                  className="link text-blue-400 text-sm"
+                                  rel="noreferrer"
+                                >
+                                  자세히 보기
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     }
-                    onClick={() => {
-                      setSelectedMarker(index);
-                      console.log('shopId: ', data.shopId);
-                      moveToShop(data.shopId);
-                    }}
-                    isClicked={selectedMarker === index}
                   />
                 );
               } else {
                 return (
                   <CloseMarkerContainer
                     index={index}
-                    key={`OpenMarkerContainer-${data.lat}-${data.lng}`}
+                    isClicked={selectedMarker === index}
+                    key={`CloseMarkerContainer-${data.lat}-${data.lng}`}
                     position={{ lat: data.lat, lng: data.lng }}
                     // 마커 마우스 올리면 나타나는 화면 div
                     content={
-                      <div
-                        style={{
-                          width: 'max-content',
-                          whiteSpace: 'nowrap',
-                          height: '100%',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          padding: '10px',
-                          textAlign: 'center',
-                        }}
-                      >
-                        가게명: {data.title}
-                        <hr />
-                        카테고리:{' '}
-                        {
-                          data.category === 'bread'
-                            ? '붕어빵'
-                            : data.category === 'snack'
-                              ? '분식'
-                              : data.category === 'hotteok'
-                                ? '호떡'
-                                : data.category === 'sweetPotato'
-                                  ? '군고구마'
-                                  : data.category // 조건에 맞지 않으면(예외) 원래 값 출력
-                        }{' '}
-                        <hr />
-                        {data.status === 'opened' ? (
-                          <div>영업 중</div>
-                        ) : (
-                          <div>영업 준비 중</div>
-                        )}
+                      <div className="wrap p-2">
+                        <div className="info">
+                          <div className="title flex min-w-max">
+                            <div className="bg-gray-300">
+                              {data.title} /{' '}
+                              {
+                                data.category === 'bread'
+                                  ? '붕어빵'
+                                  : data.category === 'snack'
+                                    ? '분식'
+                                    : data.category === 'hotteok'
+                                      ? '호떡'
+                                      : data.category === 'sweetPotato'
+                                        ? '군고구마'
+                                        : data.category // 조건에 맞지 않으면(예외) 원래 값 출력
+                              }
+                            </div>
+                          </div>
+                          <hr className="my-1" />
+                          <div className="body">
+                            <img
+                              src={`${host}/api/shop/view/${data.filename}`}
+                              className="size-24"
+                            />
+                            <div className="desc min-w-max">
+                              <div className="ellipsis">{data.location}</div>
+                              <div>
+                                <button
+                                  onClick={() => {
+                                    console.log('shopId: ', data.shopId);
+                                    moveToShop(data.shopId);
+                                  }}
+                                  target="_blank"
+                                  className="link text-blue-400 text-sm"
+                                  rel="noreferrer"
+                                >
+                                  자세히 보기
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     }
-                    onClick={() => {
-                      setSelectedMarker(index);
-                      console.log('shopId: ', data.shopId);
-                      moveToShop(data.shopId);
-                    }}
-                    isClicked={selectedMarker === index}
                   />
                 );
               }
             })}
           </MarkerClusterer>
-
-          {/* 맵 마커 목록: 영업 준비 중 */}
-          {/* <MarkerClusterer
-            averageCenter={true}
-            minLevel={5}
-            calculator={[10, 30, 50]}
-            styles={[
-              {
-                // calculator 각 사이 값 마다 적용될 스타일을 지정한다
-                width: '30px',
-                height: '30px',
-                background: 'rgba(198, 179, 179, 0.83)',
-                borderRadius: '15px',
-                color: '#6b6b6b',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                lineHeight: '31px',
-              },
-            ]}
-          >
-            {isCloseData.map((data, index) => (
-              
-            ))}
-          </MarkerClusterer> */}
-          {/* </DrawingManager> */}
         </Map>
         <button onClick={onButtonClick} className="hidden"></button>
       </div>

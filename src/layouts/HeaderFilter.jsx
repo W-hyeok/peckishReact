@@ -188,16 +188,12 @@ export default function HeaderFilter({
                   className="block size-6 group-data-[open]:hidden"
                 /> */}
 
-                <img
-                  src={filterIcon}
-                  aria-hidden="true"
-                  className="block size-9 group-data-[open]:hidden"
-                />
+                <img src={filterIcon} aria-hidden="true" className="size-9" />
                 {/* 닫기 아이콘 */}
-                <XMarkIcon
+                {/* <XMarkIcon
                   aria-hidden="true"
                   className="hidden size-9 group-data-[open]:block"
-                />
+                /> */}
               </PopoverButton>
             </div>
           </div>
@@ -208,7 +204,7 @@ export default function HeaderFilter({
                 <nav className="flex">
                   <PopoverGroup
                     className="h-fit w-fit px-4 py-2 bg-white rounded-[8px] border-[2px] border-yellow-400 hover:bg-yellow-400
-                  text-yellow-400 text-md font-semibold mt-2 hover:text-white"
+                  text-black text-md font-semibold mt-2 "
                   >
                     <Popover className="relative min-w-full">
                       <PopoverButton className="flex items-center gap-x-1">
@@ -259,8 +255,10 @@ export default function HeaderFilter({
                       href={open.href}
                       onClick={() => openClick(open.name)} // 필터 클릭 시 '영업 중' 요청
                       className={classNames(
-                        open.current ? 'bg-yellow-800' : 'text-black', // 논리 상 이상은 없으나 안먹는 색상(green-300 같이)이 있음...
-                        'h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white'
+                        open.current
+                          ? 'bg-yellow-400 text-black'
+                          : 'text-black', // 논리 상 이상은 없으나 안먹는 색상(green-300 같이)이 있음...
+                        'h-fit w-fit px-4 py-2 bg-white text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white'
                       )}
                     >
                       {open.name}
@@ -299,7 +297,7 @@ export default function HeaderFilter({
                 {' '}
                 <button
                   className="ml-auto hover:bg-yellow-950/10 flex items-center
-                  h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
+                  h-fit w-fit px-4 py-2 bg-white text-black text-md font-semibold rounded-[8px] mt-2 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
                   onClick={cookieMember ? moveToPost : moveToLogin}
                 >
                   {' '}
@@ -328,18 +326,21 @@ export default function HeaderFilter({
                   <div className="flex items-center justify-between w-full">
                     {/* <p>패널 버튼 내부</p> */}
                     {/* 패널 닫기 버튼? */}
-                    <PopoverButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                      <span className="absolute -inset-0.5" />
-                      <span className="sr-only">Close menu</span>
-                      {/* <XMarkIcon aria-hidden="true" className="size-6" /> */}
+                    <div className="relative inline-flex items-center justify-center p-2 text-gray-400">
+                      <PopoverButton className="rounded-md text-gray-400hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
+                        <span className="absolute -inset-0.5" />
+                        <span className="sr-only">Close menu</span>
+                        <XMarkIcon aria-hidden="true" className="size-6" />
+                      </PopoverButton>
                       <div className="pl-1 pt-1"> 필터를 선택하세요... </div>
-                    </PopoverButton>
+                    </div>
                     {/* 필터 초기화 */}
                     <button
-                      className="rounded-md px-2 text-sm font-black flex justify-center"
+                      className="rounded-md px-2 text-md font-black flex justify-center"
                       onClick={() => clickEvent('초기화')}
                     >
-                      <img src={resetButton} className="h-8 mx-auto" />{' '}
+                      {/* <img src={resetButton} className="h-8 mx-auto" />{' '} */}
+                      <span className="h-auto mx-auto">초기화</span>
                     </button>
                   </div>
                 </div>
@@ -365,8 +366,10 @@ export default function HeaderFilter({
                         href={item.href}
                         onClick={() => clickEvent(item.name)} // 필터 클릭 시 '카테고리값' 요청
                         className={classNames(
-                          item.current ? 'bg-orange-400' : 'text-black',
-                          'rounded-md px-3 py-2 mx-1 text-md font-black bg-yellow-400/20 hover:bg-yellow-950/10'
+                          item.current
+                            ? 'bg-yellow-400 text-white'
+                            : 'text-black',
+                          'rounded-md h-fit w-fit px-3 py-2 mx-1 text-md font-black border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white'
                         )}
                       >
                         {item.name}
@@ -381,8 +384,10 @@ export default function HeaderFilter({
                         href={open.href}
                         onClick={() => openClick(open.name)} // 필터 클릭 시 '영업 중' 요청
                         className={classNames(
-                          open.current ? 'bg-green-400' : 'text-black',
-                          'rounded-md px-3 py-2 text-md font-black bg-emerald-300/20 hover:bg-yellow-950/10'
+                          open.current
+                            ? 'bg-blue-400 text-white'
+                            : 'text-black',
+                          'rounded-md h-fit w-fit px-3 py-1.5 text-md font-black border-[2px] border-blue-400 hover:bg-blue-600 hover:text-white'
                         )}
                       >
                         영업 중만 보기

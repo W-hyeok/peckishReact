@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { languages } from '../../assets/languages';
+import '../../css/translate.css';
 
 const GoogleTranslate = () => {
   const [chooseCountry, setChooseCountry] = useState(
@@ -17,7 +18,10 @@ const GoogleTranslate = () => {
 
     window.googleTranslateElementInit = () => {
       new window.google.translate.TranslateElement(
-        { pageLanguage: 'ko', autoDisplay: true },
+        {
+          pageLanguage: 'ko',
+          autoDisplay: true,
+        },
         'google_translate_element'
       );
     };
