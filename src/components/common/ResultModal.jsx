@@ -32,10 +32,10 @@ const ResultModal = ({ title, content, callbackFn }) => {
             className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
           >
             <div>
-              <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-blue-100">
+              <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-yellow-100">
                 <CheckIcon
                   aria-hidden="true"
-                  className="size-6 text-blue-600"
+                  className="size-6 text-yellow-400"
                 />
               </div>
               <div className="mt-3 text-center sm:mt-5">
@@ -54,8 +54,10 @@ const ResultModal = ({ title, content, callbackFn }) => {
               <button
                 type="button"
                 onClick={handleClose}
-                className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="inline-flex w-full justify-center bg-white text-yellow-400 text-xl font-semibold rounded-[8px] px-3 py-2 mt-6 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
               >
+                {/* className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                             > */}
                 Close
               </button>
             </div>
