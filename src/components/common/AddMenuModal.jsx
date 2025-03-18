@@ -279,16 +279,16 @@ const AddMenuModal = ({
                 <button
                   type="button"
                   onClick={handleClickSave}
-                  className="inline-flex w-full justify-center rounded-md bg-yellow-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="inline-flex w-full justify-center bg-white text-blue-600 px-6 py-3 text-xl font-semibold rounded-[8px] mt-8 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                 >
                   등록
                 </button>
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="inline-flex w-full justify-center rounded-md bg-gray-600 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  className="inline-flex w-full justify-center bg-white text-red-500 px-6 py-3 text-xl font-semibold rounded-[8px] mt-8 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
                 >
-                  돌아가기
+                  취소
                 </button>
               </div>
             </DialogPanel>

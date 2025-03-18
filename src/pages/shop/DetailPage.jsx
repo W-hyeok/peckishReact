@@ -32,7 +32,7 @@ const DetailPage = () => {
   }, [shopId]); //shopId가 바뀔 때마다 리렌더링
 
   return (
-    <div>
+    <div className="px-4 py-5 sm:p-6">
       {/* <Tmp /> */}
       {/* component에서 받을 props 이름  = { router 값} */}
       {fetch ? <FetchModal /> : <></>}

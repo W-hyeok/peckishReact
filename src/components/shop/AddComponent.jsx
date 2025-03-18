@@ -376,9 +376,12 @@ const AddComponent = () => {
       {/* 검색(엔터)용 버튼(히든) */}
       <button type="button" onClick={activeButton} className="hidden"></button>
       {/* 뒷 배경 양식 */}
-      <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+      <form className="mx-auto w-full max-w-4xl px-4 py-6">
         {/*첫번째 레이아웃*/}
-        <div>
+        <div></div>
+        {/* Order summary 두번째 레이아웃 */}
+        <div className="">
+          {/* <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4"> */}
           <div>
             {/* 검색창 시작 */}
             <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
@@ -474,167 +477,185 @@ const AddComponent = () => {
               {/* 점포 사진 끝 */}
             </div>
           </div>
-        </div>
-        {/* Order summary 두번째 레이아웃 */}
-        <div className="">
-          <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
-            {/* 점포명 */}
+          {/* 점포명 */}
+          <div className="sm:col-span-2">
+            <label
+              htmlFor="address"
+              className="block text-sm/6 font-medium text-gray-700"
+            >
+              점포명
+            </label>
+            <div className="mt-2">
+              <input
+                name="title"
+                type="text"
+                value={shop.title}
+                onChange={handleChangeShop}
+                placeholder="아몬드 붕붕"
+                autoComplete="street-address"
+                className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+          {/* 점포 주소 */}
+          <div className="sm:col-span-2 mb-4">
+            <label
+              htmlFor="location"
+              className="block text-sm/6 font-medium text-gray-700"
+            >
+              점포 주소
+            </label>
+            <div className="mt-2">
+              <input
+                name="location"
+                value={shop.location}
+                onChange={handleChangeShop}
+                type="text"
+                placeholder="신촌역 7번 출구 앞"
+                className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              />
+            </div>
+          </div>
+          <div className="col-span-full space-y-6">
+            {/*요일*/}
             <div className="sm:col-span-2">
-              <label
-                htmlFor="address"
-                className="block text-sm/6 font-medium text-gray-700"
-              >
-                점포명
-              </label>
-              <div className="mt-2">
-                <input
-                  name="title"
-                  type="text"
-                  value={shop.title}
-                  onChange={handleChangeShop}
-                  placeholder="아몬드 붕붕"
-                  autoComplete="street-address"
-                  className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
-            {/* 점포 주소 */}
-            <div className="sm:col-span-2 mb-4">
-              <label
-                htmlFor="location"
-                className="block text-sm/6 font-medium text-gray-700"
-              >
-                점포 주소
-              </label>
-              <div className="mt-2">
-                <input
-                  name="location"
-                  value={shop.location}
-                  onChange={handleChangeShop}
-                  type="text"
-                  placeholder="신촌역 7번 출구 앞"
-                  className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                />
-              </div>
-            </div>
-            <div className="col-span-full space-y-6">
-              {/*요일*/}
-              <div className="sm:col-span-2">
-                <fieldset>
-                  <legend className="text-base text-gray-900">
-                    영업일 선택: {selectedDayNames}
-                  </legend>
-                  <div className="mt-1 divide-y divide-gray-200 border-b border-t border-gray-200">
-                    <div className="flex flex-wrap gap-2">
-                      {' '}
-                      {/* flexbox와 wrap 사용하여 가로로 배치 */}
-                      {days.map((day) => (
-                        <div
-                          key={day.id}
-                          className="flex items-center gap-1 pl-2"
-                        >
-                          <div className="min-w-0 flex-1 text-sm/6">
-                            <label className="select-none font-medium text-gray-900">
-                              {day.name}
-                            </label>
-                          </div>
-                          <div className="flex h-6 shrink-0 items-center">
-                            <div className="group grid size-4 grid-cols-1">
-                              <input
-                                type="checkbox"
-                                checked={selectedDays.includes(day.id)}
-                                value={shop.days}
-                                onChange={(e) =>
-                                  handleCheckboxChange(day.id, e.target.checked)
-                                }
-                                className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                              />
-                            </div>
+              <fieldset>
+                <legend className="text-base text-gray-900">
+                  영업일 선택: {selectedDayNames}
+                </legend>
+                <div className="mt-1 divide-y divide-gray-200 border-b border-t border-gray-200">
+                  <div className="flex flex-wrap gap-2">
+                    {' '}
+                    {/* flexbox와 wrap 사용하여 가로로 배치 */}
+                    {days.map((day) => (
+                      <div
+                        key={day.id}
+                        className="flex items-center gap-1 pl-2"
+                      >
+                        <div className="min-w-0 flex-1 text-sm/6">
+                          <label className="select-none font-medium text-gray-900">
+                            {day.name}
+                          </label>
+                        </div>
+                        <div className="flex h-6 shrink-0 items-center">
+                          <div className="group grid size-4 grid-cols-1">
+                            <input
+                              type="checkbox"
+                              checked={selectedDays.includes(day.id)}
+                              value={shop.days}
+                              onChange={(e) =>
+                                handleCheckboxChange(day.id, e.target.checked)
+                              }
+                              className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                            />
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mb-4">{/* 여백 */}</div>
-                </fieldset>
-              </div>
-
-              {/* 오픈시간과 마감시간을 한 줄에 배치 */}
-              <div className="sm:col-span-2 space-y-1 mt-2">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex flex-col">
-                    {/* 오픈시간 */}
-                    <label
-                      htmlFor="city"
-                      className="block text-sm/6 font-medium text-gray-700"
-                    >
-                      오픈시간
-                    </label>
-                    <TimePicker
-                      onChange={handleOpenTimeChange} // 오픈 시간 변경 시 호출
-                      value={openTime} // 현재 오픈 시간 값
-                      disableClock // 시계 안보이게 하기
-                    />
-                  </div>
-
-                  {/* 마감시간 */}
-                  <div className="flex flex-col">
-                    <label
-                      htmlFor="city"
-                      className="block text-sm/6 font-medium text-gray-700"
-                    >
-                      마감시간
-                    </label>
-                    <TimePicker
-                      onChange={handleCloseTimeChange} // 마감 시간 변경 시 호출
-                      value={closeTime} // 현재 마감 시간 값
-                      disableClock // 시계 안보이게 하기
-                    />
+                      </div>
+                    ))}
                   </div>
                 </div>
-              </div>
-              {/* 영업시간 오류 메시지 표시 */}
-              <div className="sm:col-span-2 space-y-2">
-                {error && <p style={{ color: 'red' }}>{error}</p>}{' '}
-                <div className="hidden">
-                  <p>오픈 시간: {openTime}</p>
-                  <p>마감 시간: {closeTime}</p>
-                </div>
-              </div>
+                <div className="mb-4">{/* 여백 */}</div>
+              </fieldset>
+            </div>
 
-              {/*카테고리*/}
-              <div className="mt-6 sm:col-span-2 space-y-2">
-                <label
-                  htmlFor="category"
-                  className="block text-sm/6 font-medium text-gray-700"
-                >
-                  카테고리
-                </label>
-                <div className="mt-2 grid grid-cols-1">
-                  <select
-                    id="category"
-                    name="category"
-                    value={shop.category}
-                    onChange={handleSelectChange}
-                    autoComplete="category-name"
-                    className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            {/* 오픈시간과 마감시간을 한 줄에 배치 */}
+            <div className="sm:col-span-2 space-y-1 mt-2">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col">
+                  {/* 오픈시간 */}
+                  <label
+                    htmlFor="city"
+                    className="block text-sm/6 font-medium text-gray-700"
                   >
-                    <option>카테고리를 선택하세요</option>
-                    <option value="bread">붕어빵</option>
-                    <option value="snack">분식</option>
-                    <option value="sweetPotato">군고구마</option>
-                    <option value="hotteok">호떡</option>
-                  </select>
-                  <ChevronDownIcon
-                    aria-hidden="true"
-                    className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                    오픈시간
+                  </label>
+                  <TimePicker
+                    onChange={handleOpenTimeChange} // 오픈 시간 변경 시 호출
+                    value={openTime} // 현재 오픈 시간 값
+                    disableClock // 시계 안보이게 하기
+                  />
+                </div>
+
+                {/* 마감시간 */}
+                <div className="flex flex-col">
+                  <label
+                    htmlFor="city"
+                    className="block text-sm/6 font-medium text-gray-700"
+                  >
+                    마감시간
+                  </label>
+                  <TimePicker
+                    onChange={handleCloseTimeChange} // 마감 시간 변경 시 호출
+                    value={closeTime} // 현재 마감 시간 값
+                    disableClock // 시계 안보이게 하기
                   />
                 </div>
               </div>
-              {/* '사업자 인증' 버튼 */}
-              {/* 일반 유저 및 사업자+인증 이력 있을 시 체크 불가, 문구 달라짐 */}
-              {checkRole == 'USER' ? (
-                <>
+            </div>
+            {/* 영업시간 오류 메시지 표시 */}
+            <div className="sm:col-span-2 space-y-2">
+              {error && <p style={{ color: 'red' }}>{error}</p>}{' '}
+              <div className="hidden">
+                <p>오픈 시간: {openTime}</p>
+                <p>마감 시간: {closeTime}</p>
+              </div>
+            </div>
+
+            {/*카테고리*/}
+            <div className="mt-6 sm:col-span-2 space-y-2">
+              <label
+                htmlFor="category"
+                className="block text-sm/6 font-medium text-gray-700"
+              >
+                카테고리
+              </label>
+              <div className="mt-2 grid grid-cols-1">
+                <select
+                  id="category"
+                  name="category"
+                  value={shop.category}
+                  onChange={handleSelectChange}
+                  autoComplete="category-name"
+                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                >
+                  <option>카테고리를 선택하세요</option>
+                  <option value="bread">붕어빵</option>
+                  <option value="snack">분식</option>
+                  <option value="sweetPotato">군고구마</option>
+                  <option value="hotteok">호떡</option>
+                </select>
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                />
+              </div>
+            </div>
+            {/* '사업자 인증' 버튼 */}
+            {/* 일반 유저 및 사업자+인증 이력 있을 시 체크 불가, 문구 달라짐 */}
+            {checkRole == 'USER' ? (
+              <>
+                <div className="flex h-auto shrink-0 items-center space-x-4">
+                  <div className="group grid size-4 grid-cols-1">
+                    <input
+                      name="certificate"
+                      type="checkbox"
+                      disabled
+                      className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                    />
+                  </div>
+                  <div className="flex text-lg">
+                    <label className="select-none font-medium text-gray-700">
+                      내 점포 인증하기
+                      <span className="ml-2 text-gray-600">
+                        (회원정보 수정 - 사업자 정보 추가 필요)
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {memberCookie.owned == true ? (
                   <div className="flex h-auto shrink-0 items-center space-x-4">
                     <div className="group grid size-4 grid-cols-1">
                       <input
@@ -645,84 +666,62 @@ const AddComponent = () => {
                       />
                     </div>
                     <div className="flex text-lg">
-                      <label className="select-none font-medium text-gray-700">
+                      <label className="select-none font-medium text-gray-500">
                         내 점포 인증하기
-                        <span className="ml-2 text-gray-600">
-                          (회원정보 수정 - 사업자 정보 추가 필요)
+                        <span className="text-gray-400">
+                          (이미 점포를 인증하셨습니다.)
                         </span>
                       </label>
                     </div>
                   </div>
-                </>
-              ) : (
-                <>
-                  {memberCookie.owned == true ? (
-                    <div className="flex h-auto shrink-0 items-center space-x-4">
-                      <div className="group grid size-4 grid-cols-1">
-                        <input
-                          name="certificate"
-                          type="checkbox"
-                          disabled
-                          className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                        />
-                      </div>
-                      <div className="flex text-lg">
-                        <label className="select-none font-medium text-gray-500">
-                          내 점포 인증하기
-                          <span className="text-gray-400">
-                            (이미 점포를 인증하셨습니다.)
-                          </span>
-                        </label>
-                      </div>
+                ) : (
+                  <div className="flex h-auto shrink-0 items-center space-x-4">
+                    <div className="group grid size-4 grid-cols-1">
+                      <input
+                        name="certificate"
+                        value={shop.certificate}
+                        onChange={(e) =>
+                          handleCheckboxCertificate(e.target.checked)
+                        }
+                        type="checkbox"
+                        className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                      />
                     </div>
-                  ) : (
-                    <div className="flex h-auto shrink-0 items-center space-x-4">
-                      <div className="group grid size-4 grid-cols-1">
-                        <input
-                          name="certificate"
-                          value={shop.certificate}
-                          onChange={(e) =>
-                            handleCheckboxCertificate(e.target.checked)
-                          }
-                          type="checkbox"
-                          className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                        />
-                      </div>
-                      <div className="flex text-lg">
-                        <label className="select-none font-medium text-gray-900">
-                          내 점포 인증하기
-                          <span className="text-gray-400">
-                            (해당 점포의 사장님일 경우 체크해주세요.)
-                          </span>
-                        </label>
-                      </div>
+                    <div className="flex text-lg">
+                      <label className="select-none font-medium text-gray-900">
+                        내 점포 인증하기
+                        <span className="text-gray-400">
+                          (해당 점포의 사장님일 경우 체크해주세요.)
+                        </span>
+                      </label>
                     </div>
-                  )}
-                </>
-              )}
-            </div>
+                  </div>
+                )}
+              </>
+            )}
           </div>
-          {/* 버튼 시작 */}
-          <div className="px-4 py-6 mt-2 sm:px-6 flex justify-end">
-            {/* 등록: 등록 성공 시 점포 상세페이지로 이동 */}
-            <button
-              type="button"
-              onClick={handleClickSave}
-              className="w-auto rounded-md border border-transparent bg-yellow-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-            >
-              등록
-            </button>
-            {/* 취소: 메인 페이지로 이동 */}
-            <button
-              type="button"
-              onClick={moveToMain}
-              className="w-auto ml-1 rounded-md border border-transparent px-4 py-3 text-base font-medium text-black shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-            >
-              취소
-            </button>
-          </div>{' '}
-          {/* 버튼 끝 */}
+        </div>
+        {/* 버튼 시작 */}
+        <div className="px-4 py-6 mt-2 sm:px-6 flex justify-end">
+          {/* 등록: 등록 성공 시 점포 상세페이지로 이동 */}
+          <button
+            type="button"
+            onClick={handleClickSave}
+            className="w-auto rounded-md border border-transparent bg-yellow-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+          >
+            등록
+          </button>
+          {/* 취소: 메인 페이지로 이동 */}
+          <button
+            type="button"
+            onClick={moveToMain}
+            className="w-auto ml-1 rounded-md border border-transparent px-4 py-3 text-base font-medium text-black shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+          >
+            취소
+          </button>
         </div>{' '}
+        {/* 버튼 끝 */}
+        {/* </div>{' '} */}
         {/* 두 번째 레이아웃 끝 */}
       </form>
     </>

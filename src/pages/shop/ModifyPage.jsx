@@ -32,19 +32,17 @@ const ModifyPage = () => {
   }, [shopId]);
 
   return (
-    <div className="overflow-hidden bg-white shadow sm:rounded-lg">
-      <div className="px-4 py-5 sm:p-6">
-        {shop ? (
-          <ModifyComponent
-            shop={shop}
-            shopId={shopId}
-            infoType={infoType}
-            shopDetailId={shopDetailId}
-          />
-        ) : (
-          <></>
-        )}
-      </div>
+    <div className="px-4 py-5 sm:p-6">
+      {shop ? (
+        <ModifyComponent
+          shop={shop}
+          shopId={shopId}
+          infoType={infoType}
+          shopDetailId={shopDetailId}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

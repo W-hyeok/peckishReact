@@ -54,21 +54,9 @@ const shopRouter = () => {
         </Suspense>
       ),
     },
-
-    // {
-    //   // infoType에 따른 메뉴 추가
-    //   path: 'addMenu/:shopId/:shopDetailId/:infoType',
-    //   element: (
-    //     <Suspense fallback={<LoadingPage />}>
-    //       {/* <LoginRequired> */}
-    //       <AddMenu />
-    //       {/* </LoginRequired> */}
-    //     </Suspense>
-    //   ),
-    // },
     {
       // infoType에 따라 상점 정보 수정
-      path: 'modify/:shopId/:shopDetailId/:infoType',
+      path: 'modify/:shopId/:infoType',
       element: (
         <Suspense fallback={<LoadingPage />}>
           <LoginRequired>

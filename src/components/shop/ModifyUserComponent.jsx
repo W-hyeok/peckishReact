@@ -340,7 +340,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
         ></button>
 
         {loaded ? (
-          <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
+          <form className="mx-auto w-full max-w-4xl px-4 py-6">
             {/*첫번째 레이아웃*/}
             <div>
               <div>

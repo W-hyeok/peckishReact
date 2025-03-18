@@ -9,7 +9,7 @@ const AddMenuPage = () => {
     navigate('/');
   }
   return (
-    <div>
+    <div px-4 py-5 sm:p-6>
       <AddMenuComponent
         shopId={shopId}
         shopDetailId={shopDetailId}
