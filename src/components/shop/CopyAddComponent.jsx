@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { act, useEffect, useRef, useState } from 'react';
 import { ChevronDownIcon, PhotoIcon } from '@heroicons/react/24/outline';
 import TimePicker from 'react-time-picker';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
@@ -13,7 +13,7 @@ import 'react-clock/dist/Clock.css';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-// 지도 라이브러리 사용을 위해 처음에 로드
+// 지도 라이브러리 사용 위해 처음에 로드해야 함
 const { kakao } = window;
 
 const initState = {
@@ -56,12 +56,12 @@ const AddComponent = () => {
   //console.log('*********', loginState.roleNames);
 
   useEffect(() => {
-    if (checkRole === 'USER') {
+    if (checkRole == 'USER') {
       console.log('I am USER');
-    } else if (checkRole === 'OWNER') {
+    } else if (checkRole == 'OWNER') {
       console.log('I am OWNER');
     }
-  }, [checkRole]);
+  }, []);
 
   // useKakaoLoader();
   // 지도 좌표값 설정
@@ -183,7 +183,6 @@ const AddComponent = () => {
     //console.log(newData);
     SetSearchText(newData);
   };
-
   const activeButton = () => {
     console.log('enter!');
     console.log('검색값:', searchText);
@@ -243,6 +242,7 @@ const AddComponent = () => {
     //shop.category(e.target.value); // 선택된 값을 상태에 저장
     setShop({ ...shop, category: e.target.value });
   };
+
   // 파일 선택 시 호출되는 함수
   const handleImageChange = () => {
     const file = uploadRef.current?.files[0]; // 파일을 참조
@@ -255,6 +255,7 @@ const AddComponent = () => {
       reader.readAsDataURL(file); // 파일을 Data URL 형식으로 읽기
     }
   };
+
   const { moveToMain, moveToShop } = useCustomMove();
 
   //저장시 발생할 이벤트
@@ -264,7 +265,7 @@ const AddComponent = () => {
     if (!shopfile) {
       console.error('사진을 등록해주세요.');
       alert('사진을 넣어주세요');
-      return;
+      return; // 파일이 없으면 저장하지 않음
     }
     if (!shop.title) {
       console.error('제목을 입력해주세요');
@@ -286,7 +287,7 @@ const AddComponent = () => {
       alert('요일을 선택해주세요');
       return;
     }
-    if (memberCookie.owned === true) {
+    if (memberCookie.owned == true) {
       alert('인증된 점포가 이미 존재합니다.');
       return;
     }
@@ -372,11 +373,17 @@ const AddComponent = () => {
       )}
       {/* 결과 모달창 끝 */}
 
+      {/* 검색(엔터)용 버튼(히든) */}
       <button type="button" onClick={activeButton} className="hidden"></button>
+      {/* 뒷 배경 양식 */}
       <form className="mx-auto w-full max-w-4xl px-4 py-6">
+        {/*첫번째 레이아웃*/}
         <div></div>
+        {/* Order summary 두번째 레이아웃 */}
         <div className="">
+          {/* <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4"> */}
           <div>
+            {/* 검색창 시작 */}
             <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
               <input
                 onChange={handleInputChange}
@@ -385,14 +392,16 @@ const AddComponent = () => {
                 type="search"
                 placeholder="주소/위치 검색..."
                 aria-label="Search"
-                className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm text-black outline-none placeholder:text-black focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
+                className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm/6 text-black outline-none placeholder:text-black
+                            focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
               />
               <MagnifyingGlassIcon
                 aria-hidden="true"
                 className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-black peer-focus:text-gray-400"
               />
-            </div>
-            <Map
+            </div>{' '}
+            {/* 지도 부분 시작 */}
+            <Map // 지도를 표시할 Container
               id="map"
               center={position.center}
               isPanto={position.isPanto}
@@ -402,7 +411,7 @@ const AddComponent = () => {
                 borderRadius: '15px',
                 borderColor: 'blue',
               }}
-              level={3}
+              level={3} // 지도의 확대 레벨
               onClick={(_, mouseEvent) => {
                 const latlng = mouseEvent.latLng;
                 setPosition({
@@ -414,27 +423,27 @@ const AddComponent = () => {
               <MapMarker position={position.center ?? center} />
             </Map>
             <p className="text-center pt-1 text-gray-600">
-              <span className="text-red-500">*</span>제보/등록할 점포의 위치를
-              클릭해서 지정해주세요!
+              제보/등록할 점포의 위치를 클릭해서 지정해주세요!
             </p>
             <div id="clickLatlng" className="hidden">
               {position &&
                 `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
-            </div>
+            </div>{' '}
+            {/* 지도 끝 */}
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-              {/* 점포 사진 영역 */}
-              <div className="col-span-full mb-8">
-                <label className="block text-sm font-medium text-gray-900">
-                  점포 사진 <span className="text-red-500">*</span>
+              {/* 점포 사진 시작 */}
+              <div className="col-span-full">
+                <label className="block text-sm/6 font-medium text-gray-900">
+                  점포 사진
                 </label>
-                <div className="mt-2 flex justify-center rounded-lg border bg-white border-gray-900/25 px-6 py-10">
+                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <div className="text-center">
                     {image ? (
                       <img
                         src={image}
                         alt="Preview"
                         className="mx-auto rounded-lg max-w-full h-auto"
-                        style={{ width: '400px', height: '300px' }}
+                        style={{ width: '400px', height: '300px' }} // 이미지 크기 조정
                       />
                     ) : (
                       <PhotoIcon
@@ -442,34 +451,39 @@ const AddComponent = () => {
                         className="mx-auto size-12 text-gray-300"
                       />
                     )}
-                    <div className="mt-4 flex justify-center text-sm text-gray-600">
-                      <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                        <span>{image ? '사진 변경' : '점포 사진 등록'}</span>
-                        <input
-                          type="file"
-                          ref={uploadRef}
-                          accept="image/*"
-                          multiple={false}
-                          className="sr-only"
-                          onChange={handleImageChange}
-                        />
-                      </label>
-                    </div>
-                    <p className="text-xs text-gray-500">
-                      파일 크기 10MB까지 업로드 가능합니다.
-                    </p>
+                    {!image && (
+                      <>
+                        <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
+                          <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                            <span>점포 사진 등록</span>
+                            <input
+                              type="file"
+                              ref={uploadRef}
+                              accept="image/*"
+                              multiple={false}
+                              className="sr-only"
+                              onChange={handleImageChange}
+                            />
+                          </label>
+                        </div>
+                        <p className="text-xs/5 text-gray-500">
+                          파일 크기 10MB까지 업로드 가능합니다.
+                        </p>
+                      </>
+                    )}
                   </div>
                 </div>
-              </div>
+              </div>{' '}
+              {/* 점포 사진 끝 */}
             </div>
           </div>
-          {/* 점포명 영역 */}
-          <div className="sm:col-span-2 mb-8">
+          {/* 점포명 */}
+          <div className="sm:col-span-2">
             <label
-              htmlFor="title"
-              className="block text-sm font-medium text-gray-700"
+              htmlFor="address"
+              className="block text-sm/6 font-medium text-gray-700"
             >
-              점포명 <span className="text-red-500">*</span>
+              점포명
             </label>
             <div className="mt-2">
               <input
@@ -477,19 +491,19 @@ const AddComponent = () => {
                 type="text"
                 value={shop.title}
                 onChange={handleChangeShop}
-                placeholder="더조은 분식"
+                placeholder="아몬드 붕붕"
                 autoComplete="street-address"
-                className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
           </div>
-          {/* 점포 주소 영역 */}
-          <div className="sm:col-span-2 mb-8">
+          {/* 점포 주소 */}
+          <div className="sm:col-span-2 mb-4">
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm/6 font-medium text-gray-700"
             >
-              점포 주소 <span className="text-red-500">*</span>
+              점포 주소
             </label>
             <div className="mt-2">
               <input
@@ -498,24 +512,27 @@ const AddComponent = () => {
                 onChange={handleChangeShop}
                 type="text"
                 placeholder="신촌역 7번 출구 앞"
-                className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               />
             </div>
           </div>
           <div className="col-span-full space-y-6">
+            {/*요일*/}
             <div className="sm:col-span-2">
               <fieldset>
                 <legend className="text-base text-gray-900">
-                  영업일 <span className="text-red-500">*</span>
+                  영업일 선택: {selectedDayNames}
                 </legend>
-                <div className="mt-1">
+                <div className="mt-1 divide-y divide-gray-200 border-b border-t border-gray-200">
                   <div className="flex flex-wrap gap-2">
+                    {' '}
+                    {/* flexbox와 wrap 사용하여 가로로 배치 */}
                     {days.map((day) => (
                       <div
                         key={day.id}
                         className="flex items-center gap-1 pl-2"
                       >
-                        <div className="min-w-0 flex-1 text-sm">
+                        <div className="min-w-0 flex-1 text-sm/6">
                           <label className="select-none font-medium text-gray-900">
                             {day.name}
                           </label>
@@ -529,7 +546,7 @@ const AddComponent = () => {
                               onChange={(e) =>
                                 handleCheckboxChange(day.id, e.target.checked)
                               }
-                              className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                              className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                             />
                           </div>
                         </div>
@@ -537,42 +554,10 @@ const AddComponent = () => {
                     ))}
                   </div>
                 </div>
-                <div className="mb-4"></div>
+                <div className="mb-4">{/* 여백 */}</div>
               </fieldset>
             </div>
-            {/* 오픈/마감 시간 영역 */}
-            {/* <div className="sm:col-span-2 space-y-1 mt-2">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="openTime"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    오픈시간 <span className="text-red-500">*</span>
-                  </label>
-                  <TimePicker
-                    className="w-full bg-white rounded-md border px-4 py-2 text-base text-gray-900"
-                    onChange={handleOpenTimeChange}
-                    value={openTime}
-                    disableClock
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="closeTime"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    마감시간 <span className="text-red-500">*</span>
-                  </label>
-                  <TimePicker
-                    className="w-full bg-white rounded-md border px-4 py-2 text-base text-gray-900"
-                    onChange={handleCloseTimeChange}
-                    value={closeTime}
-                    disableClock
-                  />
-                </div>
-              </div>
-            </div> */}
+
             {/* 오픈시간과 마감시간을 한 줄에 배치 */}
             <div className="sm:col-span-2 space-y-1 mt-2">
               <div className="grid grid-cols-2 gap-4">
@@ -580,12 +565,11 @@ const AddComponent = () => {
                   {/* 오픈시간 */}
                   <label
                     htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm/6 font-medium text-gray-700"
                   >
                     오픈시간
                   </label>
                   <TimePicker
-                    className="bg-white"
                     onChange={handleOpenTimeChange} // 오픈 시간 변경 시 호출
                     value={openTime} // 현재 오픈 시간 값
                     disableClock // 시계 안보이게 하기
@@ -596,12 +580,11 @@ const AddComponent = () => {
                 <div className="flex flex-col">
                   <label
                     htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm/6 font-medium text-gray-700"
                   >
                     마감시간
                   </label>
                   <TimePicker
-                    className="bg-white"
                     onChange={handleCloseTimeChange} // 마감 시간 변경 시 호출
                     value={closeTime} // 현재 마감 시간 값
                     disableClock // 시계 안보이게 하기
@@ -609,29 +592,31 @@ const AddComponent = () => {
                 </div>
               </div>
             </div>
+            {/* 영업시간 오류 메시지 표시 */}
             <div className="sm:col-span-2 space-y-2">
-              {error && <p className="text-red-500">{error}</p>}
+              {error && <p style={{ color: 'red' }}>{error}</p>}{' '}
               <div className="hidden">
                 <p>오픈 시간: {openTime}</p>
                 <p>마감 시간: {closeTime}</p>
               </div>
             </div>
-            {/* 카테고리 선택 영역 */}
+
+            {/*카테고리*/}
             <div className="mt-6 sm:col-span-2 space-y-2">
               <label
                 htmlFor="category"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm/6 font-medium text-gray-700"
               >
                 카테고리
               </label>
-              <div className="mt-2 relative">
+              <div className="mt-2 grid grid-cols-1">
                 <select
                   id="category"
                   name="category"
                   value={shop.category}
                   onChange={handleSelectChange}
                   autoComplete="category-name"
-                  className="w-full appearance-none rounded-md bg-white py-2 pl-3 pr-12 text-base text-gray-900 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                  className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 >
                   <option>카테고리를 선택하세요</option>
                   <option value="bread">붕어빵</option>
@@ -639,12 +624,10 @@ const AddComponent = () => {
                   <option value="sweetPotato">군고구마</option>
                   <option value="hotteok">호떡</option>
                 </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                  <ChevronDownIcon
-                    className="h-5 w-5 text-gray-500"
-                    aria-hidden="true"
-                  />
-                </div>
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                />
               </div>
             </div>
             {/* '사업자 인증' 버튼 */}
@@ -719,25 +702,33 @@ const AddComponent = () => {
           </div>
         </div>
         {/* 버튼 시작 */}
-        <div className="flex justify-end space-x-4 mt-2">
+        <div className="px-4 py-6 mt-2 sm:px-6 flex justify-end">
+          {/* 등록: 등록 성공 시 점포 상세페이지로 이동 */}
           <button
             type="button"
             onClick={handleClickSave}
-            className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+            className="w-auto rounded-md border border-transparent bg-yellow-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
           >
             등록
           </button>
+          {/* 취소: 메인 페이지로 이동 */}
           <button
             type="button"
             onClick={moveToMain}
-            className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+            className="w-auto ml-1 rounded-md border border-transparent px-4 py-3 text-base font-medium text-black shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
           >
             취소
           </button>
-        </div>
+        </div>{' '}
+        {/* 버튼 끝 */}
+        {/* </div>{' '} */}
+        {/* 두 번째 레이아웃 끝 */}
       </form>
     </>
   );
 };
 
 export default AddComponent;
+// import AddComponent from '파일경로'
+// export AddComponent;  export useEffect;
+// import { AddComponent } from '/...//fdsf'

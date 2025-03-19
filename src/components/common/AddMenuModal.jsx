@@ -199,29 +199,30 @@ const AddMenuModal = ({
                           className="mx-auto size-12 text-gray-300"
                         />
                       )}
-                      {!image && (
-                        <>
-                          <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
-                            <label
-                              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 
+
+                      <>
+                        <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
+                          <label
+                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 
                                   focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                            >
-                              <span>메뉴 사진 업로드</span>
-                              <input
-                                type="file"
-                                ref={uploadRef}
-                                accept="image/*"
-                                multiple={false} // 한장의 파일만 선택
-                                className="sr-only"
-                                onChange={handleImageMenu}
-                              />
-                            </label>
-                          </div>
-                          <p className="text-xs/5 text-gray-600">
-                            사진 용량은 10MB까지 업로드 가능
-                          </p>
-                        </>
-                      )}
+                          >
+                            <span>
+                              {image ? '사진 변경' : '메뉴 사진 등록'}
+                            </span>
+                            <input
+                              type="file"
+                              ref={uploadRef}
+                              accept="image/*"
+                              multiple={false} // 한장의 파일만 선택
+                              className="sr-only"
+                              onChange={handleImageMenu}
+                            />
+                          </label>
+                        </div>
+                        <p className="text-xs/5 text-gray-600">
+                          사진 용량은 10MB까지 업로드 가능
+                        </p>
+                      </>
                     </div>
                   </div>
 

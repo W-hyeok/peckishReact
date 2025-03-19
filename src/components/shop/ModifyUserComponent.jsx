@@ -270,7 +270,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     });
   };
 
-  const { moveToMain } = useCustomMove();
+  const { moveToShop } = useCustomMove();
 
   const closeModal = () => {
     setResult(null); // result
@@ -288,7 +288,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   const deleteOldImages = (filename) => {
     // 기존 이미지에서 삭제 버튼 클릭한 이미지 제외시키기
     //const resultFileNames = shopData.shop;
-    // TODO - 화면에서 사라지게 수정하기기
+    // TODO - 화면에서 사라지게 수정하기
   };
 
   // 오픈 시간 변경 함수
@@ -344,56 +344,9 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
             {/*첫번째 레이아웃*/}
             <div>
               <div>
-                {/* 검색창 시작 */}
-                <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
-                  <input
-                    onChange={handleInputChange}
-                    onKeyDown={enter}
-                    name="search"
-                    type="search"
-                    placeholder="주소/위치 검색..."
-                    aria-label="Search"
-                    className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm/6 text-black outline-none placeholder:text-black
-                            focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
-                  />
-                  <MagnifyingGlassIcon
-                    aria-hidden="true"
-                    className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-black peer-focus:text-gray-400"
-                  />
-                </div>{' '}
-                {/* 지도 부분 시작 */}
-                <Map // 지도를 표시할 Container
-                  id="map"
-                  center={position.center}
-                  isPanto={position.isPanto}
-                  style={{
-                    width: '100%',
-                    height: '50vh',
-                    borderRadius: '15px',
-                    borderColor: 'blue',
-                  }}
-                  level={3} // 지도의 확대 레벨
-                  onClick={(_, mouseEvent) => {
-                    const latlng = mouseEvent.latLng;
-                    setPosition({
-                      center: { lat: latlng.getLat(), lng: latlng.getLng() },
-                      isPanto: true,
-                    });
-                  }}
-                >
-                  <MapMarker position={position.center ?? center} />
-                </Map>
-                <p className="text-center pt-1 text-gray-600">
-                  제보/등록할 점포의 위치를 클릭해서 지정해주세요!
-                </p>
-                <div id="clickLatlng" className="hidden">
-                  {position &&
-                    `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
-                </div>{' '}
-                {/* 지도 끝 */}
                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                   {/* old images */}
-                  <div className="bg-white col-span-full">
+                  <div className="span-full">
                     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
                       <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
                         <div className="group relative aspect-[2/1] overflow-hidden rounded-lg sm:row-span-2 sm:aspect-square">
@@ -439,26 +392,24 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                             className="mx-auto size-12 text-gray-300"
                           />
                         )}
-                        {!image && (
-                          <>
-                            <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
-                              <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                                <span>점포 사진 등록</span>
-                                <input
-                                  type="file"
-                                  ref={uploadRef}
-                                  accept="image/*"
-                                  multiple={false}
-                                  className="sr-only"
-                                  onChange={handleImageChange}
-                                />
-                              </label>
-                            </div>
-                            <p className="text-xs/5 text-gray-500">
-                              파일 크기 10MB까지 업로드 가능합니다.
-                            </p>
-                          </>
-                        )}
+                        <div className="mt-4">
+                          <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2">
+                            <span>
+                              {image ? '사진 변경' : '점포 사진 등록'}
+                            </span>
+                            <input
+                              type="file"
+                              ref={uploadRef}
+                              accept="image/*"
+                              multiple={false}
+                              className="sr-only"
+                              onChange={handleImageChange}
+                            />
+                          </label>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2 text-center">
+                          파일 크기 10MB까지 업로드 가능합니다.
+                        </p>
                       </div>
                     </div>
                   </div>{' '}
@@ -487,13 +438,63 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                     />
                   </div>
                 </div>
+                {/* 검색창 시작 */}
+                <div className="col-span-full mb-4">
+                  <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
+                    <input
+                      onChange={handleInputChange}
+                      onKeyDown={enter}
+                      name="search"
+                      type="search"
+                      placeholder="주소/위치 검색..."
+                      aria-label="Search"
+                      className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm/6 text-black outline-none placeholder:text-black
+                            focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
+                    />
+                    <MagnifyingGlassIcon
+                      aria-hidden="true"
+                      className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-black peer-focus:text-gray-400"
+                    />
+                  </div>{' '}
+                  {/* 지도 부분 시작 */}
+                  <Map // 지도를 표시할 Container
+                    id="map"
+                    center={position.center}
+                    isPanto={position.isPanto}
+                    style={{
+                      width: '100%',
+                      height: '50vh',
+                      borderRadius: '15px',
+                      borderColor: 'blue',
+                    }}
+                    level={3} // 지도의 확대 레벨
+                    onClick={(_, mouseEvent) => {
+                      const latlng = mouseEvent.latLng;
+                      setPosition({
+                        center: { lat: latlng.getLat(), lng: latlng.getLng() },
+                        isPanto: true,
+                      });
+                    }}
+                  >
+                    <MapMarker position={position.center ?? center} />
+                  </Map>
+                  <p className="text-center pt-1 text-gray-600">
+                    제보/등록할 점포의 위치를 클릭해서 지정해주세요!
+                  </p>
+                  <div id="clickLatlng" className="hidden">
+                    {position &&
+                      `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
+                  </div>{' '}
+                </div>
+
+                {/* 지도 끝 */}
                 {/* 점포 주소 */}
                 <div className="sm:col-span-2 mb-4">
                   <label
                     htmlFor="location"
                     className="block text-sm/6 font-medium text-gray-700"
                   >
-                    점포 주소
+                    점포 주소 <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-2">
                     <input
@@ -624,20 +625,20 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                 </div>
               </div>
               {/* 버튼 시작 */}
-              <div className="px-4 py-6 mt-2 sm:px-6 flex justify-end">
+              <div className="flex justify-end space-x-4 mt-2">
                 {/* 등록: 등록 성공 시 메인 페이지로 이동 */}
                 <button
                   type="button"
                   onClick={handleClickSave}
-                  className="w-auto rounded-md border border-transparent bg-yellow-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-base font-medium rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                 >
-                  등록
+                  수정완료
                 </button>
                 {/* 취소: 메인 페이지로 이동 */}
                 <button
                   type="button"
-                  onClick={moveToMain}
-                  className="w-auto ml-1 rounded-md border border-transparent px-4 py-3 text-base font-medium text-black shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  onClick={moveToShop}
+                  className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-base font-medium rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
                 >
                   취소
                 </button>
