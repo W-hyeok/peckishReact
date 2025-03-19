@@ -14,11 +14,23 @@ const RoomComponent = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [resetUnreadTrigger, setResetUnreadTrigger] = useState(0);
   const messagesEndRef = useRef(null);
 
   // 컴포넌트 내부에서 최신 쿠키 값을 읽어옵니다.
   const memberInfo = getCookie('member');
   const memberEmail = memberInfo.email;
+
+  const markMessagesAsRead = async () => {
+    try {
+      await axios.put(
+        `${API_SERVER_HOST}/chat/room/markAsRead/${room_ID}?email=${memberEmail}`
+      );
+      console.log('채팅방 메시지 읽음 처리 성공');
+    } catch (error) {
+      console.error('채팅방 내 메시지 읽음 처리 실패', error);
+    }
+  };
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -94,17 +106,20 @@ const RoomComponent = () => {
     ws.onmessage = async (event) => {
       try {
         const messageData = JSON.parse(event.data);
-        try {
-          const response = await axios.get(
-            `${API_SERVER_HOST}/api/member/${messageData.email}`
-          );
-          // 프로필 이미지 URL을 messageData 객체에 추가
-          messageData.profileFilename = `${API_SERVER_HOST}/api/member/view/${response.data.profileFilename}`;
-        } catch (err) {
-          console.error('사용자 정보를 가져오는데 실패했습니다.', err);
-          messageData.profileFilename = '/default-profile.png'; // 기본 이미지 설정
+        // 메시지 타입 분기 처리: 채팅창에서는 type이 'chat'인 메시지만 추가
+        if (messageData.type === 'chat') {
+          try {
+            const response = await axios.get(
+              `${API_SERVER_HOST}/api/member/${messageData.email}`
+            );
+            // 프로필 이미지 URL을 messageData 객체에 추가
+            messageData.profileFilename = `${API_SERVER_HOST}/api/member/view/${response.data.profileFilename}`;
+          } catch (err) {
+            console.error('사용자 정보를 가져오는데 실패했습니다.', err);
+            messageData.profileFilename = '/default-profile.png'; // 기본 이미지 설정
+          }
+          setMessages((prevMessages) => [...prevMessages, messageData]);
         }
-        setMessages((prevMessages) => [...prevMessages, messageData]);
       } catch (error) {
         console.error('메시지 오류:', error);
       }
@@ -123,16 +138,7 @@ const RoomComponent = () => {
     return () => {
       ws.close();
       // 채팅방 떠날 때 읽음 처리 API 호출
-      axios
-        .put(
-          `${API_SERVER_HOST}/chat/room/markAsRead/${room_ID}?email=${memberEmail}`
-        )
-        .then(() => {
-          console.log('채팅방 나갈 때 메시지 읽음 처리 성공');
-        })
-        .catch((error) => {
-          console.error('채팅방 나갈 때 읽음 처리 실패:', error);
-        });
+      markMessagesAsRead();
     };
   }, [room_ID, memberEmail]);
 
@@ -166,11 +172,19 @@ const RoomComponent = () => {
     }
   };
 
+  const handleInputFocus = async () => {
+    await markMessagesAsRead();
+    setResetUnreadTrigger((prev) => prev + 1);
+  };
+
   return (
     <>
       <main className="mb-[100px] max-w-screen-xl p-4 relative justify-center">
         <div className="flex flex-row justify-center bg-[#FFD396] bg-opacity-15 w-full max-w-5xl mx-auto h-[40rem] ">
-          <ChatSideBarComponenet />
+          <ChatSideBarComponenet
+            socket={socket}
+            resetUnreadTrigger={resetUnreadTrigger}
+          />
           <div className="flex flex-col flex-grow bg-gray-200 w-full max-w-xl mx-auto rounded-lg p-2 relative border-t border-gray-200 shadow-md">
             {/* 메시지 창 */}
             <div
@@ -239,6 +253,7 @@ const RoomComponent = () => {
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') sendMessage();
                 }}
+                onFocus={handleInputFocus}
                 placeholder="메시지를 입력하세요"
                 className="flex-grow p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               />
@@ -252,6 +267,7 @@ const RoomComponent = () => {
             </div>
           </div>
         </div>
+        <button>목록으로</button>
       </main>
     </>
   );

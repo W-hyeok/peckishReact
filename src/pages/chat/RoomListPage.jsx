@@ -1,40 +1,120 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getListOwner } from '../../api/roomApi';
+import { Link, useNavigate } from 'react-router-dom';
+import { getListDetail, getListOwner } from '../../api/roomApi';
 import { getCookie } from '../../util/cookieUtil';
 import BasicLayout from '../../layouts/BasicLayout';
+import { API_SERVER_HOST } from '../../api/todoApi';
+import axios from 'axios';
+import { WS_SERVER_HOST } from '../../components/chat/RoomComponent';
 
-const memberInfo = getCookie('member');
-const membermail = memberInfo ? memberInfo.email : ''; // userName을 useEffect 바깥에서 선언
 const RoomList = () => {
+  const memberInfo = getCookie('member');
+  const memberEmail = memberInfo ? memberInfo.email : '';
+
   const [rooms, setRooms] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        if (!membermail) return;
-        const data = await getListOwner(membermail);
-        setRooms(data);
+        if (!memberEmail) return;
+        // getListOwner 호출로 사장님이 참여한 방 목록을 가져옴
+        const data = await getListOwner(memberEmail);
+        const updatedData = data.map((room) => ({
+          ...room,
+          unreadCount: 0,
+          profileImage: `${API_SERVER_HOST}/api/member/view/${room.photoPath}`,
+        }));
+        setRooms(updatedData);
         console.log('응답데이터: ', data);
-        console.log('ownerEmail:', membermail);
       } catch (error) {
-        console.error('에러ㅠㅠ', error);
+        console.error('응답데이터 Error', error);
       }
     };
 
     fetchRooms();
-  }, [membermail]);
+  }, [memberEmail]);
 
-  console.log(rooms);
+  const markAsRead = async (roomId) => {
+    try {
+      await axios.put(
+        `${API_SERVER_HOST}/chat/room/markAsRead/${roomId}?email=${memberEmail}`
+      );
+      console.log('채팅방 메시지 읽음 처리 성공');
+    } catch (error) {
+      console.error('채팅방 내 메시지 읽음 처리 실패', error);
+    }
+  };
+
+  const handleRoomClick = async (roomId) => {
+    // 로컬 상태 업데이트: 해당 방의 unreadCount를 0으로 설정
+    setRooms((prevRooms) =>
+      prevRooms.map((room) =>
+        room.room_ID === roomId ? { ...room, unreadCount: 0 } : room
+      )
+    );
+
+    // 서버에 읽음 처리 API 호출
+    await markAsRead(roomId);
+
+    // 해당 방으로 이동
+    navigate(`/roomList/room/${roomId}`);
+  };
+
+  // WebSocket을 통한 실시간 unread 업데이트 처리 및 최신 메시지 업데이트
+  useEffect(() => {
+    const wsUrl = `ws://${WS_SERVER_HOST}/ws/chat`;
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      console.log('[Room] WebSocket 연결 성공');
+      // 필요한 경우 인증 정보나 구독 메시지를 전송할 수 있음
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        // 백엔드에서 unreadUpdate 타입으로 unreadCount와 최신 메시지(latestContent) 업데이트 메시지를 보낸다고 가정
+        if (data.type === 'unreadUpdate') {
+          const { roomId, unreadCount, latestContent } = data;
+          setRooms((prevRooms) =>
+            prevRooms.map((room) =>
+              room.room_ID === roomId
+                ? { ...room, unreadCount, content: latestContent }
+                : room
+            )
+          );
+        }
+      } catch (error) {
+        console.error('[Room] WebSocket 메시지 처리 오류:', error);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('[Room] WebSocket 에러:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('[Room] WebSocket 연결 종료');
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
+
+  console.log('RoomList 데이터 확인:', rooms);
+
   return (
     <BasicLayout>
       <div className="bg-[#f9dfb1] overflow-y-auto">
         <main>
           <div className="container mx-auto"></div>
           <ul className="col-span-full divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden border border-gray-300 dark:border-gray-600 rounded-lg mt-5 w-1/2 mx-auto">
-            {rooms.map((room) => (
+            {rooms.map((room, index) => (
               <li
-                key={room.room_ID}
+                key={`${room.room_ID}-${index}`}
+                onClick={() => handleRoomClick(room.room_ID)}
                 className="hover:bg-gray-200 p-5 lg:p-5 sm:p-3"
               >
                 <Link to={`/roomList/room/${room.room_ID}`}>
@@ -42,8 +122,8 @@ const RoomList = () => {
                     <div className="flex flex-shrink-0 -space-x-4 rtl:space-x-reverse">
                       <img
                         className="w-8 h-8 rounded-full"
-                        src="https://plus.unsplash.com/premium_photo-1730828573938-003e14f210f4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Neil image"
+                        src={room.profileImage}
+                        alt="profileImage"
                       />
                     </div>
                     <div className="flex-1 min-w-0 text-center">
@@ -55,6 +135,13 @@ const RoomList = () => {
                       </p>
                     </div>
                     <div className="inline-flex w-8 h-8 items-center text-base font-semibold text-gray-700 dark:text-white"></div>
+                    {room.unreadCount > 0 && (
+                      <div className="flex-shrink-0">
+                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                          {room.unreadCount}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </Link>
               </li>
