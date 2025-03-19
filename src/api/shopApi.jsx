@@ -62,8 +62,8 @@ export const getMenuList = async (shopId, infoType) => {
 };
 
 //상점 수정
-export const putOne = async (shopId, shopData, shopDetailId, infoType) => {
-  const header = { headers: { 'Content-Type ': 'multipart/form-data' } };
+export const postOne = async (shopId, shopDetailId, infoType, shopData) => {
+  const header = { headers: { 'Content-Type': 'multipart/form-data' } }; // 파일전송위해
   const result = await jwtAxios.post(
     `${host}/modify/${shopId}/${shopDetailId}/${infoType}`,
     shopData,

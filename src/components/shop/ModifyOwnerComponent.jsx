@@ -4,13 +4,13 @@ import TimePicker from 'react-time-picker';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import useKakaoLoader from '../../hooks/useKakaoLoader';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { deleteOne, postShop } from '../../api/shopApi';
+import { deleteOne, postOne, postShop } from '../../api/shopApi';
 import ResultModal from '../common/ResultModal';
 import useCustomMove from '../../hooks/useCustomMove';
 import { getCookie } from '../../util/cookieUtil';
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
-import { putOne } from '../../api/shopApi';
+
 import { getOne } from '../../api/shopApi';
 import { API_SERVER_HOST } from '../../api/todoApi';
 
@@ -228,7 +228,7 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     formData.append('lng', position.center.lng);
 
     //Back에 넘겨줄 정보들 putOne(매개변수)
-    putOne(shopId, shopDetailId, formData)
+    postOne(shopId, shopDetailId, infoType, formData)
       .then((data) => {
         console.log(data);
         setResult('Modified');

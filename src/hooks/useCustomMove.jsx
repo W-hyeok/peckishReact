@@ -106,12 +106,12 @@ const useCustomMove = () => {
   };
 
   //USER - 점포 수정 페이지로 이동
-  const moveToUserShopModify = (shopId) => {
-    navigate({ pathname: `/shop/modify/${shopId}/USER` });
+  const moveToUserShopModify = (shopId, shopDetailId) => {
+    navigate({ pathname: `/shop/modify/${shopId}/${shopDetailId}/USER` });
   };
   //OWNER - 점포 수정 페이지로 이동
-  const moveToOwnerShopModify = (shopId) => {
-    navigate({ pathname: `/shop/modify/${shopId}/OWNER` });
+  const moveToOwnerShopModify = (shopId, shopDetailId) => {
+    navigate({ pathname: `/shop/modify/${shopId}/${shopDetailId}/OWNER` });
   };
 
   // 점포 등록 페이지로 이동

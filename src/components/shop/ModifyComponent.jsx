@@ -20,8 +20,8 @@ const ModifyComponent = ({ shop, shopId, shopDetailId, infoType }) => {
         <ModifyUserComponent
           shop={shop}
           shopId={shopId}
-          infoType={infoType}
           shopDetailId={shopDetailId}
+          infoType={infoType}
         />
       ) : (
         // infoType == 'OWNER'

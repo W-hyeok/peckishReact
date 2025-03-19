@@ -20,7 +20,7 @@ import { useTimeStamp } from '../../hooks/useTimeAgo';
 import useCustomMove from '../../hooks/useCustomMove';
 import AddReviewModal from '../common/AddReviewModal';
 import AddMenuModal from '../common/AddMenuModal';
-import { deleteMenu, getMenuList } from '../../api/shopApi';
+import { deleteMenu, deleteOne, getMenuList } from '../../api/shopApi';
 import DetailUserMenuComponent from './DetailUserMenuComponent';
 import DetailUserReviewComponent from '../review/DetailUserReviewComponent';
 import {
@@ -30,6 +30,7 @@ import {
   updateReview,
 } from '../../api/reviewApi';
 import ResultModal from '../common/ResultModal';
+import RemoveModal from '../common/RemoveModal';
 
 const host = `${API_SERVER_HOST}`;
 const { kakao } = window;
@@ -38,16 +39,28 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
+const DetailUserComponent = ({
+  shop,
+  shopDetailId,
+  shopId,
+  infoType,
+  mapData,
+  storeLoc,
+}) => {
+  console.log('DetailUser - shopDetailid : ', shopDetailId);
   const [menuItems, setMenuItems] = useState([]);
-  const [updatedMenu, setUpdatedMenu] = useState([]);
   const [review, setReview] = useState([]);
   const [ratingAvg, setRatingAvg] = useState(null);
   const [result, setResult] = useState(null);
   const [menuRefresh, setMenuRefresh] = useState(false);
   const [reviewRefresh, setReviewRefresh] = useState(false);
+  const [shopRemoveFetch, setShopRemoveFetch] = useState(false);
+  const [shopRefresh, setShopRefresh] = useState(false);
   const [menuFetch, setMenuFetch] = useState(false);
   const [reviewFetch, setReviewFetch] = useState(false);
+
+  // 점포 수정페이지로 이동
+  const { moveToUserShopModify, moveToShop } = useCustomMove();
 
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
@@ -112,17 +125,31 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
     setResult(null);
   };
 
-  // 점포 수정페이지로 이동
-  const { moveToUserShopModify } = useCustomMove();
-
-  const handleUserShopModify = () => {
-    console.log('User Shop - Modify');
-    moveToUserShopModify(shopId);
+  // 리뷰 삭제 모달 닫기
+  const ShopRemoveModal = () => {
+    setShopRefresh((prev) => !prev);
+    console.log('리뷰삭제 상세페이지로 이동');
+    moveToShop(shopId);
+    setResult(finishRemoveShop);
   };
 
-  // 점포 삭제처리
+  // 점포 수정
+  const handleUserShopModify = () => {
+    console.log('User Shop - Modify');
+    moveToUserShopModify(shopId, shopDetailId);
+  };
+
+  // 점포 삭제
   const handleUserShopDelete = () => {
-    console.log('User Shop - Delete');
+    deleteOne(shopId, infoType, shopDetailId)
+      .then((data) => {
+        setShopRemoveFetch(false);
+        console.log('상점 제보 정보를 삭제합니다!!!');
+        console.log(data);
+        setShopRemoveFetch(true);
+        setResult('shopRemove');
+      })
+      .catch((err) => console.log('전송실패', err));
   };
 
   return (
@@ -156,6 +183,20 @@ const DetailUserComponent = ({ shop, shopId, infoType, mapData, storeLoc }) => {
         <ResultModal
           title={'리뷰 삭제'}
           content={'리뷰가 삭제되었습니다'}
+          callbackFn={closeModal}
+        />
+      )}
+      {result === 'shopRemove' && (
+        <RemoveModal
+          title={'제보 정보 삭제'}
+          content={'제보 정보가 삭제하시겠습니까?'}
+          callbackFn={ShopRemoveModal}
+        />
+      )}
+      {result === 'finishRemoveShop' && (
+        <ResultModal
+          title={'제보 정보 삭제'}
+          content={'제보 정보를 했습니다'}
           callbackFn={closeModal}
         />
       )}

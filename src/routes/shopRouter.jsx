@@ -56,7 +56,7 @@ const shopRouter = () => {
     },
     {
       // infoType에 따라 상점 정보 수정
-      path: 'modify/:shopId/:infoType',
+      path: 'modify/:shopId/:shopDetailId/:infoType',
       element: (
         <Suspense fallback={<LoadingPage />}>
           <LoginRequired>

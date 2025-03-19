@@ -245,7 +245,7 @@ const AddComponent = () => {
   };
   // 파일 선택 시 호출되는 함수
   const handleImageChange = () => {
-    const file = uploadRef.current?.files[0]; // 파일을 참조
+    const file = uploadRef.current?.files[0]; // 파일을 참조 (input 파일 데이터 꺼내기: files는 배열이고 사진은 하나니깐 [0]방에서 한개 꺼내기기)
     if (file) {
       setShopfile(file); // shopfile 상태에 파일 저장
       const reader = new FileReader(); // FileReader 생성
@@ -377,50 +377,6 @@ const AddComponent = () => {
         <div></div>
         <div className="">
           <div>
-            <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
-              <input
-                onChange={handleInputChange}
-                onKeyDown={enter}
-                name="search"
-                type="search"
-                placeholder="주소/위치 검색..."
-                aria-label="Search"
-                className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm text-black outline-none placeholder:text-black focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
-              />
-              <MagnifyingGlassIcon
-                aria-hidden="true"
-                className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-black peer-focus:text-gray-400"
-              />
-            </div>
-            <Map
-              id="map"
-              center={position.center}
-              isPanto={position.isPanto}
-              style={{
-                width: '100%',
-                height: '50vh',
-                borderRadius: '15px',
-                borderColor: 'blue',
-              }}
-              level={3}
-              onClick={(_, mouseEvent) => {
-                const latlng = mouseEvent.latLng;
-                setPosition({
-                  center: { lat: latlng.getLat(), lng: latlng.getLng() },
-                  isPanto: true,
-                });
-              }}
-            >
-              <MapMarker position={position.center ?? center} />
-            </Map>
-            <p className="text-center pt-1 text-gray-600">
-              <span className="text-red-500">*</span>제보/등록할 점포의 위치를
-              클릭해서 지정해주세요!
-            </p>
-            <div id="clickLatlng" className="hidden">
-              {position &&
-                `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
-            </div>
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
               {/* 점포 사진 영역 */}
               <div className="col-span-full mb-8">
@@ -483,6 +439,52 @@ const AddComponent = () => {
               />
             </div>
           </div>
+          {/* 지도 시작 */}
+          <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
+            <input
+              onChange={handleInputChange}
+              onKeyDown={enter}
+              name="search"
+              type="search"
+              placeholder="주소/위치 검색..."
+              aria-label="Search"
+              className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm text-black outline-none placeholder:text-black focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
+            />
+            <MagnifyingGlassIcon
+              aria-hidden="true"
+              className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-black peer-focus:text-gray-400"
+            />
+          </div>
+          <Map
+            id="map"
+            center={position.center}
+            isPanto={position.isPanto}
+            style={{
+              width: '100%',
+              height: '50vh',
+              borderRadius: '15px',
+              borderColor: 'blue',
+            }}
+            level={3}
+            onClick={(_, mouseEvent) => {
+              const latlng = mouseEvent.latLng;
+              setPosition({
+                center: { lat: latlng.getLat(), lng: latlng.getLng() },
+                isPanto: true,
+              });
+            }}
+          >
+            <MapMarker position={position.center ?? center} />
+          </Map>
+          <p className="text-center pt-1 text-gray-600">
+            <span className="text-red-500">*</span>제보/등록할 점포의 위치를
+            클릭해서 지정해주세요!
+          </p>
+          <div id="clickLatlng" className="hidden">
+            {position &&
+              `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
+          </div>
+          {/* 지도 끝  */}
           {/* 점포 주소 영역 */}
           <div className="sm:col-span-2 mb-8">
             <label

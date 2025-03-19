@@ -4,7 +4,7 @@ import TimePicker from 'react-time-picker';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import useKakaoLoader from '../../hooks/useKakaoLoader';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { getOne, postShop, putOne } from '../../api/shopApi';
+import { getOne, postOne } from '../../api/shopApi';
 import ResultModal from '../common/ResultModal';
 import useCustomMove from '../../hooks/useCustomMove';
 import { getCookie } from '../../util/cookieUtil';
@@ -14,6 +14,7 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 
 // 지도 라이브러리 사용 위해 처음에 로드해야 함
 const { kakao } = window;
+
 const host = `${API_SERVER_HOST}`;
 
 const initState = {
@@ -42,10 +43,10 @@ const center = {
 };
 
 const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
-  console.log('user', shop);
-  console.log('user', shopId);
-  console.log('user', shopDetailId);
-  console.log('user', infoType);
+  // console.log('Modify user', shop);
+  // console.log('Modify user', shopId);
+  // console.log('Modify user', shopDetailId);
+  // console.log('Modify user', infoType);
 
   // 체크된 값들을 배열로 관리 (빈 배열로 초기화) -> 추후 데이터 전송시 쉼표로 연결해 문자열로 전송
   const [selectedDays, setSelectedDays] = useState([]);
@@ -239,11 +240,18 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   };
 
   //저장시 발생할 이벤트
-  const handleClickSave = () => {
+  const handleClickModifyUser = () => {
+    console.log('점포 수정할 shopId : ', shopId);
+    console.log('점포 수정할 shopUserId : ', shopDetailId);
+    console.log('점포 수정할 infoType : ', infoType);
+
     // 수정시 넘어갈 formData
     const formData = new FormData();
-    //DTO , state
-    formData.append('shopfile', shopfile);
+
+    if (shopfile) {
+      // 수정한 이미지 파일 데이터가 있으면
+      formData.append('shopfile', shopfile); // formData에 추가해서 보내기 (수정안하면 안보냄냄)
+    }
     formData.append('title', shopData.shopUserDTO.title);
     formData.append('location', shopData.shopUserDTO.location);
     formData.append('category', shopData.shopUserDTO.category);
@@ -253,28 +261,24 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     formData.append('lat', position.center.lat);
     formData.append('lng', position.center.lng);
 
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
+
     //Back에 넘겨줄 정보들 putOne(매개변수)
-    putOne(shopId, formData, shopDetailId, infoType)
+    postOne(shopId, shopDetailId, infoType, formData)
       .then((data) => {
         console.log(data);
-        setModify('Modified');
+        setResult('Modified');
       })
       .catch((err) => console.log('전송실패', err));
-  };
-
-  //점포 삭제 이벤트
-  const handleDelete = () => {
-    deleteOne(shopId, infoType, shopDetailId).then((data) => {
-      console.log(data);
-      setResult('Deleted');
-    });
   };
 
   const { moveToShop } = useCustomMove();
 
   const closeModal = () => {
     setResult(null); // result
-    moveToMain('/'); // 등록 시 메인으로 이동
+    moveToShop(shopId); // 수정완료 시 상세로 이동
   };
 
   // 일반 input태그 값 작성시 실행되는 함수
@@ -282,13 +286,6 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   const handleChangeShop = (e) => {
     shopData.shopUserDTO[e.target.name] = e.target.value;
     setShopData({ ...shopData });
-  };
-
-  // 기존이미지 삭제 delete 버튼 클릭 이벤트 핸들러
-  const deleteOldImages = (filename) => {
-    // 기존 이미지에서 삭제 버튼 클릭한 이미지 제외시키기
-    //const resultFileNames = shopData.shop;
-    // TODO - 화면에서 사라지게 수정하기
   };
 
   // 오픈 시간 변경 함수
@@ -315,20 +312,12 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     <div>
       <>
         {/* 결과 모달창 */}
-        {result == 'Modified' ? (
+        {result == 'Modified' && (
           <ResultModal
             title={'상점 수정 성공'}
-            content={`${shopData.shopUserDTO.shopId}번 수정 완료`}
+            content={`${shopId}번 상점 수정 완료`}
             callbackFn={closeModal}
           />
-        ) : result == 'Deleted' ? (
-          <ResultModal
-            title={'상점 삭제 성공'}
-            content={`${shopData.shopUserDTO.shopId}번 삭제 완료`}
-            callbackFn={closeModal}
-          />
-        ) : (
-          <></>
         )}
         {/* 결과 모달창 끝 */}
 
@@ -346,7 +335,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
               <div>
                 <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                   {/* old images */}
-                  <div className="span-full">
+                  {/* <div className="span-full">
                     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
                       <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
                         <div className="group relative aspect-[2/1] overflow-hidden rounded-lg sm:row-span-2 sm:aspect-square">
@@ -371,38 +360,32 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {/* 점포 사진 시작 */}
                   <div className="col-span-full">
                     <label className="block text-sm/6 font-medium text-gray-900">
-                      점포 사진
+                      점포 사진 <span className="text-red-500">*</span>
                     </label>
-                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                    <div className="mt-2 flex justify-center rounded-lg  bg-white border-gray-900/25 px-6 py-10">
                       <div className="text-center">
-                        {image ? (
-                          <img
-                            src={image}
-                            alt="Preview"
-                            className="mx-auto rounded-lg max-w-full h-auto"
-                            style={{ width: '400px', height: '300px' }} // 이미지 크기 조정
-                          />
-                        ) : (
-                          <PhotoIcon
-                            aria-hidden="true"
-                            className="mx-auto size-12 text-gray-300"
-                          />
-                        )}
+                        <img
+                          src={
+                            image ||
+                            `${host}/api/shop/view/${shopData.shopUserDTO.filename}`
+                          }
+                          alt="Preview"
+                          className="mx-auto rounded-lg max-w-full h-auto"
+                          style={{ width: '300px', height: '300px' }} // 이미지 크기 조정
+                        />
                         <div className="mt-4">
                           <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2">
-                            <span>
-                              {image ? '사진 변경' : '점포 사진 등록'}
-                            </span>
+                            <span>사진 변경</span>
                             <input
                               type="file"
                               ref={uploadRef}
                               accept="image/*"
                               multiple={false}
-                              className="sr-only"
+                              className="sr-only bg-white"
                               onChange={handleImageChange}
                             />
                           </label>
@@ -426,7 +409,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                     htmlFor="address"
                     className="block text-sm/6 font-medium text-gray-700"
                   >
-                    점포명
+                    점포명 <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-2">
                     <input
@@ -507,23 +490,22 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                     />
                   </div>
                 </div>
+
+                {/*요일*/}
                 <div className="col-span-full space-y-6">
-                  {/*요일*/}
                   <div className="sm:col-span-2">
                     <fieldset>
                       <legend className="text-base text-gray-900">
-                        영업일 선택: {selectedDayNames}
+                        영업일 <span className="text-red-500">*</span>
                       </legend>
-                      <div className="mt-1 divide-y divide-gray-200 border-b border-t border-gray-200">
+                      <div className="mt-1">
                         <div className="flex flex-wrap gap-2">
-                          {' '}
-                          {/* flexbox와 wrap 사용하여 가로로 배치 */}
                           {days.map((day) => (
                             <div
                               key={day.id}
                               className="flex items-center gap-1 pl-2"
                             >
-                              <div className="min-w-0 flex-1 text-sm/6">
+                              <div className="min-w-0 flex-1 text-sm">
                                 <label className="select-none font-medium text-gray-900">
                                   {day.name}
                                 </label>
@@ -533,14 +515,14 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                                   <input
                                     type="checkbox"
                                     checked={selectedDays.includes(day.id)}
-                                    value={shopData.shopUserDTO.days}
+                                    value={shop.days}
                                     onChange={(e) =>
                                       handleCheckboxChange(
                                         day.id,
                                         e.target.checked
                                       )
                                     }
-                                    className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                                    className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                                   />
                                 </div>
                               </div>
@@ -548,7 +530,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                           ))}
                         </div>
                       </div>
-                      <div className="mb-4">{/* 여백 */}</div>
+                      <div className="mb-4"></div>
                     </fieldset>
                   </div>
                   {/* 오픈시간과 마감시간을 한 줄에 배치 */}
@@ -563,6 +545,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                           오픈시간
                         </label>
                         <TimePicker
+                          className="bg-white"
                           onChange={handleOpenTimeChange} // 오픈 시간 변경 시 호출
                           value={openTime} // 현재 오픈 시간 값
                           disableClock // 시계 안보이게 하기
@@ -578,6 +561,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                           마감시간
                         </label>
                         <TimePicker
+                          className="bg-white"
                           onChange={handleCloseTimeChange} // 마감 시간 변경 시 호출
                           value={closeTime} // 현재 마감 시간 값
                           disableClock // 시계 안보이게 하기
@@ -629,7 +613,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                 {/* 등록: 등록 성공 시 메인 페이지로 이동 */}
                 <button
                   type="button"
-                  onClick={handleClickSave}
+                  onClick={handleClickModifyUser}
                   className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-base font-medium rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                 >
                   수정완료

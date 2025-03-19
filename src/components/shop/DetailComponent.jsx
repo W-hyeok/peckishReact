@@ -100,6 +100,7 @@ const DetailComponent = ({ shop, shopId }) => {
               <DetailUserComponent
                 shop={shop}
                 shopId={shopId}
+                shopDetailId={shop.shopUserDTO.shopUserId}
                 infoType={USER}
                 mapData={mapData}
                 storeLoc={storeLoc}
