@@ -72,7 +72,7 @@ export default function Header() {
 
   const loginState = useSelector((state) => state.loginSlice);
   useEffect(() => {
-    console.log(loginState.roleNames);
+    console.log('roleNames:', loginState.roleNames);
   }, []);
 
   let numStat = 0;
