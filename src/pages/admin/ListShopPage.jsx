@@ -19,7 +19,7 @@ const ListShopPage = () => {
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
-              <h1 className="text-3xl font-bold text-gray-900">
+              <h1 className="text-lg sm:text-sm font-bold sm:mt-6 text-gray-900">
                 관리자 페이지 <span aria-hidden="true"> &rsaquo;&rsaquo; </span>
                 전체 상점 목록
               </h1>

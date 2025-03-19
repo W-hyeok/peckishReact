@@ -454,23 +454,23 @@ const AddComponent = () => {
                         className="mx-auto size-14 text-gray-300"
                       />
                     )}
-                    {!image && (
-                      <>
-                        <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
-                          <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                            <span>프로필 사진 첨부 필수</span>
-                            <input
-                              type="file"
-                              ref={uploadRef}
-                              multiple={false}
-                              name="profileImg"
-                              className="sr-only"
-                              onChange={handleImageChange}
-                            />
-                          </label>
-                        </div>
-                      </>
-                    )}
+                    {/* {!image && ( */}
+                    <>
+                      <div className="mt-1 flex justify-center text-sm/4 text-gray-600">
+                        <label className="relative cursor-pointer rounded-md bg-white font-base text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                          <span> {image ? '사진 변경' : '인물 사진 등록'}</span>
+                          <input
+                            type="file"
+                            ref={uploadRef}
+                            multiple={false}
+                            name="profileImg"
+                            className="sr-only"
+                            onChange={handleImageChange}
+                          />
+                        </label>
+                      </div>
+                    </>
+                    {/* )} */}
                   </div>
                 </div>
               </div>
