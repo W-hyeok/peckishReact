@@ -2,11 +2,18 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { languages } from '../../assets/languages';
 import '../../css/translate.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectLanguage } from '../../slices/languageSlice';
+import { getCookie } from '../../util/cookieUtil';
 
 const GoogleTranslate = () => {
-  const [chooseCountry, setChooseCountry] = useState(
-    { code: 'ko', name: '한국어', flag: 'kr' } // 한국어
-  );
+  const languageState = useSelector((state) => state.language);
+  const disPatch = useDispatch();
+  const cookieLang = getCookie('transLang');
+
+  // const [chooseCountry, setChooseCountry] = useState(
+  //   { code: 'ko', name: '한국어', flag: 'kr' } // 한국어
+  // );
   const [isClicked, setIsClicked] = useState(false); // 클릭 여부 상태값
   const [isTranslated, setIsTranstlated] = useState(false); // 번역 모드 상태값 (번역 중임을 알림)
 
@@ -20,7 +27,7 @@ const GoogleTranslate = () => {
       new window.google.translate.TranslateElement(
         {
           pageLanguage: 'ko',
-          autoDisplay: true,
+          autoDisplay: false,
         },
         'google_translate_element'
       );
@@ -42,32 +49,38 @@ const GoogleTranslate = () => {
       gtCombo.value = value;
       gtCombo.dispatchEvent(new Event('change'));
     }
-    setTimeout(() => {
-      setChooseCountry(lang);
-    }, 500);
+    // setChooseCountry(lang);
+    disPatch(selectLanguage(lang));
   };
 
   return (
     <>
       <div id="google_translate_element" className="hidden"></div>
-      {isTranslated && (
+      {/* <button
+        onClick={() => {
+          disPatch(selectLanguage(chooseCountry.name));
+        }}
+      >
+        {' '}
+        언어 선택하기{' '}
+      </button> */}
+      {isClicked && (
         <span className="mr-4 text-gray-500 bg-yellow-200/50 rounded-lg">
-          * 번역은 정확하지 않을 수 있습니다. <br /> * Translations may not be
-          accurate.
+          * 번역은 정확하지 않을 수 있습니다.
         </span>
       )}
       <ButtonCotainer
-        key={chooseCountry.code}
+        key={languageState.code}
         // onMouseEnter={() => setIsHovered(true)}
         // onMouseLeave={() => setIsHovered(false)}
         onClick={() => {
           setIsClicked(!isClicked); // 버튼 클릭 시 isClicked값 전환 ('토글')
           setIsTranstlated(true);
-          console.log('선택된 국가: ', chooseCountry);
+          console.log('저장된 언어:', cookieLang);
         }}
       >
-        <Flag code={chooseCountry.flag} />
-        {chooseCountry.name}
+        <Flag code={cookieLang.flag} />
+        {cookieLang.name}
         {/* 번역버튼 hover 시 리스트 표시 */}
         {isClicked && (
           <>
@@ -84,6 +97,7 @@ const GoogleTranslate = () => {
                   key={lang.code}
                   onClick={() => {
                     handleLanguageChange(lang);
+                    console.log('선택된 국가(comp):', languageState);
                     setIsClicked(false);
                   }}
                 >
