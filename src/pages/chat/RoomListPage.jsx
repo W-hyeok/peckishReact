@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getListDetail, getListOwner } from '../../api/roomApi';
+import { getListOwner } from '../../api/roomApi';
 import { getCookie } from '../../util/cookieUtil';
 import BasicLayout from '../../layouts/BasicLayout';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import axios from 'axios';
 import { WS_SERVER_HOST } from '../../components/chat/RoomComponent';
+
+import '../../css/common.css';
 
 const RoomList = () => {
   const memberInfo = getCookie('member');
@@ -74,7 +76,7 @@ const RoomList = () => {
     ws.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        // 백엔드에서 unreadUpdate 타입으로 unreadCount와 최신 메시지(latestContent) 업데이트 메시지를 보낸다고 가정
+        // 백엔드에서 unreadUpdate 타입으로 unreadCount와 최신 메시지(latestContent) 업데이트 메시지
         if (data.type === 'unreadUpdate') {
           const { roomId, unreadCount, latestContent } = data;
           setRooms((prevRooms) =>
@@ -107,15 +109,21 @@ const RoomList = () => {
 
   return (
     <BasicLayout>
-      <div className="bg-[#f9dfb1] overflow-y-auto">
-        <main>
+      <div className="overflow-y-auto">
+        <main className="flex-col justify-center">
+          {/* 홈으로 가는 버튼을 헤더와 채팅방 리스트 사이에 가운데 정렬 */}
+          <div className="flex justify-end my-4 mt-20 col-span-full divide-y w-1/2 mx-auto">
+            <Link to="/" className="defaultBtn">
+              홈으로
+            </Link>
+          </div>
           <div className="container mx-auto"></div>
           <ul className="col-span-full divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden border border-gray-300 dark:border-gray-600 rounded-lg mt-5 w-1/2 mx-auto">
             {rooms.map((room, index) => (
               <li
                 key={`${room.room_ID}-${index}`}
                 onClick={() => handleRoomClick(room.room_ID)}
-                className="hover:bg-gray-200 p-5 lg:p-5 sm:p-3"
+                className="bg-white hover:bg-gray-200 p-5 lg:p-5 sm:p-3"
               >
                 <Link to={`/roomList/room/${room.room_ID}`}>
                   <div className="flex items-center space-x-4 rtl:space-x-reverse">

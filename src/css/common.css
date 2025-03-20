@@ -1,5 +1,5 @@
 .defaultBtn {
-  @apply h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] 
+  @apply h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl rounded-[8px] 
     border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white;
 }
 

@@ -13,9 +13,9 @@ body {
 } */
 
 @font-face {
-  font-family: 'GmarketSansTTFMedium';
-  font-weight: normal;
-  src: url('./fonts/GmarketSansTTFMedium.ttf') format('truetype');
+  font-family: 'NotoSansKR-Light';
+  font-weight: Light;
+  src: url('./fonts/NotoSansKR-Light.ttf') format('truetype');
 }
 
 body {
