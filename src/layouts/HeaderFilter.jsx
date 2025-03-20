@@ -230,6 +230,7 @@ export default function HeaderFilter({
                         <div className="">
                           {navigation.map((item) => (
                             <a
+                              href={item.href}
                               key={item.name}
                               className={classNames(
                                 item.current ? 'bg-yellow-200' : 'text-black',
@@ -240,7 +241,7 @@ export default function HeaderFilter({
                             >
                               <img src={item.icon} className="size-10" />
                               <div className="flex justify-center items-center">
-                                <a href={item.href}>{item.name}</a>
+                                <a>{item.name}</a>
                               </div>
                             </a>
                           ))}

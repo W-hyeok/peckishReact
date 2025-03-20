@@ -135,7 +135,7 @@ const ButtonCotainer = styled.li`
   cursor: pointer;
   background-color: #ffffff;
   outline: none;
-  border: 2px solid #000000;
+  border: 1px solid #facc15;
   border-radius: 8px;
   font-size: 14px;
   position: relative;
@@ -147,7 +147,7 @@ const LanguageList = styled.ul`
   top: 6vh;
   right: 0vh;
   background-color: white;
-  border: 2px solid #000000;
+  border: 1px solid #facc15;
   list-style: none;
   padding: 10px;
   padding-top: 5px;

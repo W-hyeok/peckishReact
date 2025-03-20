@@ -46,6 +46,9 @@ const DetailUserComponent = ({
   infoType,
   mapData,
   storeLoc,
+  cookieMember,
+  moveToLogin,
+  moveToMain,
 }) => {
   console.log('DetailUser - shopDetailid : ', shopDetailId);
   const [menuItems, setMenuItems] = useState([]); // 메뉴목록 뿌리기
@@ -128,6 +131,9 @@ const DetailUserComponent = ({
     console.log('User Shop - Modify');
     moveToUserShopModify(shopId, shopDetailId);
   };
+
+  /* 댓글 추가 / 메뉴 추가 / 수정/삭제 - 비로그인 시 */
+  // const handleNotLogin
 
   // 점포 삭제
   const handleUserShopDelete = () => {
@@ -380,12 +386,24 @@ const DetailUserComponent = ({
                 ) : (
                   <div className="flex flex-col items-center justify-center py-10">
                     <span className="text-5xl">🍽️</span>
-                    <p className="mt-4">메뉴를 추가해주세요!</p>
+                    <p className="mt-4">메뉴를 추가해주세요!</p>{' '}
+                    {cookieMember && (
+                      <p className="text-gray-500/90">
+                        (로그인이 필요한 서비스입니다.)
+                      </p>
+                    )}
                   </div>
                 )}
                 <button
                   type="button"
-                  onClick={handleClickAddMenu}
+                  onClick={() => {
+                    // 로그인 상태에 따른 분기처리: 메뉴 등록 modal / 로그인 페이지
+                    if (cookieMember) {
+                      handleClickAddMenu();
+                    } else {
+                      moveToMain();
+                    }
+                  }}
                   className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
                 >
                   메뉴 작성

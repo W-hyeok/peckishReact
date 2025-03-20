@@ -5,8 +5,13 @@ import DetailOwnerComponent from './DetailOwnerComponent';
 import { getMap } from '../../api/mapApi';
 import { Navigate, useNavigate } from 'react-router-dom';
 import '../../css/common.css';
+import { getCookie } from '../../util/cookieUtil';
+import useCustomMove from '../../hooks/useCustomMove';
 
 const DetailComponent = ({ shop, shopId }) => {
+  const cookieMember = getCookie('member')
+    ? getCookie('member')
+    : { email: null };
   console.log('***********DetailComponent***********');
   console.log(shop);
   console.log(shopId);
@@ -23,6 +28,7 @@ const DetailComponent = ({ shop, shopId }) => {
     imageUrl: '/src/assets/shop/notCert.png',
   };
 
+  const { moveToLogin, moveToMain } = useCustomMove();
   const [mapData, setMapData] = useState(''); // 위도, 경도 정보...가 포함된 맵 데이터
   const [storeLoc, setStoreLoc] = useState({
     center: { lat: '', lng: '' },
@@ -104,6 +110,9 @@ const DetailComponent = ({ shop, shopId }) => {
                 infoType={USER}
                 mapData={mapData}
                 storeLoc={storeLoc}
+                cookieMember={cookieMember}
+                moveToLogin={moveToLogin}
+                moveToMain={moveToMain}
               />
             ) : (
               <div className="flex justify-center items-center">

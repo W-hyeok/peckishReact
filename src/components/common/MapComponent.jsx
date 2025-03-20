@@ -318,7 +318,8 @@ function MapComponent({
             }}
           >
             {isVisible && (
-              <div className="wrap p-2">
+              /* 자동 생성되는 부모 요소의 border 덮어쓰기 위해 outline 설정, 4 이상이어야 가려짐 */
+              <div className="relative p-2 rounded-lg bg-white outline outline-4 outline-yellow-300">
                 <div className="flex items-start">
                   {content}
                   <button
@@ -372,7 +373,7 @@ function MapComponent({
             }}
           >
             {isVisible && (
-              <div className="wrap p-2">
+              <div className="relative p-2 rounded-lg bg-white outline outline-4 outline-gray-400">
                 <div className="flex items-start">
                   {content}
                   <button
@@ -609,7 +610,7 @@ function MapComponent({
                       <div className="wrap p-2">
                         <div className="info">
                           <div className="title flex min-w-max">
-                            <div className="bg-gray-300">
+                            <div className="font-semibold">
                               {data.title} /{' '}
                               {
                                 data.category === 'bread'
@@ -624,11 +625,11 @@ function MapComponent({
                               }
                             </div>
                           </div>
-                          <hr className="my-1" />
+                          <hr className="mb-2" />
                           <div className="body">
                             <img
                               src={`${host}/api/shop/view/${data.filename}`}
-                              className="size-24"
+                              className="size-24 rounded-md mb-2"
                             />
                             <div className="desc min-w-max">
                               <div className="ellipsis">{data.location}</div>

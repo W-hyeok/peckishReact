@@ -126,7 +126,7 @@ export default function Header() {
                     <img
                       alt=""
                       src={`${host}/api/member/view/${cookieMember.profileFilename}`}
-                      className="size-12 rounded-full border-[2px] border-black border-solid"
+                      className="size-12 rounded-full border-[1px] border-yellow-400"
                     />
                   </MenuButton>
                 </div>
@@ -191,7 +191,7 @@ export default function Header() {
                 <img
                   src={`${host}/api/member/view/${cookieMember.profileFilename}`}
                   aria-hidden="true"
-                  className="size-9 rounded-full border-[2px] border-black border-solid"
+                  className="size-9 rounded-full border-[1px] border-black border-solid"
                 />
               </PopoverButton>
             </div>
