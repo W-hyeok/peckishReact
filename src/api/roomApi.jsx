@@ -3,9 +3,11 @@ import { getCookie } from '../util/cookieUtil';
 import { API_SERVER_HOST } from './todoApi';
 
 const memberInfo = getCookie('member');
-
-const memberToken = memberInfo.accessToken;
-const header = { headers: { Authorization: `Bearer ${memberToken}` } };
+// memberInfo가 없으면 memberToken은 null 또는 빈 문자열 처리
+const memberToken = memberInfo ? memberInfo.accessToken : '';
+const header = memberToken
+  ? { headers: { Authorization: `Bearer ${memberToken}` } }
+  : {}; // 로그인하지 않은 경우 헤더는 빈 객체
 
 export const getList = async (memberEmail) => {
   try {

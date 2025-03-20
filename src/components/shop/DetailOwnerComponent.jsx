@@ -96,6 +96,12 @@ const DetailOwnerComponent = ({
 
   //채팅
   const handleChat = async () => {
+    // 로그인 여부 체크
+    if (!memberInfo) {
+      alert('로그인 후 이용 가능합니다.');
+      return;
+    }
+
     try {
       const memberEmail = memberInfo.email; // JWT에서 사용자 이메일 추출
       if (!ownerEmail) {
@@ -104,14 +110,14 @@ const DetailOwnerComponent = ({
       }
       const member1 = ownerEmail;
       const member2 = memberEmail;
-      // 두 멤버를 createRoom에 전달합니다.
+      // 두 멤버를 createRoom에 전달
       const room = await createRoom({
         member1,
         member2,
         shopId,
       });
       console.log('채팅방 생성 성공:', room);
-      // 반환된 room 객체의 roomId를 이용해 채팅방 페이지로 이동합니다.
+      // 반환된 room 객체의 roomId를 이용해 채팅방 페이지로 이동
       if (room.room_ID) {
         navigate(`/room/${room.room_ID}`);
       } else {
