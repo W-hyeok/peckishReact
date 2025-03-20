@@ -50,7 +50,7 @@ const LeaveComponent = () => {
         <></>
       )}
       <form>
-        <div className="flex min-h-full flex-col items-center justify-center sm:px-6 lg:px-8">
+        <div className="flex min-w-full min-h-full flex-col items-center justify-center sm:px-6 lg:px-8">
           <div className="mt-40 sm:mx-auto sm:w-full sm:max-w-md">
             <h2 className="mt-2 text-center text-2xl font-bold tracking-tight text-gray-900">
               탈퇴 하시겠습니까?

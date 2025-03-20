@@ -37,7 +37,7 @@ const ListShopComponent = () => {
               <tr>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   아이디
                 </th>
@@ -49,25 +49,25 @@ const ListShopComponent = () => {
                 </th> */}
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   운영여부
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   제보/인증 여부
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   "제보/인증"한 회원 이메일
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   등록일
                 </th>
@@ -80,20 +80,20 @@ const ListShopComponent = () => {
                   onClick={() => moveToShop(shop.shopId)}
                   className="cursor-pointer"
                 >
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {shop.shopId}
                   </td>
                   {/* <td className="py-3.5 pl-4 pr-3 text-left text-lg font-normal text-gray-900 sm:pl-0">
                     {shop.title}
                   </td> */}
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {shop.isExist ? (
                       <span className="text-green-600">폐업중</span>
                     ) : (
                       <span className="text-red-600">운영중</span>
                     )}
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     <span
                       className={`inline-flex rounded-lg text-nowrap text-md sm:text-xs font-thin ${
                         shop.certificate
@@ -104,10 +104,10 @@ const ListShopComponent = () => {
                       {shop.certificate ? '사업자 인증' : '소비자 제보'}
                     </span>
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {shop.email}
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {new Date(shop.regDate)
                       .toLocaleDateString('ko-KR', {
                         year: 'numeric',

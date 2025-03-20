@@ -185,7 +185,7 @@ const ReadComponent = ({ email }) => {
             />
           </dd>
         </div>
-        <div className="flex float-right gap-2 mb-4">
+        <div className="grid lg:grid-flow-col justify-center gap-2 mb-4">
           {member.memberStat === 2 && (
             <>
               <button

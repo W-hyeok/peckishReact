@@ -38,31 +38,31 @@ const ListComponent = () => {
               <tr>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   이메일
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   회원 유형
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   닉네임
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   연락처
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   가입일자
                 </th>
@@ -75,10 +75,10 @@ const ListComponent = () => {
                   onClick={() => moveToReadAll(member.email)}
                   className="cursor-pointer"
                 >
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {member.email}
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {member.roleNames[member.roleNames.length - 1] ===
                     'ADMIN' ? (
                       <span className="text-blue-600">관리자</span>
@@ -92,13 +92,13 @@ const ListComponent = () => {
                       <></>
                     )}
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {member.nickname}
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {member.phone}
                   </td>
-                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                  <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     {new Date(member.regDate)
                       .toLocaleDateString('ko-KR', {
                         year: 'numeric',
@@ -112,6 +112,12 @@ const ListComponent = () => {
               ))}
             </tbody>
           </table>
+          {/* <div>
+            <div>
+              <h2 id="visit-count">0</h2>
+              <p>방문횟수</p>
+            </div>
+          </div> */}
         </div>
       </div>
       <PageComponent serverData={serverData} move={moveToList}></PageComponent>

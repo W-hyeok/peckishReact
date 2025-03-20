@@ -7,7 +7,7 @@ const KakaoLoginComponent = () => {
 
   return (
     <div>
-      <div className="relative mt-10">
+      <div className="relative min-w-full mt-10">
         <div aria-hidden="true" className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-gray-200" />
         </div>
