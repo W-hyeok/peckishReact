@@ -79,8 +79,13 @@ const GoogleTranslate = () => {
           console.log('저장된 언어:', cookieLang);
         }}
       >
-        <Flag code={cookieLang.flag} />
-        {cookieLang.name}
+        {cookieLang ? (
+          <Flag code={cookieLang.flag} />
+        ) : (
+          <Flag code={languageState.flag} />
+        )}
+
+        {languageState.name}
         {/* 번역버튼 hover 시 리스트 표시 */}
         {isClicked && (
           <>
