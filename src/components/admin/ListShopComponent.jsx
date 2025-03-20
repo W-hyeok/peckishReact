@@ -39,7 +39,7 @@ const ListShopComponent = () => {
                   scope="col"
                   className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
-                  아이디
+                  No
                 </th>
                 {/* <th
                   scope="col"
@@ -63,7 +63,7 @@ const ListShopComponent = () => {
                   scope="col"
                   className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
-                  "제보/인증"한 회원 이메일
+                  이메일
                 </th>
                 <th
                   scope="col"
