@@ -31,13 +31,13 @@ const initState = {
 
 // days 데이터 (예시)
 const days = [
-  { id: 1, name: '월' },
-  { id: 2, name: '화' },
-  { id: 3, name: '수' },
-  { id: 4, name: '목' },
-  { id: 5, name: '금' },
-  { id: 6, name: '토' },
-  { id: 7, name: '일' },
+  { id: 1, name: '월요일' },
+  { id: 2, name: '화요일' },
+  { id: 3, name: '수요일' },
+  { id: 4, name: '목요일' },
+  { id: 5, name: '금요일' },
+  { id: 6, name: '토요일' },
+  { id: 7, name: '일요일' },
 ];
 
 const center = {
@@ -191,6 +191,13 @@ const AddExtraUSERComponent = ({ shopId }) => {
     }
   };
 
+  const { moveToShop } = useCustomMove();
+  // 취소 버튼 클릭시
+  const handleClickBack = () => {
+    console.log('취소버튼 클릭 : 이전페이지로 이동합니다');
+    moveToShop(shopId);
+  };
+
   // 체크된 값들을 배열로 관리 (빈 배열로 초기화) -> 추후 데이터 전송시 쉼표로 연결해 문자열로 전송
   const [selectedDays, setSelectedDays] = useState([]);
   const [shop, setShop] = useState({ ...initState });
@@ -256,6 +263,7 @@ const AddExtraUSERComponent = ({ shopId }) => {
     console.log('영업시작 시간 : ', openTime);
     console.log('영업시간 종료 : ', closeTime);
     console.log('카테고리 : ', shop.category);
+    console.log('제보된 정보 certificate 확인 : ', shop.certificate);
 
     // console.log(shop);
 
@@ -282,11 +290,9 @@ const AddExtraUSERComponent = ({ shopId }) => {
       .catch((err) => console.log('전송실패', err));
   };
 
-  const { moveToMain } = useCustomMove();
-
   const closeModal = () => {
     setResult(null); // result
-    moveToMain('/'); // 등록 시 메인으로 이동
+    moveToShop(shopId);
   };
 
   // 일반 input태그 값 작성시 실행되는 함수
@@ -317,6 +323,7 @@ const AddExtraUSERComponent = ({ shopId }) => {
 
   const [defaultShop, setDefaultShop] = useState(null);
 
+  // 상점 정보 힌트를 주기 위해서 기존 정보 불러오기
   useEffect(() => {
     getOne(shopId).then((data) => {
       console.log(data.RESULT);
@@ -330,7 +337,7 @@ const AddExtraUSERComponent = ({ shopId }) => {
       {/* 결과 모달창 */}
       {result ? (
         <ResultModal
-          title={'상점 등록 성공'}
+          title={'추가 상점 정보 등록 성공'}
           content={`${result}번 등록 완료`}
           callbackFn={closeModal}
         />
@@ -592,75 +599,6 @@ const AddExtraUSERComponent = ({ shopId }) => {
                   </div>
                 </div>
               </div>
-              {/* '사업자 인증' 버튼 */}
-              {/* 일반 유저 및 사업자+인증 이력 있을 시 체크 불가, 문구 달라짐 */}
-              {checkRole == 'USER' ? (
-                <>
-                  <div className="flex h-auto shrink-0 items-center space-x-4">
-                    <div className="group grid size-4 grid-cols-1">
-                      <input
-                        name="certificate"
-                        type="checkbox"
-                        disabled
-                        className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                      />
-                    </div>
-                    <div className="flex text-lg">
-                      <label className="select-none font-medium text-gray-700">
-                        내 점포 인증하기
-                        <span className="ml-2 text-gray-600">
-                          (회원정보 수정 - 사업자 정보 추가 필요)
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  {memberCookie.owned == true ? (
-                    <div className="flex h-auto shrink-0 items-center space-x-4">
-                      <div className="group grid size-4 grid-cols-1">
-                        <input
-                          name="certificate"
-                          type="checkbox"
-                          disabled
-                          className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                        />
-                      </div>
-                      <div className="flex text-lg">
-                        <label className="select-none font-medium text-gray-500">
-                          내 점포 인증하기
-                          <span className="text-gray-400">
-                            (이미 점포를 인증하셨습니다.)
-                          </span>
-                        </label>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex h-auto shrink-0 items-center space-x-4">
-                      <div className="group grid size-4 grid-cols-1">
-                        <input
-                          name="certificate"
-                          value={shop.certificate}
-                          onChange={(e) =>
-                            handleCheckboxCertificate(e.target.checked)
-                          }
-                          type="checkbox"
-                          className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                        />
-                      </div>
-                      <div className="flex text-lg">
-                        <label className="select-none font-medium text-gray-900">
-                          내 점포 인증하기
-                          <span className="text-gray-400">
-                            (해당 점포의 사장님일 경우 체크해주세요.)
-                          </span>
-                        </label>
-                      </div>
-                    </div>
-                  )}
-                </>
-              )}
             </div>
 
             {/* 버튼 시작 */}
@@ -674,7 +612,7 @@ const AddExtraUSERComponent = ({ shopId }) => {
               </button>
               <button
                 type="button"
-                onClick={moveToMain}
+                onClick={handleClickBack}
                 className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
               >
                 취소
