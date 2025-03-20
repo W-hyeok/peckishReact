@@ -14,7 +14,6 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 
 // 지도 라이브러리 사용 위해 처음에 로드해야 함
 const { kakao } = window;
-
 const host = `${API_SERVER_HOST}`;
 
 const initState = {

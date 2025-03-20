@@ -97,7 +97,7 @@ const RemoveModal = ({
                 <button
                   type="button"
                   onClick={handleShopDelete}
-                  className="inline-flex w-full justify-center bg-white text-red-400 text-xl font-semibold rounded-[8px] px-3 py-2 mt-6 border-[2px] border-red-400 hover:bg-red-400 hover:text-white"
+                  className="inline-flex w-full justify-center bg-white text-red-500 px-6 py-3 text-xl font-semibold rounded-[8px] mt-8 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
                 >
                   {/* className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                              > */}
@@ -107,7 +107,7 @@ const RemoveModal = ({
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="inline-flex w-full justify-center bg-white text-red-400 text-xl font-semibold rounded-[8px] px-3 py-2 mt-6 border-[2px] border-red-400 hover:bg-red-400 hover:text-white"
+                  className="inline-flex w-full justify-center bg-white text-blue-600 px-6 py-3 text-xl font-semibold rounded-[8px] mt-8 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                 >
                   {/* className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                              > */}

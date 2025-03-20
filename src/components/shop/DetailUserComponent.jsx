@@ -58,7 +58,7 @@ const DetailUserComponent = ({
   const [reviewFetch, setReviewFetch] = useState(false);
 
   // 점포 수정페이지로 이동
-  const { moveToUserShopModify, moveToShop } = useCustomMove();
+  const { moveToUserShopModify } = useCustomMove();
 
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
@@ -131,14 +131,7 @@ const DetailUserComponent = ({
 
   // 점포 삭제
   const handleUserShopDelete = () => {
-    // deleteOne(shopId, infoType, shopDetailId)
-    //   .then((data) => {
-    //     //setShopRemoveFetch(false);
-    //     console.log('상점 제보 정보를 삭제합니다!!!');
-    //     console.log(data);
-    //     setResult('shopRemove');
-    //   })
-    //   .catch((err) => console.log('전송실패', err));
+    console.log('점포 삭제 모달 보여줘라');
     setResult('shopRemove');
   };
 
@@ -178,8 +171,8 @@ const DetailUserComponent = ({
       )}
       {result === 'shopRemove' && (
         <RemoveModal
-          title={'제보 정보 삭제'}
-          content={'제보 정보를 삭제하시겠습니까?'}
+          title={'상점 정보 삭제'}
+          content={'상점 정보를 삭제하시겠습니까?'}
           callbackFn={closeModal}
           shopId={shopId}
           infoType={infoType}
@@ -426,7 +419,7 @@ const DetailUserComponent = ({
               </TabPanel>
             </TabPanels>
           </TabGroup>
-
+          {/* 버튼 */}
           <div className="flex justify-end space-x-4 mt-2">
             <button
               onClick={handleUserShopModify}
