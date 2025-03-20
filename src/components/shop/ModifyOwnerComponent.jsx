@@ -4,14 +4,12 @@ import TimePicker from 'react-time-picker';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import useKakaoLoader from '../../hooks/useKakaoLoader';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { deleteOne, postOne, postShop } from '../../api/shopApi';
+import { getOne, postOne } from '../../api/shopApi';
 import ResultModal from '../common/ResultModal';
 import useCustomMove from '../../hooks/useCustomMove';
 import { getCookie } from '../../util/cookieUtil';
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
-
-import { getOne } from '../../api/shopApi';
 import { API_SERVER_HOST } from '../../api/todoApi';
 
 // 지도 라이브러리 사용 위해 처음에 로드해야 함
@@ -24,8 +22,8 @@ const initState = {
   shopDTO: null,
   shopOwnerDTO: null,
   menuOwnerList: [],
-  shopUserDTO: null,
-  menuUserList: [],
+  shopOwnerDTO: null,
+  menuOwnerList: [],
 };
 
 // days 데이터 (예시)
@@ -66,6 +64,25 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   const [error, setError] = useState(''); // 오류 메시지 상태 추가
   const [loaded, setLoaded] = useState(false); //데이터 로딩 체크
 
+  // DB에서 데이터 조회
+  useEffect(() => {
+    getOne(shopId).then((data) => {
+      const old = data.RESULT;
+      console.log(data.RESULT);
+      setShopData({ ...data.RESULT });
+      setOpenTime(old.shopOwnerDTO.openTime);
+      setCloseTime(old.shopOwnerDTO.closeTime);
+      // 요일 처리
+      const dayNamesArr = old.shopOwnerDTO.days.split(', ');
+      const names = dayNamesArr.map(
+        (dayname) => days.find((day) => day.name === dayname)?.id
+      );
+      setSelectedDays(names);
+      setLoaded(true);
+    });
+  }, [shopId]);
+
+  // ***** 지도 *****
   // useKakaoLoader();
   // 지도 좌표값 설정
   const [position, setPosition] = useState({
@@ -177,6 +194,7 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
       activeButton();
     }
   };
+  // ***** 지도 *****
 
   // handleCheckboxChange 함수: 체크박스를 클릭할 때마다 selectedDays 업데이트
   const handleCheckboxChange = (id, isChecked) => {
@@ -212,20 +230,31 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     }
   };
 
-  //수정 저장시 발생할 이벤트
-  const handleClickSave = () => {
+  //저장시 발생할 이벤트
+  const handleClickModifyOwner = () => {
+    console.log('점포 수정할 shopId : ', shopId);
+    console.log('점포 수정할 shopOwnerId : ', shopDetailId);
+    console.log('점포 수정할 infoType : ', infoType);
+
     // 수정시 넘어갈 formData
     const formData = new FormData();
-    //DTO , state
-    formData.append('shopfile', shopfile);
-    formData.append('title', shopData.title);
-    formData.append('location', shopData.location);
-    formData.append('category', shopData.category);
+
+    if (shopfile) {
+      // 수정한 이미지 파일 데이터가 있으면
+      formData.append('shopfile', shopfile); // formData에 추가해서 보내기 (수정안하면 안보냄냄)
+    }
+    formData.append('title', shopData.shopOwnerDTO.title);
+    formData.append('location', shopData.shopOwnerDTO.location);
+    formData.append('category', shopData.shopOwnerDTO.category);
     formData.append('days', selectedDayNames);
     formData.append('openTime', openTime);
     formData.append('closeTime', closeTime);
     formData.append('lat', position.center.lat);
     formData.append('lng', position.center.lng);
+
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
 
     //Back에 넘겨줄 정보들 putOne(매개변수)
     postOne(shopId, shopDetailId, infoType, formData)
@@ -236,34 +265,19 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
       .catch((err) => console.log('전송실패', err));
   };
 
-  //점포 삭제 이벤트
-  const handleDelete = () => {
-    deleteOne(shopId, infoType, shopDetailId).then((data) => {
-      console.log(data);
-      setResult('Deleted');
-    });
-  };
-
-  const { moveToMain } = useCustomMove();
+  const { moveToShop } = useCustomMove();
 
   const closeModal = () => {
     setResult(null); // result
-    moveToMain('/'); // 등록 시 메인으로 이동
+    moveToShop(shopId); // 수정완료 시 상세로 이동
   };
 
   // 일반 input태그 값 작성시 실행되는 함수
   // 수정된 정보들
   const handleChangeShop = (e) => {
-    shopData[e.target.name] = e.target.value;
-    setShop({ ...shopData });
+    shopData.shopOwnerDTO[e.target.name] = e.target.value;
+    setShopData({ ...shopData });
   };
-
-  // 기존이미지 삭제 delete 버튼 클릭 이벤트 핸들러
-  const deleteOldImages = (filename) => {
-    // 기존 이미지에서 삭제 버튼 클릭한 이미지 제외시키기
-    const resultFileNames = shopData.shop; // ??
-  };
-
   // 오픈 시간 변경 함수
   const handleOpenTimeChange = (newOpenTime) => {
     if (newOpenTime >= closeTime) {
@@ -288,365 +302,327 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     <div>
       <>
         {/* 결과 모달창 */}
-        {result == 'Modified' ? (
+        {result == 'Modified' && (
           <ResultModal
             title={'상점 수정 성공'}
-            content={`${shopData.shopDTO.shopId}번 수정 완료`}
+            content={`${shopId}번 상점 수정 완료`}
             callbackFn={closeModal}
           />
-        ) : result == 'Deleted' ? (
-          <ResultModal
-            title={'상점 삭제 성공'}
-            content={`${shopData.shopDTO.shopId}번 삭제 완료`}
-            callbackFn={closeModal}
-          />
-        ) : (
-          <></>
         )}
         {/* 결과 모달창 끝 */}
         {/* 검색(엔터)용 버튼(히든) */}
-
         <button
           type="button"
           onClick={activeButton}
           className="hidden"
         ></button>
 
-        <form className="lg:grid lg:grid-cols-2 lg:gap-x-12 xl:gap-x-16">
-          {/*첫번째 레이아웃*/}
-          <div>
+        {loaded ? (
+          <form className="mx-auto w-full max-w-4xl px-4 py-6">
+            {/*첫번째 레이아웃*/}
             <div>
-              {/* 검색창 시작 */}
-              <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
-                <input
-                  onChange={handleInputChange}
-                  onKeyDown={enter}
-                  name="search"
-                  type="search"
-                  placeholder="주소/위치 검색..."
-                  aria-label="Search"
-                  className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm/6 text-black outline-none placeholder:text-black
-                            focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
-                />
-                <MagnifyingGlassIcon
-                  aria-hidden="true"
-                  className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-black peer-focus:text-gray-400"
-                />
-              </div>{' '}
-              {/* 지도 부분 시작 */}
-              <Map // 지도를 표시할 Container
-                id="map"
-                center={position.center}
-                isPanto={position.isPanto}
-                style={{
-                  width: '100%',
-                  height: '50vh',
-                  borderRadius: '15px',
-                  borderColor: 'blue',
-                }}
-                level={3} // 지도의 확대 레벨
-                onClick={(_, mouseEvent) => {
-                  const latlng = mouseEvent.latLng;
-                  setPosition({
-                    center: { lat: latlng.getLat(), lng: latlng.getLng() },
-                    isPanto: true,
-                  });
-                }}
-              >
-                <MapMarker position={position.center ?? center} />
-              </Map>
-              <p className="text-center pt-1 text-gray-600">
-                제보/등록할 점포의 위치를 클릭해서 지정해주세요!
-              </p>
-              <div id="clickLatlng" className="hidden">
-                {position &&
-                  `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
-              </div>{' '}
-              {/* 지도 끝 */}
-              <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                {/* 점포 사진 시작 */}
-                <div className="col-span-full">
-                  <label className="block text-sm/6 font-medium text-gray-900">
-                    점포 사진
-                  </label>
-                  {/* Product image */}
-                  <div className="lg:col-span-2 lg:row-end-1">
-                    <img
-                      alt={''}
-                      src={`${host}/api/shop/view/${shopData.shopOwnerDTO.filename}`}
-                      className="aspect-[4/3] w-full rounded-lg bg-gray-100 object-cover
-            "
-                    />
-                  </div>
-                  <div className="absolute inset-0 flex items-end p-6">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        deleteOldImages(shopData.shopOwnerDTO.filename)
-                      }
-                      className="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                    <div className="text-center">
-                      {image ? (
-                        <img
-                          src={image}
-                          alt="Preview"
-                          className="mx-auto rounded-lg max-w-full h-auto"
-                          style={{ width: '400px', height: '300px' }} // 이미지 크기 조정
-                        />
-                      ) : (
-                        <PhotoIcon
-                          aria-hidden="true"
-                          className="mx-auto size-12 text-gray-300"
-                        />
-                      )}
-                      {!image && (
-                        <>
-                          <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
-                            <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                              <span>점포 사진 등록</span>
-                              <input
-                                type="file"
-                                ref={uploadRef}
-                                accept="image/*"
-                                multiple={false}
-                                className="sr-only"
-                                onChange={handleImageChange}
-                              />
-                            </label>
-                          </div>
-                          <p className="text-xs/5 text-gray-500">
-                            파일 크기 10MB까지 업로드 가능합니다.
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </div>{' '}
-                {/* 점포 사진 끝 */}
-              </div>
-            </div>
-          </div>
-          {/* Order summary 두번째 레이아웃 */}
-          <div className="">
-            <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
-              {/* 점포명 */}
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="address"
-                  className="block text-sm/6 font-medium text-gray-700"
-                >
-                  점포명
-                </label>
-                <div className="mt-2">
-                  <input
-                    name="title"
-                    type="text"
-                    value={shopData.shopOwnerDTO.title}
-                    onChange={handleChangeShop}
-                    placeholder="아몬드 붕붕"
-                    autoComplete="street-address"
-                    className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
-              </div>
-              {/* 점포 주소 */}
-              <div className="sm:col-span-2 mb-4">
-                <label
-                  htmlFor="location"
-                  className="block text-sm/6 font-medium text-gray-700"
-                >
-                  점포 주소
-                </label>
-                <div className="mt-2">
-                  <input
-                    name="location"
-                    value={shopData.shopOwnerDTO.location}
-                    onChange={handleChangeShop}
-                    type="text"
-                    placeholder="신촌역 7번 출구 앞"
-                    className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                  />
-                </div>
-              </div>
-              <div className="col-span-full space-y-6">
-                {/*요일*/}
-                <div className="sm:col-span-2">
-                  <fieldset>
-                    <legend className="text-base text-gray-900">
-                      영업일 선택: {selectedDayNames}
-                    </legend>
-                    <div className="mt-1 divide-y divide-gray-200 border-b border-t border-gray-200">
-                      <div className="flex flex-wrap gap-2">
-                        {' '}
-                        {/* flexbox와 wrap 사용하여 가로로 배치 */}
-                        {days.map((day) => (
+              <div>
+                <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+                  {/* old images */}
+                  {/* <div className="span-full">
+                    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+                      <div className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:grid-rows-2 sm:gap-x-6 lg:gap-8">
+                        <div className="group relative aspect-[2/1] overflow-hidden rounded-lg sm:row-span-2 sm:aspect-square">
+                          <img
+                            alt={shopData.shopOwnerDTO.title}
+                            src={`${host}/api/shop/view/${shopData.shopOwnerDTO.filename}`}
+                            className="absolute size-full object-cover group-hover:opacity-75"
+                          />
                           <div
-                            key={day.id}
-                            className="flex items-center gap-1 pl-2"
-                          >
-                            <div className="min-w-0 flex-1 text-sm/6">
-                              <label className="select-none font-medium text-gray-900">
-                                {day.name}
-                              </label>
-                            </div>
-                            <div className="flex h-6 shrink-0 items-center">
-                              <div className="group grid size-4 grid-cols-1">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedDays.includes(day.id)}
-                                  value={shop.days}
-                                  onChange={(e) =>
-                                    handleCheckboxChange(
-                                      day.id,
-                                      e.target.checked
-                                    )
-                                  }
-                                  className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                                />
-                              </div>
-                            </div>
+                            aria-hidden="true"
+                            className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50"
+                          />
+                          <div className="absolute inset-0 flex items-end p-6">
+                            <button
+                              type="button"
+                              onClick={() => deleteOldImages(image)}
+                              className="rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            >
+                              Delete
+                            </button>
                           </div>
-                        ))}
+                        </div>
                       </div>
                     </div>
-                    <div className="mb-4">{/* 여백 */}</div>
-                  </fieldset>
-                </div>
-                {/* 오픈시간과 마감시간을 한 줄에 배치 */}
-                <div className="sm:col-span-2 space-y-1 mt-2">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex flex-col">
-                      {/* 오픈시간 */}
-                      <label
-                        htmlFor="city"
-                        className="block text-sm/6 font-medium text-gray-700"
-                      >
-                        오픈시간
-                      </label>
-                      <TimePicker
-                        onChange={handleOpenTimeChange} // 오픈 시간 변경 시 호출
-                        value={openTime} // 현재 오픈 시간 값
-                        disableClock // 시계 안보이게 하기
-                      />
+                  </div> */}
+                  {/* 점포 사진 시작 */}
+                  <div className="col-span-full">
+                    <label className="block text-sm/6 font-medium text-gray-900">
+                      점포 사진 <span className="text-red-500">*</span>
+                    </label>
+                    <div className="mt-2 flex justify-center rounded-lg  bg-white border-gray-900/25 px-6 py-10">
+                      <div className="text-center">
+                        <img
+                          src={
+                            image ||
+                            `${host}/api/shop/view/${shopData.shopOwnerDTO.filename}`
+                          }
+                          alt="Preview"
+                          className="mx-auto rounded-lg max-w-full h-auto"
+                          style={{ width: '300px', height: '300px' }} // 이미지 크기 조정
+                        />
+                        <div className="mt-4">
+                          <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2">
+                            <span>사진 변경</span>
+                            <input
+                              type="file"
+                              ref={uploadRef}
+                              accept="image/*"
+                              multiple={false}
+                              className="sr-only bg-white"
+                              onChange={handleImageChange}
+                            />
+                          </label>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2 text-center">
+                          파일 크기 10MB까지 업로드 가능합니다.
+                        </p>
+                      </div>
                     </div>
-
-                    {/* 마감시간 */}
-                    <div className="flex flex-col">
-                      <label
-                        htmlFor="city"
-                        className="block text-sm/6 font-medium text-gray-700"
-                      >
-                        마감시간
-                      </label>
-                      <TimePicker
-                        onChange={handleCloseTimeChange} // 마감 시간 변경 시 호출
-                        value={closeTime} // 현재 마감 시간 값
-                        disableClock // 시계 안보이게 하기
-                      />
-                    </div>
-                  </div>
+                  </div>{' '}
+                  {/* 점포 사진 끝 */}
                 </div>
-                {/* 영업시간 오류 메시지 표시 */}
-                <div className="sm:col-span-2 space-y-2">
-                  {error && <p style={{ color: 'red' }}>{error}</p>}{' '}
-                  <div className="hidden">
-                    <p>오픈 시간: {openTime}</p>
-                    <p>마감 시간: {closeTime}</p>
-                  </div>
-                </div>
-                {/*카테고리*/}
-                <div className="mt-6 sm:col-span-2 space-y-2">
+              </div>
+            </div>
+            {/* Order summary 두번째 레이아웃 */}
+            <div className="">
+              <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
+                {/* 점포명 */}
+                <div className="sm:col-span-2">
                   <label
-                    htmlFor="category"
+                    htmlFor="address"
                     className="block text-sm/6 font-medium text-gray-700"
                   >
-                    카테고리
+                    점포명 <span className="text-red-500">*</span>
                   </label>
-                  <div className="mt-2 grid grid-cols-1">
-                    <select
-                      id="category"
-                      name="category"
-                      value={shopData.shopOwnerDTO.category}
-                      onChange={handleSelectChange}
-                      autoComplete="category-name"
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    >
-                      <option>카테고리를 선택하세요</option>
-                      <option value="bread">붕어빵</option>
-                      <option value="snack">분식</option>
-                      <option value="sweetPotato">군고구마</option>
-                      <option value="hotteok">호떡</option>
-                    </select>
-                    <ChevronDownIcon
-                      aria-hidden="true"
-                      className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                  <div className="mt-2">
+                    <input
+                      name="title"
+                      type="text"
+                      value={shopData.shopOwnerDTO.title}
+                      onChange={handleChangeShop}
+                      className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                     />
                   </div>
                 </div>
-                {/* '사업자 인증' 버튼 */}
-                {/* USER라면 사업자인증 버튼 안 보이게 */}
-                {shop.certificate ? (
-                  <div className="flex h-auto shrink-0 items-center space-x-4">
-                    <div className="group grid size-4 grid-cols-1">
-                      <input
-                        name="certificate"
-                        value={shopData.certificate}
-                        onChange={(e) =>
-                          handleCheckboxCertificate(e.target.checked)
-                        }
-                        type="checkbox"
-                        className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                {/* 검색창 시작 */}
+                <div className="col-span-full mb-4">
+                  <div className="bg-yellow-50 grid w-1/2 justify-self-center mb-3">
+                    <input
+                      onChange={handleInputChange}
+                      onKeyDown={enter}
+                      name="search"
+                      type="search"
+                      placeholder="주소/위치 검색..."
+                      aria-label="Search"
+                      className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm/6 text-black outline-none placeholder:text-black
+                            focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
+                    />
+                    <MagnifyingGlassIcon
+                      aria-hidden="true"
+                      className="pointer-events-none col-start-1 row-start-1 ml-3 size-5 self-center text-black peer-focus:text-gray-400"
+                    />
+                  </div>{' '}
+                  {/* 지도 부분 시작 */}
+                  <Map // 지도를 표시할 Container
+                    id="map"
+                    center={position.center}
+                    isPanto={position.isPanto}
+                    style={{
+                      width: '100%',
+                      height: '50vh',
+                      borderRadius: '15px',
+                      borderColor: 'blue',
+                    }}
+                    level={3} // 지도의 확대 레벨
+                    onClick={(_, mouseEvent) => {
+                      const latlng = mouseEvent.latLng;
+                      setPosition({
+                        center: { lat: latlng.getLat(), lng: latlng.getLng() },
+                        isPanto: true,
+                      });
+                    }}
+                  >
+                    <MapMarker position={position.center ?? center} />
+                  </Map>
+                  <p className="text-center pt-1 text-gray-600">
+                    제보/등록할 점포의 위치를 클릭해서 지정해주세요!
+                  </p>
+                  <div id="clickLatlng" className="hidden">
+                    {position &&
+                      `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
+                  </div>{' '}
+                </div>
+
+                {/* 지도 끝 */}
+                {/* 점포 주소 */}
+                <div className="sm:col-span-2 mb-4">
+                  <label
+                    htmlFor="location"
+                    className="block text-sm/6 font-medium text-gray-700"
+                  >
+                    점포 주소 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      name="location"
+                      value={shopData.shopOwnerDTO.location}
+                      onChange={handleChangeShop}
+                      type="text"
+                      placeholder="신촌역 7번 출구 앞"
+                      className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    />
+                  </div>
+                </div>
+
+                {/*요일*/}
+                <div className="col-span-full space-y-6">
+                  <div className="sm:col-span-2">
+                    <fieldset>
+                      <legend className="text-base text-gray-900">
+                        영업일 <span className="text-red-500">*</span>
+                      </legend>
+                      <div className="mt-1">
+                        <div className="flex flex-wrap gap-2">
+                          {days.map((day) => (
+                            <div
+                              key={day.id}
+                              className="flex items-center gap-1 pl-2"
+                            >
+                              <div className="min-w-0 flex-1 text-sm">
+                                <label className="select-none font-medium text-gray-900">
+                                  {day.name}
+                                </label>
+                              </div>
+                              <div className="flex h-6 shrink-0 items-center">
+                                <div className="group grid size-4 grid-cols-1">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedDays.includes(day.id)}
+                                    value={shop.days}
+                                    onChange={(e) =>
+                                      handleCheckboxChange(
+                                        day.id,
+                                        e.target.checked
+                                      )
+                                    }
+                                    className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="mb-4"></div>
+                    </fieldset>
+                  </div>
+                  {/* 오픈시간과 마감시간을 한 줄에 배치 */}
+                  <div className="sm:col-span-2 space-y-1 mt-2">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex flex-col">
+                        {/* 오픈시간 */}
+                        <label
+                          htmlFor="city"
+                          className="block text-sm/6 font-medium text-gray-700"
+                        >
+                          오픈시간
+                        </label>
+                        <TimePicker
+                          className="bg-white"
+                          onChange={handleOpenTimeChange} // 오픈 시간 변경 시 호출
+                          value={openTime} // 현재 오픈 시간 값
+                          disableClock // 시계 안보이게 하기
+                        />
+                      </div>
+
+                      {/* 마감시간 */}
+                      <div className="flex flex-col">
+                        <label
+                          htmlFor="city"
+                          className="block text-sm/6 font-medium text-gray-700"
+                        >
+                          마감시간
+                        </label>
+                        <TimePicker
+                          className="bg-white"
+                          onChange={handleCloseTimeChange} // 마감 시간 변경 시 호출
+                          value={closeTime} // 현재 마감 시간 값
+                          disableClock // 시계 안보이게 하기
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  {/* 영업시간 오류 메시지 표시 */}
+                  <div className="sm:col-span-2 space-y-2">
+                    {error && <p style={{ color: 'red' }}>{error}</p>}{' '}
+                    <div className="hidden">
+                      <p>오픈 시간: {openTime}</p>
+                      <p>마감 시간: {closeTime}</p>
+                    </div>
+                  </div>
+                  {/*카테고리*/}
+                  <div className="mt-6 sm:col-span-2 space-y-2">
+                    <label
+                      htmlFor="category"
+                      className="block text-sm/6 font-medium text-gray-700"
+                    >
+                      카테고리
+                    </label>
+                    <div className="mt-2 grid grid-cols-1">
+                      <select
+                        id="category"
+                        name="category"
+                        value={shopData.shopOwnerDTO.category}
+                        onChange={handleSelectChange}
+                        autoComplete="category-name"
+                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      >
+                        <option>카테고리를 선택하세요</option>
+                        <option value="bread">붕어빵</option>
+                        <option value="snack">분식</option>
+                        <option value="sweetPotato">군고구마</option>
+                        <option value="hotteok">호떡</option>
+                      </select>
+                      <ChevronDownIcon
+                        aria-hidden="true"
+                        className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
                       />
                     </div>
-                    <div className="flex text-lg">
-                      <label className="select-none font-medium text-gray-900">
-                        인증된 정보
-                        <span className="text-gray-400">
-                          (사업자 권한이 필요합니다.)
-                        </span>
-                      </label>
-                    </div>{' '}
                   </div>
-                ) : (
-                  <></>
-                )}
+                </div>
               </div>
-            </div>
-            {/* 버튼 시작 */}
-            <div className="px-4 py-6 mt-2 sm:px-6 flex justify-end">
-              {/* 점포 수정  */}
-              <button
-                type="button"
-                onClick={handleClickSave}
-                className="w-auto rounded-md border border-transparent bg-yellow-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              >
-                수정
-              </button>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="w-auto rounded-md border border-transparent bg-yellow-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              >
-                삭제
-              </button>
-              {/* 취소: 메인 페이지로 이동 */}
-              <button
-                type="button"
-                onClick={moveToMain}
-                className="w-auto ml-1 rounded-md border border-transparent px-4 py-3 text-base font-medium text-black shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-              >
-                취소
-              </button>
+              {/* 버튼 시작 */}
+              <div className="flex justify-end space-x-4 mt-2">
+                {/* 등록: 등록 성공 시 메인 페이지로 이동 */}
+                <button
+                  type="button"
+                  onClick={handleClickModifyOwner}
+                  className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-base font-medium rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                >
+                  수정완료
+                </button>
+                {/* 취소: 메인 페이지로 이동 */}
+                <button
+                  type="button"
+                  onClick={moveToShop}
+                  className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-base font-medium rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                >
+                  취소
+                </button>
+              </div>{' '}
+              {/* 버튼 끝 */}
             </div>{' '}
-            {/* 버튼 끝 */}
-          </div>{' '}
-          {/* 두 번째 레이아웃 끝 */}
-        </form>
+            {/* 두 번째 레이아웃 끝 */}
+          </form>
+        ) : (
+          <></>
+        )}
       </>
     </div>
   );

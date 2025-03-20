@@ -12,10 +12,6 @@ const DetailUserReviewComponent = ({
   ratingAvg,
 }) => {
   const memberCookie = getCookie('member');
-  const [showAll, setShowAll] = useState(false); // 더보기
-
-  // showAll ? 전체 리뷰 표시 : 리뷰 3개만 표시
-  const displayedReviews = showAll ? review : review.slice(0, 3);
   const host = `${API_SERVER_HOST}`;
 
   return (
@@ -85,17 +81,6 @@ const DetailUserReviewComponent = ({
           </div>
         </div>
       ))}
-      {/* 더보기 버튼 (리뷰가 3개 이상일 때만 표시)
-      {review.length > 3 && (
-        <div className="flex justify-center mt-2">
-          <button
-            onClick={() => setShowAll((prev) => !prev)}
-            className="text-blue-500 text-sm font-semibold hover:underline"
-          >
-            {showAll ? '접기 ▲' : '더보기 ▼'}
-          </button>
-        </div>
-      )} */}
     </div>
   );
 };

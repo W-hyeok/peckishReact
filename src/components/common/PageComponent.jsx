@@ -11,7 +11,7 @@ const PageComponent = ({ serverData, move }) => {
         {serverData.prev ? (
           <div
             onClick={() => move({ page: serverData.prevPage })}
-            className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+            className="inline-flex items-center cursor-pointer border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
           >
             <ArrowLongLeftIcon
               aria-hidden="true"
@@ -28,7 +28,7 @@ const PageComponent = ({ serverData, move }) => {
           <div
             key={pageNum}
             onClick={() => move({ page: pageNum })}
-            className={`inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium 
+            className={`inline-flex items-center cursor-pointer border-t-2 px-4 pt-4 text-sm font-medium 
               ${
                 serverData.current === pageNum
                   ? 'border-indigo-500 text-indigo-600'
@@ -44,7 +44,7 @@ const PageComponent = ({ serverData, move }) => {
         {serverData.next ? (
           <div
             onClick={() => move({ page: serverData.nextPage })}
-            className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+            className="inline-flex items-center cursor-pointer border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
           >
             Next
             <ArrowLongRightIcon

@@ -334,7 +334,7 @@ const AddComponent = () => {
         <></>
       )}
       <form>
-        <div className="flex min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8">
+        <div className="flex min-w-full min-h-full flex-1 flex-col justify-center sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-gray-900">
               회원가입
@@ -566,7 +566,7 @@ const AddComponent = () => {
                           사업자 등록번호 확인
                         </button>
                       )}
-                      <div className="mt-0 flex items-center justify-center gap-x-6">
+                      <div className="mt-2 flex items-center justify-center gap-x-6">
                         {isVerified && (
                           <button
                             type="button"

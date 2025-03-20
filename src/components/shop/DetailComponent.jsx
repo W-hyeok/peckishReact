@@ -135,6 +135,7 @@ const DetailComponent = ({ shop, shopId }) => {
               <DetailOwnerComponent
                 shop={shop}
                 shopId={shopId}
+                shopDetailId={shop.shopOwnerDTO.shopOwnerId}
                 infoType={OWNER}
                 mapData={mapData}
                 storeLoc={storeLoc}

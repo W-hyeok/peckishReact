@@ -17,11 +17,12 @@ const initState = {
 };
 
 const ListMemberComponent = () => {
-  const { page, size, moveToListmem, moveToRead, refresh } = useCustomMove();
+  const { page, moveToListmem, moveToRead, refresh } = useCustomMove();
   const [serverData, setServerData] = useState(initState);
+  const size = 10;
 
   useEffect(() => {
-    getAdminMemberList({ page, size: 10 }).then((data) => {
+    getAdminMemberList({ page, size }).then((data) => {
       console.log(data);
       setServerData(data);
     });
@@ -29,7 +30,7 @@ const ListMemberComponent = () => {
 
   const handlePageChange = (newPage) => {
     // 페이지 변경 시 데이터 조회
-    getAdminMemberList({ page: newPage, size: 10 }).then((data) => {
+    getAdminMemberList({ page: newPage, size }).then((data) => {
       console.log('멤버리스트 data 확인: {}', data);
       setServerData(data);
     });
@@ -44,31 +45,31 @@ const ListMemberComponent = () => {
               <tr>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   이메일
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   닉네임
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   전화번호
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   사업자 등록번호
                 </th>
                 <th
                   scope="col"
-                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0"
+                  className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0"
                 >
                   회원상태
                 </th>
@@ -82,19 +83,19 @@ const ListMemberComponent = () => {
                     onClick={() => moveToRead(member.email)}
                     className={`${member.memberStat === 2 ? 'hover:bg-red-200 cursor-pointer bg-red-300' : ''}`}
                   >
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                       {member.email}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                       {member.nickname}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                       {member.phone}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                       {member.businessNumber}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-md sm:text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                       {member.memberStat == 2 ? (
                         '승인 대기'
                       ) : member.memberStat == 1 ? (

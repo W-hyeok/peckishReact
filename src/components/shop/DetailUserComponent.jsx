@@ -48,19 +48,17 @@ const DetailUserComponent = ({
   storeLoc,
 }) => {
   console.log('DetailUser - shopDetailid : ', shopDetailId);
-  const [menuItems, setMenuItems] = useState([]);
-  const [review, setReview] = useState([]);
-  const [ratingAvg, setRatingAvg] = useState(null);
-  const [result, setResult] = useState(null);
+  const [menuItems, setMenuItems] = useState([]); // 메뉴목록 뿌리기
+  const [review, setReview] = useState([]); // 리뷰목록 뿌리기
+  const [ratingAvg, setRatingAvg] = useState(null); // 리뷰 별점 계산
+  const [result, setResult] = useState(null); // 모달 result
   const [menuRefresh, setMenuRefresh] = useState(false);
   const [reviewRefresh, setReviewRefresh] = useState(false);
-  const [shopRemoveFetch, setShopRemoveFetch] = useState(false);
-  const [shopRefresh, setShopRefresh] = useState(false);
   const [menuFetch, setMenuFetch] = useState(false);
   const [reviewFetch, setReviewFetch] = useState(false);
 
   // 점포 수정페이지로 이동
-  const { moveToUserShopModify, moveToShop } = useCustomMove();
+  const { moveToUserShopModify } = useCustomMove();
 
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
@@ -125,14 +123,6 @@ const DetailUserComponent = ({
     setResult(null);
   };
 
-  // 리뷰 삭제 모달 닫기
-  const ShopRemoveModal = () => {
-    setShopRefresh((prev) => !prev);
-    console.log('리뷰삭제 상세페이지로 이동');
-    moveToShop(shopId);
-    setResult(finishRemoveShop);
-  };
-
   // 점포 수정
   const handleUserShopModify = () => {
     console.log('User Shop - Modify');
@@ -141,15 +131,8 @@ const DetailUserComponent = ({
 
   // 점포 삭제
   const handleUserShopDelete = () => {
-    deleteOne(shopId, infoType, shopDetailId)
-      .then((data) => {
-        setShopRemoveFetch(false);
-        console.log('상점 제보 정보를 삭제합니다!!!');
-        console.log(data);
-        setShopRemoveFetch(true);
-        setResult('shopRemove');
-      })
-      .catch((err) => console.log('전송실패', err));
+    console.log('점포 삭제 모달 보여줘라');
+    setResult('shopRemove');
   };
 
   return (
@@ -188,16 +171,12 @@ const DetailUserComponent = ({
       )}
       {result === 'shopRemove' && (
         <RemoveModal
-          title={'제보 정보 삭제'}
-          content={'제보 정보가 삭제하시겠습니까?'}
-          callbackFn={ShopRemoveModal}
-        />
-      )}
-      {result === 'finishRemoveShop' && (
-        <ResultModal
-          title={'제보 정보 삭제'}
-          content={'제보 정보를 했습니다'}
+          title={'상점 정보 삭제'}
+          content={'상점 정보를 삭제하시겠습니까?'}
           callbackFn={closeModal}
+          shopId={shopId}
+          infoType={infoType}
+          shopDetailId={shopDetailId}
         />
       )}
 
@@ -440,7 +419,7 @@ const DetailUserComponent = ({
               </TabPanel>
             </TabPanels>
           </TabGroup>
-
+          {/* 버튼 */}
           <div className="flex justify-end space-x-4 mt-2">
             <button
               onClick={handleUserShopModify}

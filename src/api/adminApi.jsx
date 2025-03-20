@@ -10,6 +10,7 @@ export const getAdminList = async (pageParm) => {
   const result = await jwtAxios.get(`${prefix}/list`, {
     params: { page: page, size: size },
   });
+  console.log('*****visit-count 확인: {}', result.data.visitCount);
   return result.data; //PageResponseDTO
 };
 // 관리자 Shoplist 조회

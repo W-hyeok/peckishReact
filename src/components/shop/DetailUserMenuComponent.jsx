@@ -1,8 +1,6 @@
 import React from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
-import { TrashIcon } from '@heroicons/react/24/solid';
-import { deleteMenu } from '../../api/shopApi';
 import { API_SERVER_HOST } from '../../api/todoApi';
 
 const host = `${API_SERVER_HOST}`;
