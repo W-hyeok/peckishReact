@@ -17,7 +17,7 @@ const navigation = {
     },
     {
       name: 'GitHub',
-      href: '#',
+      href: 'https://github.com/W-hyeok/peckishReact',
       icon: (props) => (
         <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
           <path
@@ -46,29 +46,27 @@ const navigation = {
 
 export default function Footer() {
   return (
-    <footer className="bg-[#502902] pb-4" style={{ position: 'relative' }}>
-      <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-        <div className="space-y-2">
-          <p className="text-sm/6 text-gray-200 ml-10 pt-2">
-            &copy; 2025 "간식 혁명단", Inc. All rights reserved.
-          </p>
-          {/* <img
+    <footer className="bg-yellow-100/30 pb-4" style={{ position: 'relative' }}>
+      <div className="flex justify-between items-center mx-10 py-2 border-t border-yellow-500">
+        <p className="text-sm/6 text-gray-700 pt-2">
+          &copy; 2025 "간식 혁명단", Inc. All rights reserved.
+        </p>
+        {/* <img
               alt="Company name"
               src="/src/assets/fish_logo.png"
               className="h-9"
             /> */}
-          <div className="flex gap-x-6 ml-10">
-            {navigation.social.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="text-gray-200 hover:text-gray-600"
-              >
-                <span className="sr-only">{item.name}</span>
-                <item.icon aria-hidden="true" className="size-6" />
-              </Link>
-            ))}
-          </div>
+        <div className="flex gap-x-6 ml-10">
+          {navigation.social.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              className="text-gray-500 hover:text-gray-900"
+            >
+              <span className="sr-only">{item.name}</span>
+              <item.icon aria-hidden="true" className="size-6" />
+            </Link>
+          ))}
         </div>
       </div>
     </footer>

@@ -79,13 +79,18 @@ const GoogleTranslate = () => {
           console.log('저장된 언어:', cookieLang);
         }}
       >
+        {/* 언어 쿠키 있으면 그걸로, 없으면 기본값으로 렌더링 */}
         {cookieLang ? (
-          <Flag code={cookieLang.flag} />
+          <>
+            <Flag code={cookieLang.flag} />
+            {cookieLang.name}
+          </>
         ) : (
-          <Flag code={languageState.flag} />
+          <>
+            <Flag code={languageState.flag} />
+            {languageState.name}
+          </>
         )}
-
-        {languageState.name}
         {/* 번역버튼 hover 시 리스트 표시 */}
         {isClicked && (
           <>

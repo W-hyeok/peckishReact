@@ -6,7 +6,7 @@ const BasicLayout = ({ children }) => {
     <>
       {/* // flex...: 화면 전체 높이 설정 */}
       <div className="max-h-max p-3 bg-yellow-100/30 ">
-        <div
+        {/* <div
           aria-hidden="true"
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
         >
@@ -17,12 +17,12 @@ const BasicLayout = ({ children }) => {
             }}
             className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#e48989] to-[#e696c2ce] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
           />
-        </div>
+        </div> */}
         <Header />
         <div className="min-h-screen">{children}</div>{' '}
         {/* 남은 공간 차지 / footer는 항상 페이지 하단에 고정 */}
       </div>
-      <Footer className="relative max-h-max bottom-0" />
+      <Footer className="relative max-h-max bottom-0 " />
     </>
   );
 };

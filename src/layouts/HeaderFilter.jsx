@@ -197,7 +197,7 @@ export default function HeaderFilter({
               </PopoverButton>
             </div>
           </div>
-          <div className="hidden border-t border-white/100 py-2 lg:block">
+          <div className="hidden border-t border-yellow-500 py-2 lg:block">
             <div className="grid grid-cols-11 items-center">
               {/* 필터 선택 부분 */}
               <div className="col-span-4">
