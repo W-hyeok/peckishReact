@@ -65,8 +65,8 @@ const ModifyComponent = () => {
     const currentNickname = e.target.value;
     setNickname(currentNickname);
 
-    if (currentNickname.length < 2 || currentNickname.length > 5) {
-      setNicknameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요!');
+    if (currentNickname.length < 2 || currentNickname.length > 20) {
+      setNicknameMessage('닉네임은 2글자 이상 20글자 이하로 입력해주세요!');
       setIsNickname(false);
     } else {
       setNicknameMessage('사용가능한 닉네임 입니다.');
@@ -102,6 +102,16 @@ const ModifyComponent = () => {
     }
   };
 
+  const deleteDashHandler = useCallback(
+    (e) => {
+      if (e.which === 8 && phone.charAt(phone.length - 1) === '-') {
+        e.preventDefault();
+        setPhone((prev) => prev.slice(0, prev.length - 2));
+      }
+    },
+    [phone, setPhone]
+  );
+
   const [shopfile, setShopfile] = useState(null); // shopfile 상태 추가
   const [image, setImage] = useState(null);
 
@@ -122,11 +132,11 @@ const ModifyComponent = () => {
   const handleClickModify = () => {
     console.log('카카오 logInfo 확인: {}', loginInfo);
 
-      // shopfile 상태가 제대로 설정되었는지 확인
-      if (!shopfile) {
-        console.error('사진 파일이 없습니다!');
-        return; // 파일이 없으면 저장하지 않음
-      }
+    // shopfile 상태가 제대로 설정되었는지 확인
+    if (!shopfile) {
+      console.error('사진 파일이 없습니다!');
+      return; // 파일이 없으면 저장하지 않음
+    }
 
     // 저장 요청
     // const profImg = uploadRef.current.files[0];
@@ -279,7 +289,7 @@ const ModifyComponent = () => {
                       <input
                         name="nickname"
                         type="text"
-                        placeholder='닉네임은 2~5 사이 글자로 이용하세요'
+                        placeholder="닉네임은 2~20 사이 글자로 이용하세요"
                         value={nickname}
                         onChange={onChangeNickname}
                         required
@@ -300,6 +310,7 @@ const ModifyComponent = () => {
                         value={phone}
                         required
                         onChange={addHyphen}
+                        onKeyDown={deleteDashHandler}
                         className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                       />
                       <p className="text-sm text-gray-900">{phoneMessage}</p>
@@ -346,7 +357,6 @@ const ModifyComponent = () => {
                       </div>
                     </div>
                   </div>
-
 
                   <div className="mt-6 flex items-center justify-end gap-x-6">
                     <button

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { postMemberAdd } from '../../api/memberApi';
 import useCustomLogin from '../../hooks/useCustomLogin';
 import { PhotoIcon } from '@heroicons/react/24/solid';
@@ -91,8 +91,8 @@ const AddComponent = () => {
     const currentNickname = e.target.value;
     setNickname(currentNickname);
 
-    if (currentNickname.length < 2 || currentNickname.length > 5) {
-      setNicknameMessage('닉네임은 2글자 이상 5글자 이하로 입력해주세요!');
+    if (currentNickname.length < 2 || currentNickname.length > 20) {
+      setNicknameMessage('닉네임은 2글자 이상 20글자 이하로 입력해주세요!');
       setIsNickname(false);
     } else {
       setNicknameMessage('올바른 형식의 닉네임 입니다.');
@@ -127,6 +127,16 @@ const AddComponent = () => {
       onChangePhone(currentNumber);
     }
   };
+
+  const deleteDashHandler = useCallback(
+    (e) => {
+      if (e.which === 8 && phone.charAt(phone.length - 1) === '-') {
+        e.preventDefault();
+        setPhone((prev) => prev.slice(0, prev.length - 2));
+      }
+    },
+    [phone, setPhone]
+  );
 
   // MemberType
   const [memberType, setMemberType] = useState('USER');
@@ -407,7 +417,7 @@ const AddComponent = () => {
                   <input
                     name="nickname"
                     type="text"
-                    placeholder="닉네임은 2~5 사이 글자로 이용하세요"
+                    placeholder="닉네임은 2~20 사이 글자로 이용하세요"
                     value={nickname}
                     onChange={onChangeNickname}
                     required
@@ -428,6 +438,7 @@ const AddComponent = () => {
                     value={phone}
                     required
                     onChange={addHyphen}
+                    onKeyDown={deleteDashHandler}
                     className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                   <p className="text-sm text-gray-900">{phoneMessage}</p>

@@ -100,6 +100,8 @@ const DetailComponent = ({ shop, shopId }) => {
 
         {/* TabPanels containing content for each tab */}
         <TabPanels as={Fragment}>
+          {/* 상점이 존재하지 않는다면?  */}
+          {shop.shopDTO.exist ? <></> : <></>}
           {/* 첫 번째 탭: 제보된 정보 */}
           <TabPanel className="p-6 text-sm text-gray-500">
             {shop.shopDTO.userData ? (
@@ -143,8 +145,8 @@ const DetailComponent = ({ shop, shopId }) => {
             {shop.shopDTO.ownerData ? (
               <DetailOwnerComponent
                 shop={shop}
-                shopId={shopId}
                 shopDetailId={shop.shopOwnerDTO.shopOwnerId}
+                shopId={shopId}
                 infoType={OWNER}
                 mapData={mapData}
                 storeLoc={storeLoc}

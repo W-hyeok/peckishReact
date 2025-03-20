@@ -301,6 +301,7 @@ const AddComponent = () => {
     console.log('영업시작 시간:', openTime);
     console.log('영업시간 종료:', closeTime);
     console.log('카테고리:', shop.category);
+    console.log('owner 정보 여부 : ', shop.certificate);
 
     // console.log(shop);
 

@@ -4,7 +4,7 @@ import TimePicker from 'react-time-picker';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import useKakaoLoader from '../../hooks/useKakaoLoader';
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { getOne, postShop, postUSERShop } from '../../api/shopApi';
+import { getOne, postOWNERShop, postShop } from '../../api/shopApi';
 import ResultModal from '../common/ResultModal';
 import useCustomMove from '../../hooks/useCustomMove';
 import { getCookie } from '../../util/cookieUtil';
@@ -286,17 +286,17 @@ const AddExtraOWNERComponent = ({ shopId }) => {
     postOWNERShop(shopId, formData)
       .then((data) => {
         console.log(data);
-        console.log('인증정보 저장해랏');
+        console.log('인증정보 저장해라잇~');
         setResult(data.RESULT);
       })
       .catch((err) => console.log('전송실패', err));
   };
 
-  const { moveToMain } = useCustomMove();
+  const { moveToShop } = useCustomMove();
 
   const closeModal = () => {
     setResult(null); // result
-    moveToMain('/'); // 등록 시 메인으로 이동
+    moveToShop(shopId);
   };
 
   // 일반 input태그 값 작성시 실행되는 함수
@@ -327,6 +327,7 @@ const AddExtraOWNERComponent = ({ shopId }) => {
 
   const [defaultShop, setDefaultShop] = useState(null);
 
+  // 상점 정보 힌트를 주기 위해서 기존 정보 불러오기
   useEffect(() => {
     getOne(shopId).then((data) => {
       console.log(data.RESULT);
@@ -335,12 +336,18 @@ const AddExtraOWNERComponent = ({ shopId }) => {
     });
   }, [shopId]);
 
+  // 취소 버튼 클릭시
+  const handleClickBack = () => {
+    console.log('취소버튼 클릭 : 이전페이지로 이동합니다');
+    moveToShop(shopId);
+  };
+
   return (
     <>
       {/* 결과 모달창 */}
       {result ? (
         <ResultModal
-          title={'상점 등록 성공'}
+          title={'추가 상점 정보 등록 성공'}
           content={`${result}번 등록 완료`}
           callbackFn={closeModal}
         />
@@ -359,7 +366,7 @@ const AddExtraOWNERComponent = ({ shopId }) => {
 
           <form className="mx-auto w-full max-w-4xl px-4 py-6">
             <p className="text-xl font-semibold">
-              {defaultShop.shopUserDTO.title} {'>'} 제보 정보 추가
+              {defaultShop.shopUserDTO.title} {'>'} 인증 정보 추가
             </p>
             <div>
               <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
@@ -683,7 +690,7 @@ const AddExtraOWNERComponent = ({ shopId }) => {
               </button>
               <button
                 type="button"
-                onClick={moveToMain}
+                onClick={handleClickBack}
                 className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
               >
                 취소

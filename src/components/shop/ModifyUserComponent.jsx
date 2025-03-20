@@ -238,7 +238,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     }
   };
 
-  //저장시 발생할 이벤트
+  //수정정시 발생할 이벤트
   const handleClickModifyUser = () => {
     console.log('점포 수정할 shopId : ', shopId);
     console.log('점포 수정할 shopUserId : ', shopDetailId);
@@ -275,6 +275,11 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
 
   const { moveToShop } = useCustomMove();
 
+  // 수정 취소 버튼 클릭시 이벤트
+  const handleShopDetail = () => {
+    console.log('수정 취소');
+    moveToShop(shopId);
+  };
   const closeModal = () => {
     setResult(null); // result
     moveToShop(shopId); // 수정완료 시 상세로 이동
@@ -617,10 +622,10 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                 >
                   수정완료
                 </button>
-                {/* 취소: 메인 페이지로 이동 */}
+                {/* 취소: 이전 페이지(점포 상세)로 이동 */}
                 <button
                   type="button"
-                  onClick={moveToShop}
+                  onClick={handleShopDetail}
                   className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-base font-medium rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
                 >
                   취소

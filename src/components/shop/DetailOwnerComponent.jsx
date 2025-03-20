@@ -41,9 +41,9 @@ function classNames(...classes) {
 
 const DetailOwnerComponent = ({
   shop,
+  shopDetailId,
   shopId,
   infoType,
-  shopDetailId,
   mapData,
   storeLoc,
 }) => {
@@ -63,6 +63,7 @@ const DetailOwnerComponent = ({
 
   // 점포 수정페이지로 이동
   const { moveToOwnerShopModify } = useCustomMove();
+
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
       setMenuFetch(false);

@@ -56,8 +56,8 @@ const LeftModifyInfoComponent = () => {
     const currentNickname = e.target.value;
     setNickname(currentNickname);
 
-    if (currentNickname.length < 2 || currentNickname.length > 5) {
-      setNicknameMessage('2~5 글자 사이로 입력해주세요!');
+    if (currentNickname.length < 2 || currentNickname.length > 20) {
+      setNicknameMessage('2~20 글자 사이로 입력해주세요!');
       setIsNickname(false);
     } else {
       setNicknameMessage('사용가능한 닉네임 입니다.');
@@ -90,6 +90,16 @@ const LeftModifyInfoComponent = () => {
       onChangePhone(currentNumber);
     }
   };
+
+  const deleteDashHandler = useCallback(
+    (e) => {
+      if (e.which === 8 && phone.charAt(phone.length - 1) === '-') {
+        e.preventDefault();
+        setPhone((prev) => prev.slice(0, prev.length - 2));
+      }
+    },
+    [phone, setPhone]
+  );
 
   // MemberType
   const [memberType, setMemberType] = useState('');
@@ -304,6 +314,7 @@ const LeftModifyInfoComponent = () => {
                 <input
                   name="nickname"
                   type="text"
+                  placeholder="닉네임은 2~20 사이 글자로 이용하세요"
                   value={nickname}
                   onChange={onChangeNickname}
                   required
@@ -323,6 +334,7 @@ const LeftModifyInfoComponent = () => {
                   value={phone}
                   required
                   onChange={addHyphen}
+                  onKeyDown={deleteDashHandler}
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
                 <p className="text-sm text-gray-900">{phoneMessage}</p>

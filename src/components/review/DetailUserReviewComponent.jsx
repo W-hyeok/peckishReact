@@ -5,6 +5,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { getCookie } from '../../util/cookieUtil';
 import { API_SERVER_HOST } from '../../api/todoApi';
+import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 
 const DetailUserReviewComponent = ({
   review = [],
@@ -20,7 +21,7 @@ const DetailUserReviewComponent = ({
       {review.map((reviewUser) => (
         <div
           key={reviewUser.reviewId}
-          className="flex items-center py-6 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
+          className="flex items-center gap-x-4 py-6 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
         >
           <div className="flex-none">
             <img
@@ -30,9 +31,10 @@ const DetailUserReviewComponent = ({
             />
           </div>
           <div className="flex-1">
+            {/* 작성자(이메일/타임스탬프) 한 줄 */}
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <h3 className="font-medium text-gray-900">
+                <h3 className="font-light text-gray-700 text-xs">
                   {reviewUser.email}
                 </h3>
                 <p className="text-xs text-gray-500">
@@ -44,7 +46,7 @@ const DetailUserReviewComponent = ({
                 <Menu as="div" className="relative flex-none">
                   <MenuButton className="p-1 text-gray-500 hover:text-gray-900">
                     <EllipsisVerticalIcon
-                      className="size-5"
+                      className="w-5 h-5"
                       aria-hidden="true"
                     />
                   </MenuButton>
@@ -65,18 +67,35 @@ const DetailUserReviewComponent = ({
               )}
             </div>
 
+            {/* 별점 및 별점 점수 한 줄 */}
             <div className="mt-1 flex items-center gap-x-1 text-xs text-gray-700">
-              {[0, 1, 2, 3, 4].map((rating) => (
-                <StarIcon
-                  key={rating}
-                  className={`w-5 h-5 ${reviewUser.rating > rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                />
-              ))}
-              <span>({ratingAvg?.toFixed(1) || '0.0'})</span>
+              {[0, 1, 2, 3, 4].map((index) => {
+                if (reviewUser.rating >= index + 1) {
+                  return (
+                    <FaStar key={index} className="w-5 h-5 text-yellow-400" />
+                  );
+                } else if (reviewUser.rating >= index + 0.5) {
+                  return (
+                    <FaStarHalfAlt
+                      key={index}
+                      className="w-5 h-5 text-yellow-400"
+                    />
+                  );
+                } else {
+                  return (
+                    <FaRegStar key={index} className="w-5 h-5 text-gray-300" />
+                  );
+                }
+              })}
+              <span className="text-xs text-gray-700">
+                ({reviewUser.rating.toFixed(1)})
+              </span>
             </div>
+
+            {/* 리뷰 내용 (별점/작성자 아래 한 줄) */}
             <div
               dangerouslySetInnerHTML={{ __html: reviewUser.content }}
-              className="mt-1 text-sm text-gray-600"
+              className="mt-1 text-left text-xs font-semibold text-gray-600"
             />
           </div>
         </div>
