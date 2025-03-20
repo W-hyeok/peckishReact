@@ -23,7 +23,7 @@ const host = API_SERVER_HOST;
 const user = {
   name: '',
   // email: 'boongeubbang@example.com',
-  imageUrl: '/src/assets/icon/profile.png',
+  imageUrl: { profile },
 };
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
