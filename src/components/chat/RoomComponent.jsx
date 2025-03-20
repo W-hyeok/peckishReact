@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getMsgs } from '../../api/roomApi';
 import { getCookie } from '../../util/cookieUtil';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import ChatSideBarComponenet from './ChatSideBarComponenet';
 
 export const WS_SERVER_HOST = 'localhost:8080';
+import '../../css/common.css';
 
 const RoomComponent = () => {
   const { room_ID } = useParams();
@@ -178,9 +179,19 @@ const RoomComponent = () => {
   };
 
   return (
-    <>
-      <main className="mb-[100px] max-w-screen-xl p-4 relative justify-center">
-        <div className="flex flex-row justify-center bg-[#FFD396] bg-opacity-15 w-full max-w-5xl mx-auto h-[40rem] ">
+    <div className="overflow-y-auto">
+      <main className="max-w-screen-xl mx-auto p-4">
+        <div className="flex justify-end w-full max-w-5xl mx-auto mb-4">
+          <div className="max-w-xl">
+            <Link
+              to="/"
+              className="block text-right px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              홈으로
+            </Link>
+          </div>
+        </div>
+        <div className="relative flex flex-row justify-center bg-opacity-15 w-full max-w-5xl mx-auto h-[40rem]">
           <ChatSideBarComponenet
             socket={socket}
             resetUnreadTrigger={resetUnreadTrigger}
@@ -189,57 +200,54 @@ const RoomComponent = () => {
             {/* 메시지 창 */}
             <div
               className="flex flex-col flex-grow p-4 overflow-y-auto"
+              q
               style={{ scrollbarWidth: 'thin', scrollbarColor: '#888 #f1f1f1' }}
             >
               <ul>
-                {messages.map((msg, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className={
-                        index === messages.length - 1 ? 'mb-[50px]' : ''
-                      }
-                    >
-                      {msg.email === memberEmail ? (
-                        <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
-                          <div>
-                            <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
-                              <p className="text-sm">{msg.content}</p>
-                            </div>
-                            <span className="text-xs text-gray-500 leading-none">
-                              {msg.reg_date}
-                            </span>
+                {messages.map((msg, index) => (
+                  <li
+                    key={index}
+                    className={index === messages.length - 1 ? 'mb-[50px]' : ''}
+                  >
+                    {msg.email === memberEmail ? (
+                      <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+                        <div>
+                          <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg">
+                            <p className="text-sm">{msg.content}</p>
                           </div>
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
-                            <img
-                              src={msg.profileFilename}
-                              alt="member Avatar"
-                              className="w-10 h-10 object-cover"
-                            />
-                          </div>
+                          <span className="text-xs text-gray-500 leading-none">
+                            {msg.reg_date}
+                          </span>
                         </div>
-                      ) : (
-                        <div className="flex w-full mt-2 space-x-3 max-w-xs">
-                          <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
-                            <img
-                              src={msg.profileFilename}
-                              alt="member Avatar"
-                              className="w-10 h-10 object-cover"
-                            />
-                          </div>
-                          <div>
-                            <div className="bg-gray-100 p-3 rounded-r-lg rounded-bl-lg">
-                              <p className="text-sm">{msg.content}</p>
-                            </div>
-                            <span className="text-xs text-gray-500 leading-none">
-                              {msg.reg_date}
-                            </span>
-                          </div>
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
+                          <img
+                            src={msg.profileFilename}
+                            alt="member Avatar"
+                            className="w-10 h-10 object-cover"
+                          />
                         </div>
-                      )}
-                    </li>
-                  );
-                })}
+                      </div>
+                    ) : (
+                      <div className="flex w-full mt-2 space-x-3 max-w-xs">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
+                          <img
+                            src={msg.profileFilename}
+                            alt="member Avatar"
+                            className="w-10 h-10 object-cover"
+                          />
+                        </div>
+                        <div>
+                          <div className="bg-gray-100 p-3 rounded-r-lg rounded-bl-lg">
+                            <p className="text-sm">{msg.content}</p>
+                          </div>
+                          <span className="text-xs text-gray-500 leading-none">
+                            {msg.reg_date}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </li>
+                ))}
                 <div ref={messagesEndRef} />
               </ul>
             </div>
@@ -257,7 +265,6 @@ const RoomComponent = () => {
                 placeholder="메시지를 입력하세요"
                 className="flex-grow p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
               />
-
               <button
                 onClick={sendMessage}
                 className="px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -267,9 +274,8 @@ const RoomComponent = () => {
             </div>
           </div>
         </div>
-        <button>목록으로</button>
       </main>
-    </>
+    </div>
   );
 };
 
