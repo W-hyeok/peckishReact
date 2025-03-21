@@ -364,7 +364,7 @@ const AddComponent = () => {
                     value={email}
                     onChange={onChangeEmail}
                     required
-                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                   <p className="text-sm text-gray-900">{emailMessage}</p>
                 </div>
@@ -383,7 +383,7 @@ const AddComponent = () => {
                     required
                     autoComplete="current-password"
                     placeholder="숫자+영문자+특수문자 5~15 글자 사이 입력해주세요!"
-                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                   <p className="text-sm text-gray-900">{passwordMessage}</p>
                 </div>
@@ -401,7 +401,7 @@ const AddComponent = () => {
                     onChange={onChangePasswordConfirm}
                     required
                     autoComplete="current-password"
-                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                   <p className="text-sm text-gray-900">
                     {passwordConfirmMessage}
@@ -421,7 +421,7 @@ const AddComponent = () => {
                     value={nickname}
                     onChange={onChangeNickname}
                     required
-                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                   <p className="text-sm text-gray-900">{nicknameMessage}</p>
                 </div>
@@ -439,7 +439,7 @@ const AddComponent = () => {
                     required
                     onChange={addHyphen}
                     onKeyDown={deleteDashHandler}
-                    className="block w-full rounded-md bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                    className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                   <p className="text-sm text-gray-900">{phoneMessage}</p>
                 </div>
@@ -564,7 +564,7 @@ const AddComponent = () => {
                           placeholder='"-" 은 생략하고 숫자만 입력하세요'
                           onChange={(e) => setBusinessNumber(e.target.value)}
                           required
-                          className="block w-full rounded-md mt-2 bg-white bg-opacity-5 px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                          className="block w-full rounded-md mt-2 bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                           // disabled={isVerified}
                         />
                       </div>

@@ -20,6 +20,8 @@ const ACCESS_TOKEN_URL = `https://kauth.kakao.com/oauth/token`;
 // 카카오 인가 요청경로(링크) 크리에이터
 export const getKakaoLoginLink = () => {
   const kakaoURL = `${AUTH_CODE_PATH}?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&prompt=login`;
+
+  console.log('카카오 인증 1단계 : 인가 요청경로(URL) 생성');
   return kakaoURL;
 };
 
@@ -41,6 +43,8 @@ export const getAccessToken = async (authCode) => {
   console.log(result.data);
   const accessToken = result.data.access_token;
   setCookie('kakaoAccessToken', accessToken, 1);
+
+  console.log('카카오 로그인 인증 2단계 : 액세스 토큰 요청');
   return accessToken;
 };
 
@@ -49,5 +53,7 @@ export const getMemberWithAccessToken = async (accessToken) => {
   const result = await axios.get(
     `${API_SERVER_HOST}/api/member/kakao?accessToken=${accessToken}`
   );
+
+  console.log('카카오 로그인 인증 3단계 : 액세스 토큰으로 로그인 요청');
   return result.data;
 };

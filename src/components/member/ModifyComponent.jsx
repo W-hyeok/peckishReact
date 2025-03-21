@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { putMemberModifyKakao } from '../../api/memberApi';
 import useCustomLogin from '../../hooks/useCustomLogin';
@@ -20,7 +20,7 @@ const ModifyComponent = () => {
     setEmail(loginInfo.email);
     // setPassword('abcdef');
     setNickname(loginInfo.nickname);
-    setPhone(loginInfo.phone);
+    // setPhone(loginInfo.phone);
   }, [loginInfo]);
 
   // 비밀번호 유효성 검사
@@ -216,11 +216,11 @@ const ModifyComponent = () => {
       <form>
         <div className="flex min-h-full flex-1 flex-col justify-center py-1 sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
-            <img
+            {/* <img
               alt="Your Company"
               src="/src/assets/fish_logo.png"
               className="mx-auto h-8 w-auto"
-            />
+            /> */}
             <h3 className="mt-1 text-center text-1xl/9 font-bold tracking-tight text-gray-900">
               카카오 회원 정보 수정
             </h3>
@@ -250,7 +250,7 @@ const ModifyComponent = () => {
                       <input
                         name="password"
                         type="password"
-                        placeholder="숫자+영문자+특수문자 5~15 글자 사이 입력해주세요!"
+                        placeholder="숫자+영문자+특수문자 5~15 글자 입력하세요!"
                         value={password}
                         onChange={onChangePassword}
                         required
@@ -289,7 +289,7 @@ const ModifyComponent = () => {
                       <input
                         name="nickname"
                         type="text"
-                        placeholder="닉네임은 2~20 사이 글자로 이용하세요"
+                        placeholder="닉네임은 2~20 사이 글자로 입력하세요"
                         value={nickname}
                         onChange={onChangeNickname}
                         required

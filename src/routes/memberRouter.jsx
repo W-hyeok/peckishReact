@@ -35,9 +35,9 @@ const memberRouter = () => {
       path: 'login',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <LogoutRequired>
-            <Login />
-          </LogoutRequired>
+          {/* <LogoutRequired> */}
+          <Login />
+          {/* </LogoutRequired> */}
         </Suspense>
       ),
     },
@@ -87,9 +87,9 @@ const memberRouter = () => {
       path: 'modify',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <LoginRequired>
-            <MemberModify />
-          </LoginRequired>
+          {/* <LoginRequired> */}
+          <MemberModify />
+          {/* </LoginRequired> */}
         </Suspense>
       ),
     },
