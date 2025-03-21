@@ -420,7 +420,7 @@ const LeftModifyInfoComponent = () => {
                       onChange={(e) => setBusinessNumber(e.target.value)}
                       required
                       className="w-full p-2 border rounded"
-                      disabled={isVerified}
+                      // disabled={isVerified}
                     />
                   </div>
                   {!isVerified && (

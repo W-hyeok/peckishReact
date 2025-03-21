@@ -63,7 +63,7 @@ const OpenCloseComponent = () => {
             className="mx-auto h-10 w-auto"
           /> */}
           <h2 className="mt-20 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            영업 개시와 종료 중 하나를 선택해 주세요 !
+            영업 개시와 종료를 확인해 주세요!
           </h2>
         </div>
 
