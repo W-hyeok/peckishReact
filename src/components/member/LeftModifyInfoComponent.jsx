@@ -258,7 +258,7 @@ const LeftModifyInfoComponent = () => {
           {/* <div className="p-6"> */}
           {/* <div className="space-y-12"> */}
           <div className="mt-2 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 ">
-            <div className="grid col-span-full flex items-center justify-center">
+            <div className="grid col-span-full items-center justify-center">
               <div className="mt-2 flex items-center gap-x-3">
                 <img
                   alt={email}
