@@ -11,6 +11,7 @@ import { getCookie } from '../../util/cookieUtil';
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
 import { API_SERVER_HOST } from '../../api/todoApi';
+import { getMap } from '../../api/mapApi';
 
 // 지도 라이브러리 사용 위해 처음에 로드해야 함
 const { kakao } = window;
@@ -61,7 +62,12 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   const [error, setError] = useState(''); // 오류 메시지 상태 추가
   const [loaded, setLoaded] = useState(false); // 데이터 로딩 체크
 
-  // DB에서 데이터 조회
+  const [storeLoc, setStoreLoc] = useState({
+    center: { lat: '', lng: '' },
+    isPanto: true,
+  }); // 현위치
+
+  // shopId로 점포 및 위치 정보 조회
   useEffect(() => {
     getOne(shopId).then((data) => {
       const old = data.RESULT;
@@ -76,6 +82,18 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
       );
       setSelectedDays(names);
       setLoaded(true);
+    });
+    getMap(shopId).then((data) => {
+      setStoreLoc((store) => ({
+        ...store,
+        center: {
+          lat: data.lat,
+          lng: data.lng,
+        },
+      }));
+      console.log('mapData: ', data);
+      console.log('위도:', data.lat);
+      console.log('경도:', data.lng);
     });
   }, [shopId]);
 
@@ -92,7 +110,7 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   /*
   const [shoplat, setShoplat] = useState({});
   const [shoplng, setShoplng] = useState({});
- 
+
   // 값을 업데이트하는 함수 예시
   const updateShopLocation = (position.center.lat, position.center.lng) => {
     // 새로운 위도(lat) 값으로 shoplat 업데이트
@@ -112,24 +130,24 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
   // 검색값 (텍스트)
   const [searchText, SetSearchText] = useState('');
   // 좌표를 주소로 변환 후 저장할 텍스트
-  const [addtoText, setAddtoText] = useState('');
+  // const [addtoText, setAddtoText] = useState('');
   // 주소를 좌표로 변환하는 함수
   const geocoder = new kakao.maps.services.Geocoder();
   // 장소를 좌표로 변환하는 함수
   const ps = new kakao.maps.services.Places();
   // 좌표를 주소로 변환하는 함수
-  const coord2Address = (lat, lng, callback) => {
-    const coords = new kakao.maps.LatLng(lat, lng);
-    geocoder.coord2Address(coords.getLat(), coords.getLng, (result, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        const address = result[0].address.address_name;
-        console.log(address);
-        callback(address); // 주소를 콜백으로 반환
-      } else {
-        callback('주소를 못찾겠어용');
-      }
-    });
-  };
+  // const coord2Address = (lat, lng, callback) => {
+  //   const coords = new kakao.maps.LatLng(lat, lng);
+  //   geocoder.coord2Address(coords.getLat(), coords.getLng, (result, status) => {
+  //     if (status === kakao.maps.services.Status.OK) {
+  //       const address = result[0].address.address_name;
+  //       console.log(address);
+  //       callback(address); // 주소를 콜백으로 반환
+  //     } else {
+  //       callback('주소를 못찾겠어용');
+  //     }
+  //   });
+  // };
   // 주소에 해당하는 마커 표시
   useEffect(() => {
     // 주소를 좌표로 변환하여 state에 저장
@@ -238,13 +256,13 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     }
   };
 
-  //수정정시 발생할 이벤트
+  // 수정 시 발생할 이벤트
   const handleClickModifyUser = () => {
     console.log('점포 수정할 shopId : ', shopId);
     console.log('점포 수정할 shopUserId : ', shopDetailId);
     console.log('점포 수정할 infoType : ', infoType);
 
-    // 수정시 넘어갈 formData
+    // 수정 시 넘어갈 formData
     const formData = new FormData();
 
     if (shopfile) {
@@ -257,8 +275,8 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
     formData.append('days', selectedDayNames);
     formData.append('openTime', openTime);
     formData.append('closeTime', closeTime);
-    formData.append('lat', position.center.lat);
-    formData.append('lng', position.center.lng);
+    formData.append('lat', storeLoc.center.lat);
+    formData.append('lng', storeLoc.center.lng);
 
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
@@ -446,8 +464,8 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                   {/* 지도 부분 시작 */}
                   <Map // 지도를 표시할 Container
                     id="map"
-                    center={position.center}
-                    isPanto={position.isPanto}
+                    center={storeLoc.center}
+                    isPanto={storeLoc.isPanto}
                     style={{
                       width: '100%',
                       height: '50vh',
@@ -457,20 +475,20 @@ const ModifyUserComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                     level={3} // 지도의 확대 레벨
                     onClick={(_, mouseEvent) => {
                       const latlng = mouseEvent.latLng;
-                      setPosition({
+                      setStoreLoc({
                         center: { lat: latlng.getLat(), lng: latlng.getLng() },
                         isPanto: true,
                       });
                     }}
                   >
-                    <MapMarker position={position.center ?? center} />
+                    <MapMarker position={storeLoc.center ?? center} />
                   </Map>
                   <p className="text-center pt-1 text-gray-600">
                     제보/등록할 점포의 위치를 클릭해서 지정해주세요!
                   </p>
                   <div id="clickLatlng" className="hidden">
-                    {position &&
-                      `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
+                    {storeLoc &&
+                      `위도: ${storeLoc.center.lat}, \r\n 경도: ${storeLoc.center.lng}`}
                   </div>{' '}
                 </div>
 

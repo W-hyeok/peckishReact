@@ -7,7 +7,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { postShop } from '../../api/shopApi';
 import ResultModal from '../common/ResultModal';
 import useCustomMove from '../../hooks/useCustomMove';
-import { getCookie } from '../../util/cookieUtil';
+import { getCookie, setCookie } from '../../util/cookieUtil';
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
 import { Link } from 'react-router-dom';
@@ -49,6 +49,7 @@ const center = {
 const AddComponent = () => {
   //email정보 쿠키에서 꺼내오기기
   const memberCookie = getCookie('member');
+  const tmpOwned = getCookie('tmpOwned');
   //console.log(memberCookie.email);
 
   const loginState = useSelector((state) => state.loginSlice);
@@ -301,10 +302,10 @@ const AddComponent = () => {
     console.log('영업시작 시간:', openTime);
     console.log('영업시간 종료:', closeTime);
     console.log('카테고리:', shop.category);
-    console.log('owner 정보 여부 : ', shop.certificate);
-
-    // console.log(shop);
-
+    console.log('owner 정보 여부 : ', shop.certificate); // true/false
+    if (shop.certificate) {
+      setCookie('tmpOwned', true, 1);
+    }
     //등록시 넘어올 formdata
     const formData = new FormData();
     //DTO , state
@@ -675,7 +676,9 @@ const AddComponent = () => {
               </>
             ) : (
               <>
-                {memberCookie.owned == true ? (
+                {/* checkRole == USER가 아니면(OWNER면) 표시 */}
+                {/* 쿠키에 owned가 true거나 직전에 등록한 적이 있어서 tmpOwned가 true면 아래 출력 */}
+                {memberCookie.owned == true || tmpOwned == true ? (
                   <div className="flex h-auto shrink-0 items-center space-x-4">
                     <div className="group grid size-4 grid-cols-1">
                       <input
@@ -695,6 +698,7 @@ const AddComponent = () => {
                     </div>
                   </div>
                 ) : (
+                  // 셋 다 아니면 이하 표시
                   <div className="flex h-auto shrink-0 items-center space-x-4">
                     <div className="group grid size-4 grid-cols-1">
                       <input

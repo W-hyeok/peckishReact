@@ -183,8 +183,9 @@ export default function Header() {
             </div>
 
             {/* Menu button */}
-            <div className="absolute right-0 shrink-0 lg:hidden">
+            <div className="flex space-x-4 absolute right-0 shrink-0 lg:hidden">
               {/* Mobile menu button */}
+              <GoogleTranslate className="" />
               <PopoverButton className=" group relative inline-flex items-center justify-center bg-transparent p-2 text-indigo-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open main menu</span>

@@ -51,7 +51,7 @@ const AddExtraOWNERComponent = ({ shopId }) => {
 
   //email정보 쿠키에서 꺼내오기
   const memberCookie = getCookie('member');
-  //console.log(memberCookie.email);
+  const tmpOwned = getCookie('tmpOwned');
 
   const loginState = useSelector((state) => state.loginSlice);
   const checkRole = loginState.roleNames;
@@ -634,7 +634,7 @@ const AddExtraOWNERComponent = ({ shopId }) => {
                 </>
               ) : (
                 <>
-                  {memberCookie.owned == true ? (
+                  {memberCookie.owned == true || tmpOwned == true ? (
                     <div className="flex h-auto shrink-0 items-center space-x-4">
                       <div className="group grid size-4 grid-cols-1">
                         <input
