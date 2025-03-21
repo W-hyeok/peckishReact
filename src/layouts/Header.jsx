@@ -175,19 +175,6 @@ export default function Header() {
             </div>
 
             {/* Menu button */}
-            <div className="flex space-x-4 absolute right-0 shrink-0 lg:hidden">
-              {/* Mobile menu button */}
-              <GoogleTranslate className="" />
-              <PopoverButton className=" group relative inline-flex items-center justify-center bg-transparent p-2 text-indigo-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
-                <span className="absolute -inset-0.5" />
-                <span className="sr-only">Open main menu</span>
-                <img
-                  src={`${host}/api/member/view/${cookieMember.profileFilename}`}
-                  aria-hidden="true"
-                  className="size-9 rounded-full border-[1px] border-black border-solid"
-                />
-              </PopoverButton>
-            </div>
           </div>
         </div>
 
