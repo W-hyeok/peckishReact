@@ -16,6 +16,15 @@ const GoogleTranslate = () => {
   // );
   const [isClicked, setIsClicked] = useState(false); // 클릭 여부 상태값
   const [isTranslated, setIsTranstlated] = useState(false); // 번역 모드 상태값 (번역 중임을 알림)
+  const [isMobile, setIsMobile] = useState(false); // 모바일 여부 상태
+
+  useEffect(() => {
+    // 모바일 판별: 화면 너비가 768px 이하이면 모바일로 간주
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const addGoogleTranslateScript = document.createElement('script');
@@ -83,12 +92,12 @@ const GoogleTranslate = () => {
         {cookieLang ? (
           <>
             <Flag code={cookieLang.flag} />
-            {cookieLang.name}
+            {!isMobile && cookieLang.name}
           </>
         ) : (
           <>
             <Flag code={languageState.flag} />
-            {languageState.name}
+            {!isMobile && languageState.name}
           </>
         )}
         {/* 번역버튼 hover 시 리스트 표시 */}

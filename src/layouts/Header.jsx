@@ -92,30 +92,22 @@ export default function Header() {
         <div className="mx-10">
           <div className="relative flex items-center justify-center pt-3 pb-3 lg:justify-between">
             {/* Logo */}
-            <div className="absolute flex left-0 shrink-0 lg:static">
+            <div className="flex items-center">
               <Link to={'/'} className="flex items-center">
                 <img
                   alt="Your Company"
                   src={fishLogo}
                   className="h-[40px] w-auto"
                 />
-                <span className="h-[40px] px-4 text-3xl font-extrabold flex items-center justify-center text-[#422006]">
+                <span className="h-[40px] px-4 text-xl font-extrabold flex items-center justify-center text-[#422006]">
                   배고픈 순간!
                 </span>
               </Link>
             </div>
 
             {/* Right section on desktop */}
-            <div className="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
-              {/* <button
-                type="button"
-                className="relative shrink-0 rounded-full p-1 text-gray-100 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-              >
-                <span className="absolute -inset-1.5" />
-                <span className="sr-only">View notifications</span>
-                <BellIcon aria-hidden="true" className="size-6" />
-              </button> */}
-              <GoogleTranslate className="absolute" />
+            <div className="flex items-center">
+              <GoogleTranslate className="lg:block hidden" />
 
               {/* Profile dropdown */}
               <Menu as="div" className="relative ml-4 shrink-0">
@@ -311,6 +303,7 @@ export default function Header() {
             </div>
           </PopoverPanel>
         </div>
+        <div className="w-full px-4 md:px-10 py-2 border-t border-yellow-500"></div>
       </Popover>
     </div>
   );
