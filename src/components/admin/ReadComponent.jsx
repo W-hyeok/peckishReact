@@ -185,7 +185,7 @@ const ReadComponent = ({ email }) => {
             />
           </dd>
         </div>
-        <div className="grid lg:grid-flow-col justify-center gap-2 mb-4">
+        <div className="grid lg:grid-flow-col justify-center lg:float-right gap-2 mb-4">
           {member.memberStat === 2 && (
             <>
               <button
@@ -247,21 +247,14 @@ const ReadComponent = ({ email }) => {
           )}
           {member.memberStat === 4 && (
             <>
-              <button
+              {/* <button
                 type="button"
                 onClick={() => handleAction(email)}
                 className="positiveBtn"
                 // className="rounded-md bg-blue-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
               >
                 재승인
-              </button>
-              <button
-                type="button"
-                onClick={() => handleActionReturn(email)}
-                className="negativeBtn"
-              >
-                반려
-              </button>
+              </button> */}
               <button
                 type="button"
                 onClick={() => navigate(-1)}

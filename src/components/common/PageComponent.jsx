@@ -23,7 +23,7 @@ const PageComponent = ({ serverData, move }) => {
           <></>
         )}
       </div>
-      <div className="hidden md:-mt-px md:flex">
+      <div className="md:-mt-px md:flex">
         {serverData.pageNumList.map((pageNum) => (
           <div
             key={pageNum}

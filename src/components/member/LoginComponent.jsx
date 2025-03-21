@@ -34,6 +34,9 @@ const LoginComponent = () => {
       } else if (data.memberStat == 2) {
         setResult('login_failure_2');
         doLogout();
+      } else if (data.memberStat == 3) {
+        setResult('login_failure_3');
+        doLogout();
       } else if (data.memberStat == 4) {
         setResult('login_failure_4');
         doLogout();
@@ -82,6 +85,12 @@ const LoginComponent = () => {
           <ResultModal
             title={'로그인 실패'}
             content={`${email}님은 관리자 승인 대기중입니다`}
+            callbackFn={closeModalError}
+          />
+        ) : result === 'login_failure_3' ? (
+          <ResultModal
+            title={'로그인 실패'}
+            content={`${email}님은 관리자가 승인을 취소하였습니다`}
             callbackFn={closeModalError}
           />
         ) : result === 'login_failure_4' ? (

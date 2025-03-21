@@ -87,18 +87,12 @@ const ListShopComponent = () => {
                     {shop.title}
                   </td> */}
                   <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
-                    {shop.isExist ? (
-                      <span className="text-green-600">폐업중</span>
-                    ) : (
-                      <span className="text-red-600">운영중</span>
-                    )}
+                    {shop.isExist ? <span>폐업중</span> : <span>운영중</span>}
                   </td>
                   <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
                     <span
                       className={`inline-flex rounded-lg text-nowrap text-md sm:text-xs font-thin ${
-                        shop.certificate
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-yellow-100 text-yellow-800'
+                        shop.certificate ? 'text-red-900' : 'text-blue-800'
                       }`}
                     >
                       {shop.certificate ? '사업자 인증' : '소비자 제보'}

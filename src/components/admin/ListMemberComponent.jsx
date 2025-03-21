@@ -81,25 +81,27 @@ const ListMemberComponent = () => {
                   <tr
                     key={member.email}
                     onClick={() => moveToRead(member.email)}
-                    className={`${member.memberStat === 2 ? 'hover:bg-red-200 cursor-pointer bg-red-300' : ''}`}
+                    className={`${member.memberStat === 2 ? 'hover:bg-red-100 cursor-pointer bg-red-200' : ''}`}
                   >
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin cursor-pointer text-gray-900 sm:pl-0">
                       {member.email}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin cursor-pointer text-gray-900 sm:pl-0">
                       {member.nickname}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin cursor-pointer text-gray-900 sm:pl-0">
                       {member.phone}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin cursor-pointer text-gray-900 sm:pl-0">
                       {member.businessNumber}
                     </td>
-                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin text-gray-900 sm:pl-0">
+                    <td className="py-3.5 pl-4 pr-3 text-left text-nowrap text-xs font-thin cursor-pointer text-gray-900 sm:pl-0">
                       {member.memberStat == 2 ? (
                         '승인 대기'
                       ) : member.memberStat == 1 ? (
                         '활동중 회원'
+                      ) : member.memberStat == 3 ? (
+                        <span className="text-red-600">승인 취소</span>
                       ) : member.memberStat == 4 ? (
                         <span className="text-red-600">승인 반려</span>
                       ) : (
