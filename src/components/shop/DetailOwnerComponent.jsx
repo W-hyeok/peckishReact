@@ -39,6 +39,17 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+// days 데이터 (예시)
+const days = [
+  { id: 1, name: '월' },
+  { id: 2, name: '화' },
+  { id: 3, name: '수' },
+  { id: 4, name: '목' },
+  { id: 5, name: '금' },
+  { id: 6, name: '토' },
+  { id: 7, name: '일' },
+];
+
 const DetailOwnerComponent = ({
   shop,
   shopDetailId,
@@ -46,6 +57,7 @@ const DetailOwnerComponent = ({
   infoType,
   mapData,
   storeLoc,
+  membercookie,
 }) => {
   console.log('DetailOwner - shopDetailId : ', shopDetailId);
 
@@ -88,6 +100,31 @@ const DetailOwnerComponent = ({
       setRatingAvg(data);
     });
   }, [shopId, infoType, reviewRefresh]);
+
+  // 요일 배열
+  const daysData = (() => {
+    const daylist = shop.shopOwnerDTO.days; // DB에서 가져온 값
+    // raw가 문자열인 경우 처리
+    if (typeof daylist === 'string') {
+      // raw가 JSON 배열 형식(예: '["월","화","수"]')인지 확인
+      if (daylist.trim().startsWith('[')) {
+        try {
+          return JSON.parse(daylist);
+        } catch (e) {
+          return daylist
+            .replace(/^\[|\]$/g, '')
+            .split(',')
+            .map((item) => item.trim());
+        }
+      } else {
+        return daylist.includes(',')
+          ? daylist.split(',').map((item) => item.trim())
+          : [daylist.trim()];
+      }
+    }
+    // raw가 문자열이 아니면 그대로 반환
+    return daylist;
+  })();
 
   // 리뷰 작성 모달
   const handleClickReview = () => {
@@ -186,6 +223,8 @@ const DetailOwnerComponent = ({
     }
   };
 
+  console.log('owner- email ', shop.shopOwnerDTO.email);
+  console.log('로그인한 회원 email', membercookie.email);
   return (
     <>
       {result === 'review' && (
@@ -392,7 +431,7 @@ const DetailOwnerComponent = ({
                       </div>
                     </dd>
                   </dl>
-                  <dl className="p-6">
+                  {/* <dl className="p-6">
                     <dt className="text-xl text-gray-900">영업일</dt>
                     <dd className="text-lg text-gray-700">
                       <input
@@ -415,7 +454,47 @@ const DetailOwnerComponent = ({
                         className="block w-full rounded-md bg-white px-4 py-3 text-lg text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
                       />
                     </dd>
+                  </dl> */}
+                  <dl className="p-6">
+                    <dt className="text-xl text-gray-900">영업일 & 영업시간</dt>
+                    <dd className="text-lg text-gray-700">
+                      <div
+                        // input처럼 보이도록 스타일링한 div (textarea의 리사이즈 표시 제거)
+                        className="block w-full rounded-md bg-white px-4 py-3 text-lg outline outline-1 outline-gray-300 focus:outline focus:outline-2 focus:outline-indigo-600"
+                        // whiteSpace: 'pre-wrap'을 통해 개행 문자를 반영, userSelect를 false로 설정해 텍스트 선택 방지
+                        style={{
+                          whiteSpace: 'pre-wrap',
+                          fontFamily: 'inherit',
+                          userSelect: 'none',
+                        }}
+                      >
+                        {days.map((day) => {
+                          // DB의 daysData와 상수 배열의 day.name을 비교 (이제 DB 값은 "월", "화" 등 그대로 저장됨)
+                          const isOpen = daysData.includes(day.name);
+                          // 영업일이면 영업시간, 아니면 "휴무" 문자열 지정
+                          const timeDisplay = isOpen
+                            ? `${shop.shopOwnerDTO.openTime} - ${shop.shopOwnerDTO.closeTime}`
+                            : '휴무';
+                          return (
+                            <div key={day.id}>
+                              {/* 요일은 그대로 출력 (substring 사용 불필요) */}
+                              <span>{day.name} </span>
+                              {isOpen ? (
+                                // 영업일인 경우 일반 텍스트로 영업시간 출력
+                                <span>{timeDisplay}</span>
+                              ) : (
+                                // 영업일이 아닌 경우 "휴무"를 빨간 글씨로 출력 (Tailwind CSS 클래스 사용)
+                                <span className="text-red-500">
+                                  {timeDisplay}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </dd>
                   </dl>
+
                   <dl className="p-6">
                     <dt className="text-lg text-gray-900">문의하기</dt>
                     <dd className="text-md text-gray-700">
@@ -428,6 +507,25 @@ const DetailOwnerComponent = ({
                       </button>
                     </dd>
                   </dl>
+                </div>
+                {/* 버튼 */}
+                <div className="flex justify-end space-x-4 mt-2">
+                  {membercookie.email === shop.shopOwnerDTO.email && (
+                    <>
+                      <button
+                        onClick={handleOwnerShopModify}
+                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        수정
+                      </button>
+                      <button
+                        onClick={handleOwnerShopDelete}
+                        className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                      >
+                        삭제
+                      </button>
+                    </>
+                  )}
                 </div>
               </TabPanel>
 
@@ -481,21 +579,6 @@ const DetailOwnerComponent = ({
               </TabPanel>
             </TabPanels>
           </TabGroup>
-          {/* 버튼 */}
-          <div className="flex justify-end space-x-4 mt-2">
-            <button
-              onClick={handleOwnerShopModify}
-              className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
-            >
-              수정
-            </button>
-            <button
-              onClick={handleOwnerShopDelete}
-              className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-            >
-              삭제
-            </button>
-          </div>
         </div>
       </div>
     </>

@@ -31,6 +31,7 @@ import {
 } from '../../api/reviewApi';
 import ResultModal from '../common/ResultModal';
 import RemoveModal from '../common/RemoveModal';
+import { getCookie } from '../../util/cookieUtil';
 
 const host = `${API_SERVER_HOST}`;
 const { kakao } = window;
@@ -39,15 +40,28 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
+// days 데이터 (예시)
+const days = [
+  { id: 1, name: '월' },
+  { id: 2, name: '화' },
+  { id: 3, name: '수' },
+  { id: 4, name: '목' },
+  { id: 5, name: '금' },
+  { id: 6, name: '토' },
+  { id: 7, name: '일' },
+];
+
 const DetailUserComponent = ({
   shop,
   shopDetailId,
   shopId,
   infoType,
+  membercookie,
   mapData,
   storeLoc,
 }) => {
   console.log('DetailUser - shopDetailid : ', shopDetailId);
+
   const [menuItems, setMenuItems] = useState([]); // 메뉴목록 뿌리기
   const [review, setReview] = useState([]); // 리뷰목록 뿌리기
   const [ratingAvg, setRatingAvg] = useState(null); // 리뷰 별점 계산
@@ -59,6 +73,33 @@ const DetailUserComponent = ({
 
   // 점포 수정페이지로 이동
   const { moveToUserShopModify } = useCustomMove();
+
+  // 요일 배열
+  const daysData = (() => {
+    const raw = shop.shopUserDTO.days; // DB에서 가져온 값
+    // raw가 문자열인 경우 처리
+    if (typeof raw === 'string') {
+      // raw가 JSON 배열 형식(예: '["월","화","수"]')인지 확인
+      if (raw.trim().startsWith('[')) {
+        try {
+          return JSON.parse(raw);
+        } catch (e) {
+          // JSON 형식이지만 파싱에 실패할 경우 fallback: 대괄호 제거 후 쉼표로 분리
+          return raw
+            .replace(/^\[|\]$/g, '')
+            .split(',')
+            .map((item) => item.trim());
+        }
+      } else {
+        // raw가 단일 문자나 쉼표로 구분된 문자열인 경우
+        return raw.includes(',')
+          ? raw.split(',').map((item) => item.trim())
+          : [raw.trim()];
+      }
+    }
+    // raw가 문자열이 아니면 그대로 반환
+    return raw;
+  })();
 
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
@@ -132,9 +173,12 @@ const DetailUserComponent = ({
   // 점포 삭제
   const handleUserShopDelete = () => {
     console.log('점포 삭제 모달 보여줘라');
+
     setResult('shopRemove');
   };
 
+  console.log('user - email', shop.shopUserDTO.email);
+  console.log('로그인한 회원 email', membercookie.email);
   return (
     <>
       {result === 'review' && (
@@ -169,6 +213,7 @@ const DetailUserComponent = ({
           callbackFn={closeModal}
         />
       )}
+
       {result === 'shopRemove' && (
         <RemoveModal
           title={'상점 정보 삭제'}
@@ -349,30 +394,76 @@ const DetailUserComponent = ({
                       </div>
                     </dd>
                   </dl>
-                  <dl className="p-6">
-                    <dt className="text-xl text-gray-900">영업일</dt>
+                  {/* <dl className="p-6">
+                    <dt className="text-xl text-gray-900">영업일 & 영업시간</dt>
                     <dd className="text-lg text-gray-700">
-                      <input
-                        name="title"
-                        type="text"
-                        value={shop.shopUserDTO.days}
-                        autoComplete="street-address"
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                      />
+                      {days.map((day) => {
+                        // 해당 요일이 영업일에 포함되어 있는지 체크
+                        const isOpen = openDays.includes(day.id);
+                        const timeDisplay = isOpen
+                          ? `${shop.shopUserDTO.openTime} ~ ${shop.shopUserDTO.closeTime}`
+                          : '휴무';
+                        // 요일 이름을 첫 글자만 추출 (예: '월요일' → '월')
+                        const shortDay = day.name.substring(0, 1);
+                        return (
+                          <div key={day.id} className="py-1">
+                            <strong>{shortDay}</strong> {timeDisplay}
+                          </div>
+                        );
+                      })}
+                    </dd>
+                  </dl> */}
+                  <dl className="p-6">
+                    <dt className="text-xl text-gray-900">영업일 & 영업시간</dt>
+                    <dd className="text-lg text-gray-700">
+                      <div
+                        className="block w-full rounded-md bg-white px-4 py-3 text-lg outline outline-1 outline-gray-300 focus:outline focus:outline-2 focus:outline-indigo-600"
+                        style={{
+                          whiteSpace: 'pre-wrap',
+                          fontFamily: 'inherit',
+                          userSelect: 'none',
+                        }}
+                      >
+                        {days.map((day) => {
+                          const isOpen = daysData.includes(day.name);
+                          const timeDisplay = isOpen
+                            ? `${shop.shopUserDTO.openTime} - ${shop.shopUserDTO.closeTime}`
+                            : '휴무';
+                          return (
+                            <div key={day.id}>
+                              <span>{day.name} </span>
+                              {isOpen ? (
+                                <span>{timeDisplay}</span>
+                              ) : (
+                                <span className="text-red-500">
+                                  {timeDisplay}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
                     </dd>
                   </dl>
-                  <dl className="p-6">
-                    <dt className="text-xl text-gray-900">영업시간</dt>
-                    <dd className="text-lg text-gray-700">
-                      <input
-                        name="title"
-                        type="text"
-                        value={`${shop.shopUserDTO.openTime} ~ ${shop.shopUserDTO.closeTime}`}
-                        autoComplete="street-address"
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                      />
-                    </dd>
-                  </dl>
+                </div>
+                {/* 버튼 */}
+                <div className="flex justify-end space-x-4 mt-2">
+                  <button
+                    onClick={handleUserShopModify}
+                    className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                  >
+                    수정
+                  </button>
+                  {membercookie.email === shop.shopUserDTO.email ? (
+                    <button
+                      onClick={handleUserShopDelete}
+                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                    >
+                      삭제
+                    </button>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               </TabPanel>
 
@@ -427,21 +518,6 @@ const DetailUserComponent = ({
               </TabPanel>
             </TabPanels>
           </TabGroup>
-          {/* 버튼 */}
-          <div className="flex justify-end space-x-4 mt-2">
-            <button
-              onClick={handleUserShopModify}
-              className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
-            >
-              수정
-            </button>
-            <button
-              onClick={handleUserShopDelete}
-              className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-            >
-              삭제
-            </button>
-          </div>
         </div>
       </div>
     </>
