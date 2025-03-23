@@ -118,43 +118,55 @@ const RoomList = () => {
             </Link>
           </div>
           <div className="container mx-auto"></div>
-          <ul className="col-span-full divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden border border-gray-300 dark:border-gray-600 rounded-lg mt-5 w-1/2 mx-auto">
-            {rooms.map((room, index) => (
-              <li
-                key={`${room.room_ID}-${index}`}
-                onClick={() => handleRoomClick(room.room_ID)}
-                className="bg-white hover:bg-gray-200 p-5 lg:p-5 sm:p-3"
-              >
-                <Link to={`/roomList/room/${room.room_ID}`}>
-                  <div className="flex items-center space-x-4 rtl:space-x-reverse">
-                    <div className="flex flex-shrink-0 -space-x-4 rtl:space-x-reverse">
-                      <img
-                        className="w-8 h-8 rounded-full"
-                        src={room.profileImage}
-                        alt="profileImage"
-                      />
-                    </div>
-                    <div className="flex-1 min-w-0 text-center">
-                      <p className="text-xl font-bold text-[#422006] truncate inline-flex items-center">
-                        {room.userNickname}
-                      </p>
-                      <p className="text-sm text-gray-400 truncate">
-                        {room.content}
-                      </p>
-                    </div>
-                    <div className="inline-flex w-8 h-8 items-center text-base font-semibold text-gray-700 dark:text-white"></div>
-                    {room.unreadCount > 0 && (
-                      <div className="flex-shrink-0">
-                        <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                          {room.unreadCount}
-                        </span>
+          {rooms.length === 0 ? (
+            // 채팅방이 없는 경우 문구 출력
+            <div className="flex flex-col items-center justify-center h-full py-20">
+            <div className="bg-white shadow-md rounded-lg p-8">
+              <p className="text-center text-2xl font-semibold text-gray-600">
+              문의 내역이 없습니다.
+              </p>
+            </div>
+          </div>
+          ) : (
+            // 채팅방이 존재하면 원래 로직대로 목록 출력
+            <ul className="col-span-full divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden border border-gray-300 dark:border-gray-600 rounded-lg mt-5 w-1/2 mx-auto">
+              {rooms.map((room, index) => (
+                <li
+                  key={`${room.room_ID}-${index}`}
+                  onClick={() => handleRoomClick(room.room_ID)}
+                  className="bg-white hover:bg-gray-200 p-5 lg:p-5 sm:p-3"
+                >
+                  <Link to={`/roomList/room/${room.room_ID}`}>
+                    <div className="flex items-center space-x-4 rtl:space-x-reverse">
+                      <div className="flex flex-shrink-0 -space-x-4 rtl:space-x-reverse">
+                        <img
+                          className="w-8 h-8 rounded-full"
+                          src={room.profileImage}
+                          alt="profileImage"
+                        />
                       </div>
-                    )}
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                      <div className="flex-1 min-w-0 text-center">
+                        <p className="text-xl font-bold text-[#422006] truncate inline-flex items-center">
+                          {room.userNickname}
+                        </p>
+                        <p className="text-sm text-gray-400 truncate">
+                          {room.content}
+                        </p>
+                      </div>
+                      <div className="inline-flex w-8 h-8 items-center text-base font-semibold text-gray-700 dark:text-white"></div>
+                      {room.unreadCount > 0 && (
+                        <div className="flex-shrink-0">
+                          <span className="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                            {room.unreadCount}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </main>
       </div>
     </BasicLayout>

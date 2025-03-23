@@ -47,7 +47,7 @@ const navigation = {
 export default function Footer() {
   return (
     <footer className="bg-yellow-100/30 pb-4" style={{ position: 'relative' }}>
-      <div className="flex justify-between items-center mx-10 py-2 border-t border-yellow-500">
+      <div className="flex justify-between items-center mx-10 py-2 border-t border-yellow-400">
         <p className="text-sm/6 text-gray-700 pt-2">
           &copy; 2025 "간식 혁명단", Inc. All rights reserved.
         </p>

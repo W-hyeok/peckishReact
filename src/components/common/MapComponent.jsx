@@ -492,11 +492,11 @@ function MapComponent({
               marginTop: '10px',
               left: '50%',
               transform: 'translateX(-50%)',
-              boxShadow: '0 2px 2px 2px rgba(0,0,0,0.4)',
+              boxShadow: '0 1px 1px 1px rgba(0,0,0,0.4)',
             }}
-            className="rounded-3xl bg-white border-[2px] border-blue-600 text-blue-600 font-semibold px-4 py-2 h-fit w-fit hover:bg-blue-600 hover:text-white"
+            className="locationBtn ml-5"
           >
-            현 위치에서 검색
+            내 주변 노점 탐색
           </button>
         )}
       </>

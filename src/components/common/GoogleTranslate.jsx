@@ -148,7 +148,6 @@ const ButtonCotainer = styled.li`
   border-radius: 8px;
   font-size: 14px;
   position: relative;
-  z-index: 999;
 `;
 
 const LanguageList = styled.ul`

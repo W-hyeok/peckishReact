@@ -20,15 +20,11 @@ const RightComponent = ({ email }) => {
       current: true,
     },
     {
-      name: '방문한 가게',
-      href: `/member/read/${email}`,
+      name: '문의 내역',
+      href: `/roomList`,
       current: false,
     },
-    {
-      name: '즐겨찾는 가게 ',
-      href: `/member/read/${email}`,
-      current: false,
-    },
+
   ];
 
   const clickTabs = (click) => {
@@ -39,6 +35,12 @@ const RightComponent = ({ email }) => {
 
   const [cookieEmail, setCookieEmail] = useState(null);
   const [shops, setShops] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
+
 
   useEffect(() => {
     getShopList(email).then((data) => {
@@ -179,23 +181,51 @@ const RightComponent = ({ email }) => {
       ) : (
         <section aria-labelledby="section-1-title">
           <div>
-            <div className="grid grid-cols-1 sm:hidden">
+            <div className="grid grid-cols-1 sm:hidden relative">
               {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
               <select
                 defaultValue={tabs.find((tab) => tab.current).name}
                 aria-label="Select a tab"
-                className="col-start-1 row-start-1 w-full appearance-none bg-orange-200 shadow py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                onClick={handleToggle}
+                onChange={(e) => {
+                  const selectedTab = tabs.find((tab) => tab.name === e.target.value);
+                  if (selectedTab) {
+                    window.location.href = selectedTab.href; // 선택된 탭의 URL로 이동
+                  }
+                }}
+                className="w-full appearance-none bg-amber-100 shadow py-2 pl-3 pr-10 text-base text-amber-900 outline outline-1 -outline-offset-1 outline-amber-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-amber-500 rounded-lg"
               >
                 {tabs.map((tab) => (
-                  <option key={tab.name}>{tab.name}</option>
+                  <option key={tab.name} className="rounded-lg bg-amber-100 hover:bg-amber-200 w-full"
+                  // style={{
+                  //   width: "100%", // 드롭다운 너비 강제 지정
+                  // }}
+                  >
+                    {tab.name}
+                  </option>
                 ))}
               </select>
+              <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+                <svg
+                  className="w-4 h-4 text-amber-900 transition-transform duration-200"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  aria-hidden="true"
+                  style={{
+                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                  }}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
             </div>
             <div className="hidden sm:block">
-              <div className="border-b border-gray-300">
+              <div>
                 <nav
                   aria-label="Tabs"
-                  className="-mb-px flex  bg-orange-200 shadow"
+                  className="flex bg-amber-100 border  border-amber-300 rounded-lg"
                 >
                   {tabs.map((tab) => (
                     <Link
@@ -207,9 +237,9 @@ const RightComponent = ({ email }) => {
                       // aria-current={tab.current ? 'page' : undefined}
                       className={classNames(
                         tab.current
-                          ? 'border-indigo-500 text-indigo-600'
-                          : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 hover:bg-orange-100',
-                        'w-1/3 border-b-2 px-1 py-4 text-center text-sm font-medium'
+                        ? 'border-amber-500 text-amber-900 hover:border-amber-300 hover:bg-amber-200 border-b-2 rounded-bl-lg rounded-br-sm hover:rounded-lg'
+                        : 'border-transparent text-amber-700 hover:border-amber-300 hover:bg-amber-200 ',
+                      'w-1/2 py-4 text-center text-sm font-medium transition-colors duration-200'
                       )}
                     >
                       {tab.name}

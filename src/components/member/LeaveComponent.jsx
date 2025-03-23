@@ -59,17 +59,17 @@ const LeaveComponent = () => {
           <div className="mt-2 flex items-center justify-center gap-x-6">
             <button
               type="button"
-              className="positiveBtn"
-              onClick={() => navigate(-1)}
-            >
-              취소
-            </button>
-            <button
-              type="button"
               onClick={handleClickLeave}
               className="negativeBtn"
             >
               확인
+            </button>
+            <button
+              type="button"
+              className="positiveBtn"
+              onClick={() => navigate(-1)}
+            >
+              취소
             </button>
           </div>
         </div>
