@@ -23,7 +23,7 @@ import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, getMenuList } from '../../api/shopApi';
 import DetailOwnerMenuComponent from './DetailOwnerMenuComponent';
 import DetailOwnerReviewComponent from '../review/DetailOwnerReviewComponent';
-import { getReview, getOwnerRating } from '../../api/reviewApi';
+import { getReview, getOwnerRating, deleteReview } from '../../api/reviewApi';
 import { getCookie } from '../../util/cookieUtil';
 import axios from 'axios';
 import { createRoom } from '../../api/roomApi';
@@ -307,6 +307,13 @@ const DetailOwnerComponent = ({
           <span className="text-base font-semibold text-gray-800 ml-2">
             ({typeof ratingAvg === 'number' ? ratingAvg.toFixed(1) : '0.0'})
           </span>
+          {ratingAvg == '0.0' ? (
+            <p className="text-base font-semibold text-red-500 ml-2">
+              첫 리뷰를 작성해주세요!
+            </p>
+          ) : (
+            <></>
+          )}
         </div>
         <div className="flex justify-between items-center mt-2">
           <h1
