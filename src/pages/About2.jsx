@@ -16,6 +16,7 @@ import {
   LockClosedIcon,
   ServerIcon,
 } from '@heroicons/react/20/solid';
+import '../css/common.css';
 
 import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel } from '@headlessui/react';
@@ -261,10 +262,7 @@ const About2 = () => {
                       </div>
                     ))}
                     <div className="mt-10 pl-8 flex gap-x-6">
-                      <button
-                        onClick={moveToMain}
-                        className="rounded-md bg-yellow-500 px-7 py-2.5 text-lg font-semibold text-white shadow-sm hover:bg-yellow-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
-                      >
+                      <button onClick={moveToMain} className="defaultBtn">
                         시작하기
                       </button>
                       {/* 로그인 상태에서는 표시되지 않음 */}
