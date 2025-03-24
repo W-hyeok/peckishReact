@@ -35,7 +35,7 @@ const LeaveComponent = () => {
   const closeModal = () => {
     setResult(null);
     doLogout();
-    moveToPath(`/`);
+    moveToPath(`/main`);
   };
 
   return (

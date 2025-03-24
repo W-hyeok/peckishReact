@@ -450,7 +450,7 @@ const AddComponent = () => {
                 <label className="block text-sm/6 font-medium text-gray-900">
                   프로필 사진*
                 </label>
-                <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                <div className="mt-1 flex justify-center bg-white rounded-lg border border-solid border-gray-900/25 px-4 py-4">
                   <div className="text-center">
                     {image ? (
                       <img
@@ -518,7 +518,7 @@ const AddComponent = () => {
                 <div className="col-span-full">
                   {memberType === 'OWNER' ? (
                     <>
-                      <div className="mt-1 flex justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
+                      <div className="mt-1 flex bg-white justify-center rounded-lg border border-solid border-gray-900/25 px-4 py-4">
                         <div className="text-center">
                           {certimage ? (
                             <img
@@ -577,7 +577,7 @@ const AddComponent = () => {
                           사업자 등록번호 확인
                         </button>
                       )}
-                      <div className="mt-2 flex items-center justify-center gap-x-6">
+                      <div className="mt-4 flex items-center justify-center gap-x-6">
                         {isVerified && (
                           <button
                             type="button"
@@ -613,7 +613,7 @@ const AddComponent = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-0 flex items-center justify-center gap-x-6">
+                      <div className="mt-4 flex items-center justify-center gap-x-6">
                         <button
                           type="button"
                           onClick={handleClickSignup}

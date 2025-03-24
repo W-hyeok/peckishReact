@@ -18,7 +18,7 @@ const LogoutComponent = () => {
 
   const closeModal = () => {
     setResult(null);
-    moveToPath('/');
+    moveToPath('/main');
   };
 
   return (
