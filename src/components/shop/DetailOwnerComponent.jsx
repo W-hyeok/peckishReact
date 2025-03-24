@@ -24,6 +24,8 @@ import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, getMenuList } from '../../api/shopApi';
 import DetailOwnerMenuComponent from './DetailOwnerMenuComponent';
 import DetailOwnerReviewComponent from '../review/DetailOwnerReviewComponent';
+import { Link } from 'react-router-dom';
+
 import { getReview, getOwnerRating, deleteReview } from '../../api/reviewApi';
 import { getCookie } from '../../util/cookieUtil';
 import axios from 'axios';
@@ -529,26 +531,49 @@ const DetailOwnerComponent = ({
                 <div className="flex justify-end space-x-4 mt-2">
                   <button
                     onClick={handelClickBack}
-                    className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                    className="h-fit w-fit px-4 py-2 bg-white text-yellow-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-yellow-500 hover:bg-yellow-500 hover:text-white"
                   >
-                    목록으로
+                    돌아가기
                   </button>
-                  <button
-                    onClick={handleOwnerShopModify}
-                    className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
-                  >
-                    수정
-                  </button>
-                  {/* 쿠키 저장 email과 로그인한 아이디가 관리자 email일 때 */}
-                  {membercookie.email === shop.shopOwnerDTO.email ? (
-                    <button
-                      onClick={handleOwnerShopDelete}
-                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-                    >
-                      삭제
-                    </button>
+                  {/* 로그인 했을 때... */}
+                  {membercookie.email ? (
+                    <>
+                      {' '}
+                      <button
+                        onClick={handleOwnerShopModify}
+                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        수정
+                      </button>
+                      {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때때 */}
+                      {membercookie.email === shop.shopOwnerDTO.email ? (
+                        <button
+                          onClick={handleOwnerShopDelete}
+                          className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                        >
+                          삭제
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </>
                   ) : (
-                    <></>
+                    // 비로그인 상태일 때...
+                    <>
+                      <Link
+                        to="/member/login"
+                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        수정
+                      </Link>
+                      {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때 */}
+                      <Link
+                        to="/member/login"
+                        className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                      >
+                        삭제
+                      </Link>
+                    </>
                   )}
                 </div>
               </TabPanel>

@@ -24,7 +24,7 @@ import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, deleteOne, getMenuList } from '../../api/shopApi';
 import DetailUserMenuComponent from './DetailUserMenuComponent';
 import DetailUserReviewComponent from '../review/DetailUserReviewComponent';
-
+import { Link } from 'react-router-dom';
 import {
   deleteReview,
   getReview,
@@ -74,7 +74,7 @@ const DetailUserComponent = ({
   const [reviewFetch, setReviewFetch] = useState(false);
 
   // 점포 수정페이지로 이동
-  const { moveToUserShopModify } = useCustomMove();
+  const { moveToUserShopModify, moveToLogin } = useCustomMove();
 
   // 요일 배열
   const daysData = (() => {
@@ -461,26 +461,49 @@ const DetailUserComponent = ({
                 <div className="flex justify-end space-x-4 mt-2">
                   <button
                     onClick={handelClickBack}
-                    className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                    className="h-fit w-fit px-4 py-2 bg-white text-yellow-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-yellow-500 hover:bg-yellow-500 hover:text-white"
                   >
-                    목록으로
+                    돌아가기
                   </button>
-                  <button
-                    onClick={handleUserShopModify}
-                    className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
-                  >
-                    수정
-                  </button>
-                  {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때때 */}
-                  {membercookie.email === shop.shopUserDTO.email ? (
-                    <button
-                      onClick={handleUserShopDelete}
-                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-                    >
-                      삭제
-                    </button>
+                  {/* 로그인 했을 때... */}
+                  {membercookie.email ? (
+                    <>
+                      {' '}
+                      <button
+                        onClick={handleUserShopModify}
+                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        수정
+                      </button>
+                      {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때때 */}
+                      {membercookie.email === shop.shopUserDTO.email ? (
+                        <button
+                          onClick={handleUserShopDelete}
+                          className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                        >
+                          삭제
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </>
                   ) : (
-                    <></>
+                    // 비로그인 상태일 때...
+                    <>
+                      <Link
+                        to="/member/login"
+                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        수정
+                      </Link>
+                      {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때 */}
+                      <Link
+                        to="/member/login"
+                        className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                      >
+                        삭제
+                      </Link>
+                    </>
                   )}
                 </div>
               </TabPanel>
@@ -499,13 +522,22 @@ const DetailUserComponent = ({
                     <p className="mt-4">메뉴를 추가해주세요!</p>
                   </div>
                 )}
-                <button
-                  type="button"
-                  onClick={handleClickAddMenu}
-                  className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
-                >
-                  메뉴 작성
-                </button>
+                {membercookie.email ? (
+                  <button
+                    type="button"
+                    onClick={handleClickAddMenu}
+                    className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
+                  >
+                    메뉴 작성
+                  </button>
+                ) : (
+                  <Link
+                    to="/member/login"
+                    className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
+                  >
+                    메뉴 작성
+                  </Link>
+                )}
               </TabPanel>
 
               {/* 리뷰 탭 */}
@@ -525,14 +557,22 @@ const DetailUserComponent = ({
                     <p className="mt-4 text-lg">리뷰를 추가해주세요!</p>
                   </div>
                 )}
-
-                <button
-                  type="button"
-                  onClick={handleClickReview}
-                  className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
-                >
-                  리뷰 작성
-                </button>
+                {membercookie.email ? (
+                  <button
+                    type="button"
+                    onClick={handleClickReview}
+                    className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
+                  >
+                    리뷰 작성
+                  </button>
+                ) : (
+                  <Link
+                    to="/member/login"
+                    className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
+                  >
+                    메뉴 작성
+                  </Link>
+                )}
               </TabPanel>
             </TabPanels>
           </TabGroup>
