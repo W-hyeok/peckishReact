@@ -33,10 +33,10 @@ const DetailPageMoon = () => {
     setFetch(true); // 로딩중
     getOneMoon(email).then((data) => {
       console.log(data.RESULT);
-      if (data.RESULT.shopDTO != null) {
+      if (data.RESULT.shopOwnerDTO != null) {
         setShop({ ...data.RESULT });
-        setShopId(data.RESULT.shopDTO.shopId); // by Moon
-        console.log(data.RESULT.shopDTO.shopId);
+        setShopId(data.RESULT.shopOwnerDTO.shopId); // by Moon
+        console.log(data.RESULT.shopOwnerDTO.shopId);
       }
       setFetch(false); // 로딩X -> Fetch 모달 닫히게
       setLoaded(false); // 로딩 완료!!!
