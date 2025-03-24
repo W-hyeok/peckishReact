@@ -93,7 +93,7 @@ const RemoveModal = ({
                   </div>
                 </div>
               </div>
-              <div className="mt-5 sm:mt-6">
+              <div className="mt-5 sm:mt-6 flex gap-4">
                 <button
                   type="button"
                   onClick={handleShopDelete}
@@ -107,7 +107,7 @@ const RemoveModal = ({
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="inline-flex w-full justify-center bg-white text-blue-600 px-6 py-3 text-xl font-semibold rounded-[8px] mt-8 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                  className="iinline-flex w-full justify-center bg-white text-blue-600 px-6 py-3 text-xl font-semibold rounded-[8px] mt-8 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                 >
                   {/* className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                              > */}
