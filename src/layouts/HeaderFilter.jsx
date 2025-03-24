@@ -217,7 +217,7 @@ export default function HeaderFilter({
             {/* 버튼들... 카테고리 넣으면 될듯? */}
             <div className="absolute right-0 shrink-0 lg:hidden">
               {/* 누르면 나타나는(popover) 버튼 */}
-              <PopoverButton className="group mt-2 relative inline-flex items-center justify-center rounded-md bg-transparent p-2 text-indigo-200 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white">
+              <PopoverButton className="group mt-2 relative inline-flex items-center justify-center rounded-md bg-transparent p-2">
                 <span className="sr-only">Open main menu</span>
                 {/* 필터 아이콘 */}
                 {/* <Bars3Icon
