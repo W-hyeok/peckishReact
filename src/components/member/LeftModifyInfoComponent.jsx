@@ -471,19 +471,19 @@ const LeftModifyInfoComponent = () => {
                   <div className="mt-2 flex items-center justify-center gap-x-6">
                     <button
                       type="button"
+                      onClick={handleClickModifyInfo}
+                      className="positiveBtn smText"
+                    >
+                      수정
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => navigate(-1)}
-                      className="negativeBtn"
+                      className="negativeBtn smText"
                     >
                       취소
                     </button>
 
-                    <button
-                      type="button"
-                      onClick={handleClickModifyInfo}
-                      className="positiveBtn"
-                    >
-                      수정
-                    </button>
                   </div>
                 </>
               )}

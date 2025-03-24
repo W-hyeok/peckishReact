@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getMsgs } from '../../api/roomApi';
 import RoomComponent from '../../components/chat/RoomComponent';
 import BasicLayout from '../../layouts/BasicLayout';
+import '../../css/common.css';
 
 const RoomPage = () => {
   const { room_ID } = useParams(); // URL에서 room_ID를 읽음
@@ -24,12 +25,14 @@ const RoomPage = () => {
   }, [room_ID]);
 
   return (
-    <BasicLayout>
-      <div key={room_ID}>
-        {/* 동적 키 설정 */}
-        <RoomComponent room_ID={room_ID} msgs={msgs} />
-      </div>
-    </BasicLayout>
+    <div className='chat-page'>
+      <BasicLayout >
+        <div key={room_ID}>
+          {/* 동적 키 설정 */}
+          <RoomComponent room_ID={room_ID} msgs={msgs} />
+        </div>
+      </BasicLayout>
+    </div>
   );
 };
 

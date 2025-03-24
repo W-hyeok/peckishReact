@@ -142,7 +142,7 @@ const About2 = () => {
             className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#e48989] to-[#e696c2ce] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
           />
         </div>
-        <div className="min-h-screen overflow-hidden py-32">
+        <div className="min-h-screen overflow-hidden sm:py-32 py-5">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             {/* 단일 컬럼: 상단 텍스트, 하단 이미지 */}
             <div className="flex flex-col items-center">
@@ -193,7 +193,7 @@ const About2 = () => {
                 <img
                   alt="Product screenshot"
                   src={landingImage}
-                  className="w-full max-w-lg rounded-xl ring-1 shadow-xl ring-gray-400/10 md:max-w-xl lg:max-w-2xl"
+                  className="w-full max-w-lg rounded-xl ring-1 shadow-xl ring-gray-400/10 md:max-w-xl lg:max-w-5xl"
                 />
               </div>
             </div>

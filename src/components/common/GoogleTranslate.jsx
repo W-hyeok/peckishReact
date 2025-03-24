@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { languages } from '../../assets/languages';
-import '../../css/translate.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectLanguage } from '../../slices/languageSlice';
 import { getCookie } from '../../util/cookieUtil';
+import '../../css/translate.css';
 
 const GoogleTranslate = () => {
   const languageState = useSelector((state) => state.language);
@@ -135,6 +135,7 @@ const GoogleTranslate = () => {
 export default GoogleTranslate;
 
 const ButtonCotainer = styled.li`
+
   display: flex;
   align-items: center;
   gap: 5px;

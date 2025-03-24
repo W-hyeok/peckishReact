@@ -270,7 +270,7 @@ export default function HeaderFilter({
                                 item.current
                                   ? 'bg-yellow-400 text-white'
                                   : 'text-black',
-                                'whitespace-nowrap rounded-lg px-4 py-2 text-base bg-white hover:bg-yellow-300',
+                                'whitespace-nowrap rounded-lg px-4 py-2 smText bg-white hover:bg-yellow-300',
                                 'group relative flex items-center gap-x-6 p-4'
                               )}
                               onClick={() => clickEvent(item.name)} // 필터 클릭 시 '카테고리값' 요청
@@ -360,7 +360,7 @@ export default function HeaderFilter({
                 {' '}
                 <button
                   className="ml-auto hover:bg-yellow-950/10 flex items-center
-                  defaultBtn"
+                  defaultBtn smText"
                   onClick={cookieMember ? moveToPost : moveToLogin}
                 >
                   {' '}
@@ -454,7 +454,7 @@ export default function HeaderFilter({
                       </div>
                     ))}
                     <button
-                      className="defaultBtn"
+                      className="defaultBtn smText"
                       onClick={cookieMember ? moveToPost : moveToLogin}
                     >
                       가게 등록하기
@@ -471,7 +471,7 @@ export default function HeaderFilter({
                           item.current
                             ? 'openFilter' // 선택
                             : 'cancelBtn', // 기본
-                          'ml-1'
+                          'ml-2 smText'
                         )}
                       >
                         {item.name}

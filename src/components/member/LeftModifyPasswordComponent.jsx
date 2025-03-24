@@ -218,17 +218,17 @@ const LeftModifyPasswordComponent = () => {
           <div className="mt-2 flex items-center justify-center gap-x-6">
             <button
               type="button"
-              className="negativeBtn"
-              onClick={() => navigate(-1)}
+              onClick={handleClickModifyPassword}
+              className="positiveBtn smText"
             >
-              취소
+              변경
             </button>
             <button
               type="button"
-              onClick={handleClickModifyPassword}
-              className="positiveBtn"
+              className="negativeBtn smText"
+              onClick={() => navigate(-1)}
             >
-              변경
+              취소
             </button>
           </div>
         </form>

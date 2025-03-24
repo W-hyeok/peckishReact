@@ -3,6 +3,11 @@
     border-[1px] border-yellow-400 hover:bg-yellow-400 hover:text-white;
 }
 
+.smDefaultBtn {
+  @apply h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xs rounded-[8px] 
+    border-[1px] border-yellow-400 hover:bg-yellow-400 hover:text-white;
+}
+
 .positiveBtn {
   @apply h-fit w-fit px-4 py-2 bg-white text-blue-600 text-base font-semibold rounded-[8px] 
     border-[1px] border-blue-600 hover:bg-blue-600 hover:text-white;
@@ -33,4 +38,13 @@
 .landBtn {
   @apply h-fit w-fit px-4 py-2 bg-yellow-400 text-white text-base rounded-[8px] 
     border-[1px] border-yellow-400 hover:bg-white hover:text-yellow-400;
+}
+
+.smText{
+  @apply text-sm sm:text-base
+}
+
+
+.chat-page .min-h-screen {
+  min-height: auto !important;
 }

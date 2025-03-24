@@ -309,19 +309,19 @@ const DetailOwnerComponent = ({
           <span className="text-base font-semibold text-gray-800 ml-2">
             ({typeof ratingAvg === 'number' ? ratingAvg.toFixed(1) : '0.0'})
           </span>
+        </div>
           {ratingAvg == '0.0' ? (
-            <p className="text-base font-semibold text-red-500 ml-2">
+            <p className="text-base font-semibold text-red-500 mt-3 mb-5">
               첫 리뷰를 작성해주세요!
             </p>
           ) : (
             <></>
           )}
-        </div>
         <div className="flex justify-between items-center mt-2">
           <h1
             className="
-                     text-4xl
-                     sm:text-6xl
+                     text-2xl
+                     sm:text-5xl
                      font-extrabold
                      tracking-tight
                      text-gray-900
@@ -335,14 +335,14 @@ const DetailOwnerComponent = ({
           </h1>
 
           {/* 최근 수정 텍스트 */}
-          <p className="text-lg text-gray-700">
+          <p className="text-sm text-gray-700">
             최근 수정: {useTimeStamp(shop.shopOwnerDTO.updateDate)}
           </p>
         </div>
       </div>
 
       {/* 사진 컨테이너 */}
-      <div className="mt-4 w-full max-w-5xl mx-auto h-[50vh] overflow-hidden">
+      <div className="mt-4 w-full h-[30vh] overflow-hidden">
         <img
           alt={shop.shopOwnerDTO.title}
           src={`${host}/api/shop/view/${shop.shopOwnerDTO.filename}`}
@@ -353,20 +353,22 @@ const DetailOwnerComponent = ({
       <div className="mt-6 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
         <div className="sm:col-span-2">
           <TabGroup>
-            <div className="border-b border-gray-200">
+            <div className="ml-5 border-b border-gray-200">
               <TabList className="flex space-x-2">
                 <Tab
                   className="
-                           px-6 py-3
-                           text-lg font-semibold
-                           border-2 border-yellow-500
+                           px-3 py-1.5
+                           sm:px-6 py-3
+                           smText
+                           border-2 border-yellow-400
                            text-gray-700
                            bg-white
                            rounded-t-md
-                           hover:bg-yellow-50
-                           data-[selected]:bg-yellow-500
+                           hover:bg-yellow-400
+                           hover:text-white
+                           data-[selected]:bg-yellow-400
                            data-[selected]:text-white
-                           data-[selected]:border-yellow-500
+                           data-[selected]:border-yellow-400
                            outline-none
                          "
                 >
@@ -375,16 +377,18 @@ const DetailOwnerComponent = ({
 
                 <Tab
                   className="
-                           px-6 py-3
-                           text-lg font-semibold
-                           border-2 border-yellow-500
+                           px-3 py-1.5
+                           sm:px-6 py-3
+                           smText
+                           border-2 border-yellow-400
                            text-gray-700
                            bg-white
                            rounded-t-md
-                           hover:bg-yellow-50
-                           data-[selected]:bg-yellow-500
+                           hover:bg-yellow-400
+                           hover:text-white
+                           data-[selected]:bg-yellow-400
                            data-[selected]:text-white
-                           data-[selected]:border-yellow-500
+                           data-[selected]:border-yellow-400
                            outline-none
                          "
                 >
@@ -393,16 +397,18 @@ const DetailOwnerComponent = ({
 
                 <Tab
                   className="
-                           px-6 py-3
-                           text-lg font-semibold
-                           border-2 border-yellow-500
+                           px-3 py-1.5
+                           sm:px-6 py-3
+                           smText
+                           border-2 border-yellow-400
                            text-gray-700
                            bg-white
                            rounded-t-md
-                           hover:bg-yellow-50
-                           data-[selected]:bg-yellow-500
+                           hover:bg-yellow-400
+                           hover:text-white
+                           data-[selected]:bg-yellow-400
                            data-[selected]:text-white
-                           data-[selected]:border-yellow-500
+                           data-[selected]:border-yellow-400
                            outline-none
                          "
                 >
@@ -413,10 +419,10 @@ const DetailOwnerComponent = ({
 
             <TabPanels as={Fragment}>
               {/* 정보 탭 */}
-              <TabPanel className="text-base text-gray-600 py-4 px-4 rounded-lg mt-2 space-y-6">
-                <div className="space-y-6">
-                  <dl className="p-6">
-                    <dt className="text-xl text-gray-900">위치</dt>
+              <TabPanel className="text-base text-gray-600 py-4 px-4 rounded-lg mt-2 space-y-2">
+                <div className="space-y-2">
+                  <dl className="p-2">
+                    <dt className="smText text-gray-900">위치</dt>
                     <dd>
                       <div id="mapWrap" className="mt-4 relative">
                         <KakaoMap
@@ -447,36 +453,13 @@ const DetailOwnerComponent = ({
                       </div>
                     </dd>
                   </dl>
-                  {/* <dl className="p-6">
-                    <dt className="text-xl text-gray-900">영업일</dt>
-                    <dd className="text-lg text-gray-700">
-                      <input
-                        name="title"
-                        type="text"
-                        value={shop.shopOwnerDTO.days}
-                        autoComplete="street-address"
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                      />
-                    </dd>
-                  </dl>
+
                   <dl className="p-6">
-                    <dt className="text-xl text-gray-900">영업시간</dt>
-                    <dd className="text-lg text-gray-700">
-                      <input
-                        name="title"
-                        type="text"
-                        value={`${shop.shopOwnerDTO.openTime} ~ ${shop.shopOwnerDTO.closeTime}`}
-                        autoComplete="street-address"
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                      />
-                    </dd>
-                  </dl> */}
-                  <dl className="p-6">
-                    <dt className="text-xl text-gray-900">영업일 & 영업시간</dt>
-                    <dd className="text-lg text-gray-700">
+                    <dt className="smText text-gray-900">영업일 & 영업시간</dt>
+                    <dd className="smText text-gray-700">
                       <div
                         // input처럼 보이도록 스타일링한 div (textarea의 리사이즈 표시 제거)
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg outline outline-1 outline-gray-300 focus:outline focus:outline-2 focus:outline-indigo-600"
+                        className="block w-full rounded-md bg-white px-5 sm:px-4 py-3 smText outline outline-1 outline-gray-300 focus:outline focus:outline-2 focus:outline-indigo-600 mt-3"
                         // whiteSpace: 'pre-wrap'을 통해 개행 문자를 반영, userSelect를 false로 설정해 텍스트 선택 방지
                         style={{
                           whiteSpace: 'pre-wrap',
@@ -512,13 +495,13 @@ const DetailOwnerComponent = ({
                   </dl>
 
                   <dl className="p-6">
-                    <dt className="text-lg text-gray-900">문의하기</dt>
-                    <dd className="text-md text-gray-700">
+                    <dt className="sm:text-base text-sm text-gray-900">문의하기</dt>
+                    <dd className="sm:text-base text-sm text-gray-700">
                       {membercookie.email !== shop.shopOwnerDTO.email && (
                         <button
                           type="button"
                           onClick={handleChat}
-                          className="defaultBtn"
+                          className="defaultBtn smText mt-3"
                         >
                           문의 하기
                         </button>
@@ -530,7 +513,7 @@ const DetailOwnerComponent = ({
                 <div className="flex justify-end space-x-4 mt-2">
                   <button
                     onClick={handelClickBack}
-                    className="h-fit w-fit px-4 py-2 bg-white text-yellow-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-yellow-500 hover:bg-yellow-500 hover:text-white"
+                    className="defaultBtn smText"
                   >
                     돌아가기
                   </button>
@@ -540,7 +523,7 @@ const DetailOwnerComponent = ({
                       {' '}
                       <button
                         onClick={handleOwnerShopModify}
-                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                        className="positiveBtn smText"
                       >
                         수정
                       </button>
@@ -548,7 +531,7 @@ const DetailOwnerComponent = ({
                       {membercookie.email === shop.shopOwnerDTO.email ? (
                         <button
                           onClick={handleOwnerShopDelete}
-                          className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                          className="negativeBtn"
                         >
                           삭제
                         </button>
@@ -561,14 +544,14 @@ const DetailOwnerComponent = ({
                     <>
                       <Link
                         to="/member/login"
-                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                        className="positiveBtn"
                       >
                         수정
                       </Link>
                       {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때 */}
                       <Link
                         to="/member/login"
-                        className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                        className="negativeBtn"
                       >
                         삭제
                       </Link>
@@ -594,7 +577,7 @@ const DetailOwnerComponent = ({
                 <button
                   type="button"
                   onClick={handleClickAddMenu}
-                  className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
+                  className="absolute top-6 right-6 inline-flex items-center justify-center defaultBtn"
                 >
                   메뉴 작성
                 </button>
@@ -620,7 +603,7 @@ const DetailOwnerComponent = ({
                 <button
                   type="button"
                   onClick={handleClickReview}
-                  className="absolute top-6 right-6 inline-flex items-center justify-center h-fit w-fit px-4 py-2 bg-white text-yellow-400 text-xl font-semibold rounded-[8px] mt-3 border-[2px] border-yellow-400 hover:bg-yellow-400 hover:text-white"
+                  className="absolute top-6 right-6 inline-flex items-center justify-center defaultBtn"
                 >
                   리뷰 작성
                 </button>

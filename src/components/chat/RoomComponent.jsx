@@ -2,7 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Dialog } from '@headlessui/react';
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  TransitionChild,
+} from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import { getMsgs } from '../../api/roomApi';
@@ -197,8 +206,9 @@ const RoomComponent = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Mobile Sidebar */}
+    <div className="flex bg-gray-100 justify-center" style={{ margin: '5vh', height: 'calc(100vh - 26.5vh)', width: 'calc(100vw - 20vh)' }}>
+    {/* 중앙 정렬을 위한 고정 크기 컨테이너 */}
+    <div className="w-full max-w-full flex h-full">
       <Dialog
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
@@ -340,6 +350,7 @@ const RoomComponent = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

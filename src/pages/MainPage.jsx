@@ -87,7 +87,8 @@ const MainPage = () => {
     // 무한 렌더링 방지를 위해(페이지 로드 시 한 번만 렌더링) 의존성 배열 추가
   }, []);
   return (
-    <BasicLayout>
+    <div className='chat-page'>
+      <BasicLayout>
       <div>
         <HeaderFilter
           onChangeAddress={handleChangeAddress}
@@ -124,30 +125,31 @@ const MainPage = () => {
                 </section>
               </div>
 
-              {/* 오른쪽 영역 */}
-              {/* <div className="grid grid-cols-1 gap-4 lg:col-span-2">
-                <section aria-labelledby="section-2-title">
-                  <h2 id="section-2-title" className="sr-only">
-                    노점 목록
-                  </h2>
-                  <div className="overflow-hidden rounded-lg bg-white shadow">
-                    <div className="">
-                      <MapComponent2
-                        data={searchAddress}
-                        transFilterData={childData}
-                        transCertData={transCertData}
-                        transOpenData={transOpenData}
-                        cookieMember={cookieMember}
-                      />
+                {/* 오른쪽 영역 */}
+                {/* <div className="grid grid-cols-1 gap-4 lg:col-span-2">
+                  <section aria-labelledby="section-2-title">
+                    <h2 id="section-2-title" className="sr-only">
+                      노점 목록
+                    </h2>
+                    <div className="overflow-hidden rounded-lg bg-white shadow">
+                      <div className="">
+                        <MapComponent2
+                          data={searchAddress}
+                          transFilterData={childData}
+                          transCertData={transCertData}
+                          transOpenData={transOpenData}
+                          cookieMember={cookieMember}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </section>
-              </div> */}
+                  </section>
+                </div> */}
+              </div>
             </div>
-          </div>
-        </main>
-      </div>
-    </BasicLayout>
+          </main>
+        </div>
+      </BasicLayout>
+    </div>
   );
 };
 

@@ -56,18 +56,18 @@ const LeftComponent = () => {
               {/* </div> */}
               {/* </div> */}
 
-            <div className="mt-2 mb-2 flex items-center justify-center gap-x-8">
+            <div className="flex items-center justify-center gap-x-2">
               <button
                 type="button"
                 onClick={() => moveToModifyInfo(cookieMember.email)}
-                className="defaultBtn"
+                className="defaultBtn smText"
               >
                 개인정보 수정
               </button>
               <button
                 type="button"
                 onClick={() => moveToModifyPassword(cookieMember.email)}
-                className="defaultBtn"
+                className="defaultBtn smText"
               >
                 비밀번호 변경
               </button>

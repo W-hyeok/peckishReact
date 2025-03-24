@@ -28,11 +28,11 @@ const DetailComponent = ({ shop, shopId }) => {
 
   const user = {
     name: '제보된 정보 없음',
-    imageUrl: '/src/assets/shop/notReport.png',
+    imageUrl: '/src/assets/shop/information.png',
   };
   const owner = {
     name: '인증된 정보 없음',
-    imageUrl: '/src/assets/shop/notCert.png',
+    imageUrl: '/src/assets/shop/information.png',
   };
 
   const [mapData, setMapData] = useState(''); // 위도, 경도 정보...가 포함된 맵 데이터

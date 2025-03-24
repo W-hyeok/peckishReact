@@ -8,8 +8,8 @@ import '../../css/common.css';
 import { getCookie } from '../../util/cookieUtil';
 import useCustomMove from '../../hooks/useCustomMove';
 import NotFound from '../../pages/NotFound';
-import ownerAddShop from '/src/assets/shop/notCert.png';
-import userAddShop from '/src/assets/shop/notReport.png';
+import ownerAddShop from '/src/assets/shop/information.png';
+import userAddShop from '/src/assets/shop/information.png';
 import locationStar from '../../assets/icon/location_star.png';
 
 const DetailComponent = ({ shop, shopId }) => {
@@ -69,23 +69,24 @@ const DetailComponent = ({ shop, shopId }) => {
         <TabGroup className="lg:col-span-7">
           <div className="mx-auto sm:px-8 sm:py-6 lg:max-w-7xl lg:px-8">
             {/* 사용자 제보 노점/ 사장님 등록 노점 */}
-            <TabList className="flex w-[400px]">
+            <TabList className="flex w-full overflow-x-auto no-scrollbar">
               {/* 사용자 제보 노점 탭 */}
               <Tab
                 className="
-      flex-1 
-      text-center 
-      py-3 
-      text-lg 
-      text-gray-600 
-      font-medium 
-      hover:bg-gray-50 
-      data-[selected]:bg-yellow-50 
-      data-[selected]:text-yellow-600 
-      data-[selected]:border-b-4 
-      data-[selected]:border-yellow-500
-      data-[selected]:font-semibold
-      transition-colors
+              flex-1 
+              mr-1
+              text-center 
+              py-3 
+              smText
+              bg-amber-200/60
+              text-gray-600 
+              font-medium 
+              hover:bg-yellow-100
+              data-[selected]:bg-yellow-100 
+              data-[selected]:text-yellow-600 
+              data-[selected]:border-b-2 
+              data-[selected]:border-yellow-500
+              transition-colors
     "
               >
                 사용자 제보 노점
@@ -93,9 +94,18 @@ const DetailComponent = ({ shop, shopId }) => {
 
               {/* 사장님 등록 노점 탭 */}
               <Tab
-                className="flex-1 text-center py-3 text-lg text-gray-600 font-medium  hover:bg-gray-50  data-[selected]:bg-yellow-50  data-[selected]:text-yellow-600 data-[selected]:border-b-4  data-[selected]:border-yellow-500
-      data-[selected]:font-semibold
-      transition-colors
+                className="flex-1 ml-1
+              text-center 
+              py-3 
+              smText
+              bg-amber-200/60
+              text-gray-600 
+              hover:bg-yellow-100  
+              data-[selected]:bg-yellow-100  
+              data-[selected]:text-yellow-600 
+              data-[selected]:border-b-2  
+              data-[selected]:border-yellow-500
+              transition-colors
     "
               >
                 사장님 등록 노점
@@ -113,16 +123,16 @@ const DetailComponent = ({ shop, shopId }) => {
               {/* userData = true 이면서 ownerData = false일 때 => 404에러 페이지지*/}
               {shop.shopDTO.userData ? (
                 <DetailUserComponent
-                  shop={shop}
-                  shopId={shopId}
-                  shopDetailId={shop.shopUserDTO.shopUserId}
-                  infoType={USER}
-                  mapData={mapData}
-                  storeLoc={storeLoc}
-                  membercookie={membercookie}
-                  moveToLogin={moveToLogin}
-                  moveToMain={moveToMain}
-                  location_Star={locationStar}
+                shop={shop}
+                shopId={shopId}
+                shopDetailId={shop.shopUserDTO.shopUserId}
+                infoType={USER}
+                mapData={mapData}
+                storeLoc={storeLoc}
+                membercookie={membercookie}
+                moveToLogin={moveToLogin}
+                moveToMain={moveToMain}
+                location_Star={locationStar}
                 />
               ) : (
                 <div className="flex justify-center items-center">
@@ -134,6 +144,11 @@ const DetailComponent = ({ shop, shopId }) => {
                       width={'60%'}
                       className="m-auto"
                     />
+                    <div>
+                      <span className='flex justify-center text-xs sm:text-lg mb-7 text-gray-900'> 
+                      👇👇👇 지금 바로 제보하세요 👇👇👇
+                      </span>
+                    </div>
                     {membercookie.email ? (
                       <div className="content-center mt-4">
                         <button
@@ -160,7 +175,7 @@ const DetailComponent = ({ shop, shopId }) => {
             <TabPanel className="p-6 text-sm text-gray-500">
               {shop.shopDTO.ownerData ? (
                 <DetailOwnerComponent
-                  shop={shop}
+                shop={shop}
                   shopDetailId={shop.shopOwnerDTO.shopOwnerId}
                   shopId={shopId}
                   infoType={OWNER}

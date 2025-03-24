@@ -12,6 +12,7 @@ import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import '../../css/translate.css';
 
 // 지도 라이브러리 사용을 위해 처음에 로드
 const { kakao } = window;
@@ -382,7 +383,7 @@ const AddComponent = () => {
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
               {/* 점포 사진 영역 */}
               <div className="col-span-full mb-8">
-                <label className="block text-sm font-medium text-gray-900">
+                <label className="block text-base font-medium text-gray-900">
                   점포 사진 <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2 flex justify-center rounded-lg border bg-white border-gray-900/25 px-6 py-10">
@@ -401,7 +402,7 @@ const AddComponent = () => {
                       />
                     )}
                     <div className="mt-4 flex justify-center text-sm text-gray-600">
-                      <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
+                      <label className="relative cursor-pointer rounded-md bg-white font-semibold text-red-500  hover:text-amber-500">
                         <span>{image ? '사진 변경' : '점포 사진 등록'}</span>
                         <input
                           type="file"
@@ -425,7 +426,7 @@ const AddComponent = () => {
           <div className="sm:col-span-2 mb-8">
             <label
               htmlFor="title"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-base font-medium text-gray-900"
             >
               점포명 <span className="text-red-500">*</span>
             </label>
@@ -450,7 +451,7 @@ const AddComponent = () => {
               type="search"
               placeholder="주소/위치 검색..."
               aria-label="Search"
-              className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 text-sm text-black outline-none placeholder:text-black focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
+              className="peer col-start-1 row-start-1 block rounded-md bg-gray-200 py-1.5 pl-10 pr-3 smText text-black outline-none placeholder:text-black focus:bg-white focus:text-gray-900 focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-white/40 focus:placeholder:text-gray-400"
             />
             <MagnifyingGlassIcon
               aria-hidden="true"
@@ -478,7 +479,7 @@ const AddComponent = () => {
           >
             <MapMarker position={position.center ?? center} />
           </Map>
-          <p className="text-center pt-1 text-gray-600">
+          <p className="text-center smText pt-1 text-gray-600">
             <span className="text-red-500">*</span>제보/등록할 점포의 위치를
             클릭해서 지정해주세요!
           </p>
@@ -491,7 +492,7 @@ const AddComponent = () => {
           <div className="sm:col-span-2 mb-8">
             <label
               htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-base text-gray-900"
             >
               점포 주소 <span className="text-red-500">*</span>
             </label>
@@ -502,7 +503,7 @@ const AddComponent = () => {
                 onChange={handleChangeShop}
                 type="text"
                 placeholder="신촌역 7번 출구 앞"
-                className="block w-full rounded-md bg-white px-3 py-2 text-base text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                className="block w-full rounded-md bg-white px-3 py-2 smText text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
               />
             </div>
           </div>
@@ -578,13 +579,13 @@ const AddComponent = () => {
               </div>
             </div> */}
             {/* 오픈시간과 마감시간을 한 줄에 배치 */}
-            <div className="sm:col-span-2 space-y-1 mt-2">
+            <div className="sm:col-span-2 space-y-1 mt-2 smText">
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col">
                   {/* 오픈시간 */}
                   <label
                     htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-base text-gray-900"
                   >
                     오픈시간
                   </label>
@@ -600,7 +601,7 @@ const AddComponent = () => {
                 <div className="flex flex-col">
                   <label
                     htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-base text-gray-900"
                   >
                     마감시간
                   </label>
@@ -613,7 +614,7 @@ const AddComponent = () => {
                 </div>
               </div>
             </div>
-            <div className="sm:col-span-2 space-y-2">
+            <div className="sm:col-span-2 space-y-2 smText">
               {error && <p className="text-red-500">{error}</p>}
               <div className="hidden">
                 <p>오픈 시간: {openTime}</p>
@@ -624,7 +625,7 @@ const AddComponent = () => {
             <div className="mt-6 sm:col-span-2 space-y-2">
               <label
                 htmlFor="category"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-base text-gray-900"
               >
                 카테고리
               </label>
@@ -635,7 +636,7 @@ const AddComponent = () => {
                   value={shop.category}
                   onChange={handleSelectChange}
                   autoComplete="category-name"
-                  className="w-full appearance-none rounded-md bg-white py-2 pl-3 pr-12 text-base text-gray-900 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
+                  className="w-full appearance-none rounded-md bg-white py-2 pl-3 pr-12 smText text-gray-900 focus:outline focus:outline-2 focus:outline-indigo-600 sm:text-sm"
                 >
                   <option>카테고리를 선택하세요</option>
                   <option value="bread">붕어빵</option>
@@ -665,9 +666,10 @@ const AddComponent = () => {
                     />
                   </div>
                   <div className="flex text-lg">
-                    <label className="select-none font-medium text-gray-700">
+                    <label className="select-none text-base text-gray-900">
                       내 점포 인증하기
-                      <span className="ml-2 text-gray-600">
+                      <br/>
+                      <span className="sm:text-base text-xs text-gray-600">
                         (회원정보 수정 - 사업자 정보 추가 필요)
                       </span>
                     </label>
@@ -712,7 +714,7 @@ const AddComponent = () => {
                       />
                     </div>
                     <div className="flex text-lg">
-                      <label className="select-none font-medium text-gray-900">
+                      <label className="select-none smText text-gray-900">
                         내 점포 인증하기
                         <span className="text-gray-400">
                           (해당 점포의 사장님일 경우 체크해주세요.)
@@ -730,14 +732,14 @@ const AddComponent = () => {
           <button
             type="button"
             onClick={handleClickSave}
-            className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+            className="positiveBtn smText"
           >
             등록
           </button>
           <button
             type="button"
             onClick={moveToMain}
-            className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+            className="negativeBtn smText"
           >
             취소
           </button>
