@@ -225,7 +225,7 @@ const ModifyComponent = () => {
               카카오 회원 정보 수정
             </h3>
             <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-[480px]">
-              <div className="bg-white px-6 py-4 shadow sm:rounded-lg sm:px-12">
+              {/* <div className="bg-white px-6 py-4 shadow sm:rounded-lg sm:px-12"> */}
                 <div className="space-y-2">
                   <div>
                     <label className="block text-sm/6 font-medium text-gray-900">
@@ -368,7 +368,7 @@ const ModifyComponent = () => {
                     </button>
                   </div>
                 </div>
-              </div>
+              {/* </div> */}
             </div>
           </div>
         </div>

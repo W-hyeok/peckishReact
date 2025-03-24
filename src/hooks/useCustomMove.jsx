@@ -73,7 +73,7 @@ const useCustomMove = () => {
   };
   // 메인 화면으로 이동
   const moveToMain = () => {
-    navigate({ pathname: '/' });
+    navigate({ pathname: '/main' });
   };
 
   const moveToAbout = () => {

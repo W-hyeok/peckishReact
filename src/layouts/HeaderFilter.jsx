@@ -23,8 +23,8 @@ import resetButton from '../assets/icon/resetButton.png';
 import filterIcon from '../assets/icon/filterIcon.png';
 
 import '../css/common.css';
-import { toast,ToastContainer } from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // 카테고리값 초기화 객체(배열)
 const initialNavigation = [
@@ -41,11 +41,7 @@ const initialNavigation = [
 // ];
 
 // 영업중 값 초기화 객체(배열)
-const initialIsOpen = [
-  { name: 'OPEN', href: '#', current: false },
-];
-
-
+const initialIsOpen = [{ name: 'OPEN', href: '#', current: false }];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -106,28 +102,29 @@ export default function HeaderFilter({
       )
     );
 
-      // 현재 선택된 필터가 이미 활성화되어 있으면 전체 해제 (초기화)
-      if (selected === itemName) {
-        setNavigation((prev) =>
-          prev.map((item) =>
-            item.name === itemName
-              ? { ...item, current: false } // 선택한 항목의 current를 false로 설정하여 비활성화
-              : item
-          )
-        );
-        setSelected(null); // 선택된 항목 초기화
-        onFilterClick('all'); // 필터 초기화
-    } else {
+    // 현재 선택된 필터가 이미 활성화되어 있으면 전체 해제 (초기화)
+    if (selected === itemName) {
       setNavigation((prev) =>
         prev.map((item) =>
           item.name === itemName
-            ? { ...item, current: true } // 클릭한 항목을 활성화
-            : { ...item, current: false } // 나머지 항목들은 비활성화
+            ? { ...item, current: false } // 선택한 항목의 current를 false로 설정하여 비활성화
+            : item
+        )
+      );
+      setSelected(null); // 선택된 항목 초기화
+      onFilterClick('all'); // 필터 초기화
+    } else {
+      setNavigation((prev) =>
+        prev.map(
+          (item) =>
+            item.name === itemName
+              ? { ...item, current: true } // 클릭한 항목을 활성화
+              : { ...item, current: false } // 나머지 항목들은 비활성화
         )
       );
       setSelected(itemName); // 선택된 항목을 저장
       onFilterClick(itemName); // 필터 클릭 시 필터 값 업데이트
-    };
+    }
 
     // 간단하게 초기화
     // if (selected === itemName) {
@@ -139,7 +136,6 @@ export default function HeaderFilter({
     //   setSelected(itemName);
     // }
 
-    
     // // 필터 클릭값 요청을 위한 함수. {카테고리}/-/-로 요청
     // onFilterClick(itemName);
     // setSelected(itemName);
@@ -179,13 +175,13 @@ export default function HeaderFilter({
   const openClick = () => {
     setIsOpen((prev) => {
       const newState = [{ ...prev[0], current: !prev[0].current }]; // 상태 반전
-       // 상태 변경 감지 후 필터 요청 반영
+      // 상태 변경 감지 후 필터 요청 반영
       if (newState[0].current) {
-        onOpenClick("opened");
-        toast("영업 중인 가게만 보기");
+        onOpenClick('opened');
+        toast('영업 중인 노점만 보기');
       } else {
-        onOpenClick("all");
-        toast("전체 가게 보기");
+        onOpenClick('all');
+        toast('전체 노점 보기');
       }
       return newState;
     });
@@ -243,9 +239,7 @@ export default function HeaderFilter({
               {/* 필터 선택 부분 */}
               <div className="col-span-4">
                 <nav className="flex">
-                  <PopoverGroup
-                    className="defaultBtn"
-                  >
+                  <PopoverGroup className="defaultBtn">
                     <Popover className="relative min-w-full">
                       <PopoverButton className="flex items-center gap-x-1">
                         {selected && selected !== '초기화' ? (
@@ -273,7 +267,9 @@ export default function HeaderFilter({
                               href={item.href}
                               key={item.name}
                               className={classNames(
-                                item.current ? 'bg-yellow-400 text-white' : 'text-black',
+                                item.current
+                                  ? 'bg-yellow-400 text-white'
+                                  : 'text-black',
                                 'whitespace-nowrap rounded-lg px-4 py-2 text-base bg-white hover:bg-yellow-300',
                                 'group relative flex items-center gap-x-6 p-4'
                               )}
@@ -303,11 +299,16 @@ export default function HeaderFilter({
                   />
                   {/* 영업 중 */}
                   {isOpen.map((open) => (
-                    <div key={open.name} className="flex items-center mr-5 ml-5">
+                    <div
+                      key={open.name}
+                      className="flex items-center mr-5 ml-5"
+                    >
                       {/* 필터 버튼 (OPEN) */}
-                      <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                      {isOpen[0].current ? "영업 중" : "전체 보기"}
-                        </span>
+                      <span className="ms-3 text-base font-medium text-[#422006]">
+                        {isOpen[0].current
+                          ? '영업 중인 노점 '
+                          : '전체 노점 보기'}
+                      </span>
 
                       {/* 토글 스위치 */}
                       <label className="inline-flex items-center cursor-pointer pl-2">
@@ -318,12 +319,12 @@ export default function HeaderFilter({
                           onChange={openClick}
                         />
                         <div
-                          className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-0 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 
-                          dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
+                          className="relative w-11 h-6 bg-amber-400 rounded-full peer peer-focus:ring-0 peer-focus:ring-blue-300  
+                          peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
                           peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] 
                           after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all 
-                          dark:border-gray-600 peer-checked:bg-blue-600"
-                        ></div>                        
+                          peer-checked:bg-blue-600"
+                        ></div>
                       </label>
                     </div>
                   ))}
@@ -392,7 +393,10 @@ export default function HeaderFilter({
                       <div className="mb-3">📌 필터를 선택해 주세요</div>
                       <PopoverButton className="rounded-md text-gray-400hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-500">
                         <span className="sr-only">Close menu</span>
-                        <XMarkIcon aria-hidden="true" className="size-5 ml-24 mb-3" />
+                        <XMarkIcon
+                          aria-hidden="true"
+                          className="size-5 ml-24 mb-3"
+                        />
                       </PopoverButton>
                     </div>
                     {/* 필터 초기화 */}
@@ -400,8 +404,8 @@ export default function HeaderFilter({
                       className="rounded-md px-2 text-md font-black flex justify-center"
                       onClick={() => clickEvent('초기화')}
                       >*/}
-                      {/* <img src={resetButton} className="h-8 mx-auto" />{' '} */}
-                      {/*<span className="h-auto mx-auto">초기화</span>
+                    {/* <img src={resetButton} className="h-8 mx-auto" />{' '} */}
+                    {/*<span className="h-auto mx-auto">초기화</span>
                     </button> */}
                   </div>
                 </div>
@@ -419,40 +423,42 @@ export default function HeaderFilter({
                     <button className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-100 hover:text-gray-800">
                     버튼4
                     </button> */}
-                    <div className='flex justify-between mb-5'>
-                      {/* 영업 중 */}
-                      {isOpen.map((open) => (
-                        <div key={open.name} className="flex items-center mr-5 ml-5">
-                          {/* 필터 버튼 (OPEN) */}
-                          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                          {isOpen[0].current ? "영업 중" : "전체 보기"}
-                            </span>
+                  <div className="flex justify-between mb-5">
+                    {/* 영업 중 */}
+                    {isOpen.map((open) => (
+                      <div
+                        key={open.name}
+                        className="flex items-center mr-5 ml-5"
+                      >
+                        {/* 필터 버튼 (OPEN) */}
+                        <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                          {isOpen[0].current ? '영업 중' : '전체 보기'}
+                        </span>
 
-                          {/* 토글 스위치 */}
-                          <label className="inline-flex items-center cursor-pointer pl-2">
-                            <input
-                              type="checkbox"
-                              className="sr-only peer"
-                              checked={isOpen[0].current}
-                              onChange={openClick}
-                            />
-                            <div
-                              className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-0 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 
+                        {/* 토글 스위치 */}
+                        <label className="inline-flex items-center cursor-pointer pl-2">
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={isOpen[0].current}
+                            onChange={openClick}
+                          />
+                          <div
+                            className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-0 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 
                               dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
                               peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] 
                               after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all 
                               dark:border-gray-600 peer-checked:bg-blue-600"
-                            ></div>
-                          </label>
-                        </div>
-                      ))}
-                      <button
-                        className="defaultBtn"
-                        onClick={cookieMember ? moveToPost : moveToLogin}
-                      >
-                        가게 등록하기
-                      </button>
-                    
+                          ></div>
+                        </label>
+                      </div>
+                    ))}
+                    <button
+                      className="defaultBtn"
+                      onClick={cookieMember ? moveToPost : moveToLogin}
+                    >
+                      가게 등록하기
+                    </button>
                   </div>
                   <div className="flex mb-12 justify-center">
                     {/* 카테고리 */}
@@ -465,7 +471,7 @@ export default function HeaderFilter({
                           item.current
                             ? 'openFilter' // 선택
                             : 'cancelBtn', // 기본
-                            'ml-1'
+                          'ml-1'
                         )}
                       >
                         {item.name}

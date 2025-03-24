@@ -33,7 +33,7 @@ const Router = () => {
       path: '',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <Main />
+          <About2 />
         </Suspense>
       ),
     },
@@ -46,10 +46,10 @@ const Router = () => {
       ),
     }, //about
     {
-      path: 'about2',
+      path: 'main',
       element: (
         <Suspense fallback={<LoadingPage />}>
-          <About2 />
+          <Main />
         </Suspense>
       ),
     }, //about

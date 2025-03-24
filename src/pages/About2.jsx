@@ -16,6 +16,7 @@ import {
   LockClosedIcon,
   ServerIcon,
 } from '@heroicons/react/20/solid';
+import '../css/common.css';
 
 import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel } from '@headlessui/react';
@@ -48,7 +49,7 @@ import { CgLogIn } from 'react-icons/cg';
 //   { name: 'Marketplace', href: '#' },
 //   { name: 'Company', href: '#' },
 // ];
-
+import landingImage from '../assets/imgs/landingImage.png';
 const features = [
   {
     name: '내 주변의 노점 찾기.',
@@ -261,10 +262,7 @@ const About2 = () => {
                       </div>
                     ))}
                     <div className="mt-10 pl-8 flex gap-x-6">
-                      <button
-                        onClick={moveToMain}
-                        className="rounded-md bg-yellow-500 px-7 py-2.5 text-lg font-semibold text-white shadow-sm hover:bg-yellow-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-600"
-                      >
+                      <button onClick={moveToMain} className="defaultBtn">
                         시작하기
                       </button>
                       {/* 로그인 상태에서는 표시되지 않음 */}
@@ -284,7 +282,7 @@ const About2 = () => {
               </div>
               <img
                 alt="Product screenshot"
-                src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png"
+                src={landingImage}
                 width={2432}
                 height={1442}
                 className="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
