@@ -50,6 +50,7 @@ const loginSlice = createSlice({
       console.log('logout!!');
       removeCookie('member'); // 쿠키 삭제
       removeCookie('auth');
+      removeCookie('tmpOwned');
       return { ...initState }; // state 초기화
     },
   },
