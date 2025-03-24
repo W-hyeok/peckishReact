@@ -103,30 +103,28 @@ const ChatSideBarComponent = ({ socket, resetUnreadTrigger, activeRoomId }) => {
   console.log('activeRoomId: ', activeRoomId);
 
   return (
-    <nav>
-      <ul role="list" className="space-y-2">
-        {chatList.map((chat, index) => (
-          <li key={index}>
-            <button
-              onClick={() => handleRoomClick(chat.roomId)}
-              className="flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-            >
-              <img
-                src={chat.profileImage}
-                alt="member Avatar"
-                className={`h-8 w-8 rounded-full ${activeRoomId === activeRoomId.email ? 'ring-4 ring-blue-600' : 'ring-2 ring-gray-300'}`}
-              />
-              {chat.unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
-                  {chat.unreadCount}
-                </span>
-              )}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div className="fixed top-[105px] left-0 z-10 flex flex-col w-[78px] h-[calc(100vh-65px-130px)] rounded-lg overflow-y-auto bg-[#F472B6] bg-opacity-15 shadow-sm items-center">
+      {chatList.map((chat, index) => (
+        <div
+          key={index}
+          onClick={() => handleRoomClick(chat.roomId)}
+          className="flex flex-row py-4 px-2 items-center w-full relative cursor-pointer"
+        >
+          <div className="w-full relative">
+            <img
+              src={chat.profileImage}
+              className="h-[44px] w-[40px] rounded-full ring-4 ring-blue-400 m-1 p-1"
+              alt="member Avatar"
+            />
+            {chat.unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+                {chat.unreadCount}
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 };
-
 export default ChatSideBarComponent;
