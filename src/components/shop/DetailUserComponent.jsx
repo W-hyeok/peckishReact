@@ -183,7 +183,6 @@ const DetailUserComponent = ({
 
   // 관리 목록으로 Back
   const handelClickBack = () => {
-    console.log(' 관리자모드 - 목록으로');
     navigate(-1);
   };
   console.log('user - email', shop.shopUserDTO.email);
@@ -457,33 +456,52 @@ const DetailUserComponent = ({
                 </div>
                 {/* 버튼 */}
                 <div className="flex justify-end space-x-4 mt-2">
-                  {/* 관리자 Role일 때 보여주기 - 목록으로 */}
-                  {membercookie.roleNames == 'ADMIN' ? (
-                    <button
-                      onClick={handelClickBack}
-                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-                    >
-                      목록으로
-                    </button>
-                  ) : (
-                    <></>
-                  )}
                   <button
-                    onClick={handleUserShopModify}
-                    className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                    onClick={handelClickBack}
+                    className="h-fit w-fit px-4 py-2 bg-white text-yellow-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-yellow-500 hover:bg-yellow-500 hover:text-white"
                   >
-                    수정
+                    돌아가기
                   </button>
-                  {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때때 */}
-                  {membercookie.email === shop.shopUserDTO.email ? (
-                    <button
-                      onClick={handleUserShopDelete}
-                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-                    >
-                      삭제
-                    </button>
+
+                  {/* 로그인 했을 때... */}
+                  {membercookie.email ? (
+                    <>
+                      {' '}
+                      <button
+                        onClick={handleUserShopModify}
+                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        수정
+                      </button>
+                      {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때때 */}
+                      {membercookie.email === shop.shopUserDTO.email ? (
+                        <button
+                          onClick={handleUserShopDelete}
+                          className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                        >
+                          삭제
+                        </button>
+                      ) : (
+                        <></>
+                      )}
+                    </>
                   ) : (
-                    <></>
+                    // 비로그인 상태일 때...
+                    <>
+                      <Link
+                        to="/member/login"
+                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                      >
+                        수정
+                      </Link>
+                      {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때 */}
+                      <Link
+                        to="/member/login"
+                        className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                      >
+                        삭제
+                      </Link>
+                    </>
                   )}
                 </div>
               </TabPanel>

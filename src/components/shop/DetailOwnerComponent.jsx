@@ -231,7 +231,6 @@ const DetailOwnerComponent = ({
 
   // 관리 목록으로 Back
   const handelClickBack = () => {
-    console.log(' 관리자모드 - 목록으로');
     navigate(-1);
   };
 
