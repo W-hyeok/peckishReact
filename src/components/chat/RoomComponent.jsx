@@ -10,7 +10,7 @@ import ChatSideBarComponent from './ChatSideBarComponent';
 import '../../css/common.css';
 
 // export const WS_SERVER_HOST = 'localhost:8080';
-export const WS_SERVER_HOST = 'https://hungrymoment.store';
+export const WS_SERVER_HOST = 'hungrymoment.store';
 
 const RoomComponent = () => {
   const { room_ID } = useParams();
@@ -72,7 +72,8 @@ const RoomComponent = () => {
     };
     fetchMessages();
 
-    const wsUrl = `ws://${WS_SERVER_HOST}/ws/chat`;
+    // const wsUrl = `ws://${WS_SERVER_HOST}/ws/chat`;
+    const wsUrl = `wss://${WS_SERVER_HOST}/ws/chat`; // https 연결일때 wss:// 로 연결해야함.
     const ws = new WebSocket(wsUrl);
     let isRoomEntered = false;
 
