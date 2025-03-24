@@ -50,7 +50,7 @@ const LoginComponent = () => {
 
   const closeModal = () => {
     setResult(null);
-    moveToPath(`/`);
+    moveToPath(`/main`);
   };
 
   const closeModalError = () => {
