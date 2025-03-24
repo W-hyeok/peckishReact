@@ -162,7 +162,7 @@ function MapComponent({
         console.log('현재 영역: ', mapLoc.bound);
         console.log('transFilterData: ', transFilterData);
         // setRole(transCertData); // 인증값
-        setServerData(data); // 점포 목록 데이터 (전체)
+        setServerData(data); // 노점 목록 데이터 (전체)
         console.log('serverData: ', serverData);
         // 렌더링할 마커 (조건: 전체 목록(data 혹은 serverData) 중 화면 범위(ne/sw)에 들어오는 것)
         // 재검색 버튼이 없거나 카테고리 값이 all이 아닐 경우(= 카테고리를 선택한 경우)
@@ -204,7 +204,7 @@ function MapComponent({
         console.log('현재 영역: ', mapLoc.bound);
         console.log('transFilterData: ', transFilterData);
         // setRole(transCertData); // 인증값
-        setServerData(data); // 점포 목록 데이터 (전체)
+        setServerData(data); // 노점 목록 데이터 (전체)
         console.log('serverData: ', serverData);
         // 렌더링할 마커 (조건: 전체 목록(data 혹은 serverData) 중 화면 범위(ne/sw)에 들어오는 것)
         // 재검색 버튼이 없거나 카테고리 값이 all이 아닐 경우(= 카테고리를 선택한 경우)

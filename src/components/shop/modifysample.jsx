@@ -356,7 +356,7 @@ const ModifyComponent = (shopId, shop, infoType) => {
               <MapMarker position={position.center ?? center} />
             </Map>
             <p className="text-center pt-1 text-gray-600">
-              제보/등록할 점포의 위치를 클릭해서 지정해주세요!
+              제보/등록할 노점의 위치를 클릭해서 지정해주세요!
             </p>
             <div id="clickLatlng" className="hidden">
               {position &&
@@ -396,10 +396,10 @@ const ModifyComponent = (shopId, shop, infoType) => {
                   </div>
                 </div>
               </div>
-              {/* 점포 사진 시작 */}
+              {/* 노점 사진 시작 */}
               <div className="col-span-full">
                 <label className="block text-sm/6 font-medium text-gray-900">
-                  점포 사진
+                  노점 사진
                 </label>
                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <div className="text-center">
@@ -420,7 +420,7 @@ const ModifyComponent = (shopId, shop, infoType) => {
                       <>
                         <div className="mt-4 flex justify-center text-sm/6 text-gray-600">
                           <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                            <span>점포 사진 등록</span>
+                            <span>노점 사진 등록</span>
                             <input
                               type="file"
                               ref={uploadRef}
@@ -439,20 +439,20 @@ const ModifyComponent = (shopId, shop, infoType) => {
                   </div>
                 </div>
               </div>{' '}
-              {/* 점포 사진 끝 */}
+              {/* 노점 사진 끝 */}
             </div>
           </div>
         </div>
         {/* Order summary 두번째 레이아웃 */}
         <div className="">
           <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
-            {/* 점포명 */}
+            {/* 노점명 */}
             <div className="sm:col-span-2">
               <label
                 htmlFor="address"
                 className="block text-sm/6 font-medium text-gray-700"
               >
-                점포명
+                노점명
               </label>
               <div className="mt-2">
                 <input
@@ -466,13 +466,13 @@ const ModifyComponent = (shopId, shop, infoType) => {
                 />
               </div>
             </div>
-            {/* 점포 주소 */}
+            {/* 노점 주소 */}
             <div className="sm:col-span-2 mb-4">
               <label
                 htmlFor="location"
                 className="block text-sm/6 font-medium text-gray-700"
               >
-                점포 주소
+                노점 주소
               </label>
               <div className="mt-2">
                 <input

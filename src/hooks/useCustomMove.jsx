@@ -95,26 +95,26 @@ const useCustomMove = () => {
     navigate({ pathname: `../readallmember/${num}`, search: queryDefault });
   };
 
-  // 점포 상세 페이지로 이동
+  // 노점 상세 페이지로 이동
   const moveToShop = (sid) => {
     navigate({ pathname: `/shop/detail/${sid}` });
   };
 
-  // 점포 상세 페이지로 이동(내 프로필 보기에서)
+  // 노점 상세 페이지로 이동(내 프로필 보기에서)
   const moveToShopFromMyProfile = (sid) => {
     navigate({ pathname: `/shop/detail/${sid}` });
   };
 
-  //USER - 점포 수정 페이지로 이동
+  //USER - 노점 수정 페이지로 이동
   const moveToUserShopModify = (shopId, shopDetailId) => {
     navigate({ pathname: `/shop/modify/${shopId}/${shopDetailId}/USER` });
   };
-  //OWNER - 점포 수정 페이지로 이동
+  //OWNER - 노점 수정 페이지로 이동
   const moveToOwnerShopModify = (shopId, shopDetailId) => {
     navigate({ pathname: `/shop/modify/${shopId}/${shopDetailId}/OWNER` });
   };
 
-  // 점포 등록 페이지로 이동
+  // 노점 등록 페이지로 이동
   const moveToPost = () => {
     navigate({ pathname: `../shop/add` });
   };

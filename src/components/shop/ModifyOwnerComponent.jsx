@@ -232,9 +232,9 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
 
   //수정시 발생할 이벤트
   const handleClickModifyOwner = () => {
-    console.log('점포 수정할 shopId : ', shopId);
-    console.log('점포 수정할 shopOwnerId : ', shopDetailId);
-    console.log('점포 수정할 infoType : ', infoType);
+    console.log('노점 수정할 shopId : ', shopId);
+    console.log('노점 수정할 shopOwnerId : ', shopDetailId);
+    console.log('노점 수정할 infoType : ', infoType);
 
     // 수정시 넘어갈 formData
     const formData = new FormData();
@@ -356,10 +356,10 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                       </div>
                     </div>
                   </div> */}
-                  {/* 점포 사진 시작 */}
+                  {/* 노점 사진 시작 */}
                   <div className="col-span-full">
                     <label className="block text-sm/6 font-medium text-gray-900">
-                      점포 사진 <span className="text-red-500">*</span>
+                      노점 사진 <span className="text-red-500">*</span>
                     </label>
                     <div className="mt-2 flex justify-center rounded-lg  bg-white border-gray-900/25 px-6 py-10">
                       <div className="text-center">
@@ -391,20 +391,20 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                       </div>
                     </div>
                   </div>{' '}
-                  {/* 점포 사진 끝 */}
+                  {/* 노점 사진 끝 */}
                 </div>
               </div>
             </div>
             {/* Order summary 두번째 레이아웃 */}
             <div className="">
               <div className="mt-4 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
-                {/* 점포명 */}
+                {/* 노점명 */}
                 <div className="sm:col-span-2">
                   <label
                     htmlFor="address"
                     className="block text-sm/6 font-medium text-gray-700"
                   >
-                    점포명 <span className="text-red-500">*</span>
+                    노점명 <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-2">
                     <input
@@ -457,7 +457,7 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                     <MapMarker position={position.center ?? center} />
                   </Map>
                   <p className="text-center pt-1 text-gray-600">
-                    제보/등록할 점포의 위치를 클릭해서 지정해주세요!
+                    제보/등록할 노점의 위치를 클릭해서 지정해주세요!
                   </p>
                   <div id="clickLatlng" className="hidden">
                     {position &&
@@ -466,13 +466,13 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                 </div>
 
                 {/* 지도 끝 */}
-                {/* 점포 주소 */}
+                {/* 노점 주소 */}
                 <div className="sm:col-span-2 mb-4">
                   <label
                     htmlFor="location"
                     className="block text-sm/6 font-medium text-gray-700"
                   >
-                    점포 주소 <span className="text-red-500">*</span>
+                    노점 주소 <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-2">
                     <input
@@ -613,7 +613,7 @@ const ModifyOwnerComponent = ({ shop, shopId, shopDetailId, infoType }) => {
                 >
                   수정완료
                 </button>
-                {/* 취소: 이전 페이지(점포 상세)로 이동 */}
+                {/* 취소: 이전 페이지(노점 상세)로 이동 */}
                 <button
                   type="button"
                   onClick={handleShopDetail}

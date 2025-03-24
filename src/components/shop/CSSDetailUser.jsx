@@ -71,7 +71,7 @@ const DetailUserComponent = ({
   const [menuFetch, setMenuFetch] = useState(false);
   const [reviewFetch, setReviewFetch] = useState(false);
 
-  // 점포 수정페이지로 이동
+  // 노점 수정페이지로 이동
   const { moveToUserShopModify } = useCustomMove();
 
   // 요일 배열
@@ -164,15 +164,15 @@ const DetailUserComponent = ({
     setResult(null);
   };
 
-  // 점포 수정
+  // 노점 수정
   const handleUserShopModify = () => {
     console.log('User Shop - Modify');
     moveToUserShopModify(shopId, shopDetailId);
   };
 
-  // 점포 삭제
+  // 노점 삭제
   const handleUserShopDelete = () => {
-    console.log('점포 삭제 모달 보여줘라');
+    console.log('노점 삭제 모달 보여줘라');
 
     setResult('shopRemove');
   };
@@ -396,7 +396,7 @@ const DetailUserComponent = ({
                                   height: 48,
                                 },
                               }}
-                              title="점포 위치에용"
+                              title="노점 위치에용"
                             />
                           )}
                         </KakaoMap>

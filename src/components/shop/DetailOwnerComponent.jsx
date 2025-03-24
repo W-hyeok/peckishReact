@@ -76,7 +76,7 @@ const DetailOwnerComponent = ({
   const [ownerEmail, setOwnerEmail] = useState(null);
   const navigate = useNavigate();
 
-  // 점포 수정페이지로 이동
+  // 노점 수정페이지로 이동
   const { moveToOwnerShopModify } = useCustomMove();
 
   useEffect(() => {
@@ -167,15 +167,15 @@ const DetailOwnerComponent = ({
     setResult(null);
   };
 
-  // 점포 수정
+  // 노점 수정
   const handleOwnerShopModify = () => {
     console.log('Owner Shop - Modify');
     moveToOwnerShopModify(shopId, shopDetailId);
   };
 
-  // 점포 삭제
+  // 노점 삭제
   const handleOwnerShopDelete = () => {
-    console.log('점포 삭제 모달 보여줘라');
+    console.log('노점 삭제 모달 보여줘라');
     setResult('shopRemove');
   };
 
@@ -441,7 +441,7 @@ const DetailOwnerComponent = ({
                                   height: 48,
                                 },
                               }}
-                              title="점포 위치에용"
+                              title="노점 위치에용"
                             />
                           )}
                         </KakaoMap>

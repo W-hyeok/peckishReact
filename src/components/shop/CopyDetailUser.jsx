@@ -138,7 +138,7 @@ const DetailUserComponent = ({
                     src: '../../src/assets/icon/booth_active.png',
                     size: { width: 48, height: 48 },
                   }}
-                  title="점포 위치"
+                  title="노점 위치"
                 />
               )}
             </KakaoMap>

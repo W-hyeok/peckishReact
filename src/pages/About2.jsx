@@ -107,7 +107,7 @@ const About2 = () => {
   // 로그인한 사업자만 볼 수 있는 링크
   const userNavigationOwner = [
     { name: '내 프로필 보기', href: `/member/read/${cookieMember.email}` },
-    { name: '점포관리', href: `/shop/detailMoon/${cookieMember.email}` },
+    { name: '노점관리', href: `/shop/detailMoon/${cookieMember.email}` },
     { name: '영업 시작/종료', href: `/member/openClose/${cookieMember.email}` },
     { name: '로그아웃', href: '/member/logout' },
     { name: '회원탈퇴', href: '/member/leave' },
@@ -116,7 +116,7 @@ const About2 = () => {
   // 로그인한 관리자만 볼 수 있는 링크
   const userNavigationAdmin = [
     { name: '전체 회원 목록', href: '/admin/list' },
-    { name: '전체 점포 목록', href: '/admin/adminshop/shoplist' },
+    { name: '전체 노점 목록', href: '/admin/adminshop/shoplist' },
     { name: '전체 사업자 신청 목록', href: '/admin/adminmember/memberlist' },
     { name: '로그아웃', href: '/member/logout' },
   ];

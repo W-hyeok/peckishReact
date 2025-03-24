@@ -128,7 +128,7 @@ const MainPage = () => {
               {/* <div className="grid grid-cols-1 gap-4 lg:col-span-2">
                 <section aria-labelledby="section-2-title">
                   <h2 id="section-2-title" className="sr-only">
-                    점포 목록
+                    노점 목록
                   </h2>
                   <div className="overflow-hidden rounded-lg bg-white shadow">
                     <div className="">

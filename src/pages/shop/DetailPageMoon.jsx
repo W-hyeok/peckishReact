@@ -56,8 +56,8 @@ const DetailPageMoon = () => {
         )
       ) : (
         <ResultModal
-          title={'점포 관리 이상'}
-          content={`관리할 점포가 아직 없습니다`}
+          title={'노점 관리 이상'}
+          content={`관리할 노점가 아직 없습니다`}
           callbackFn={closeModal}
         />
       )}

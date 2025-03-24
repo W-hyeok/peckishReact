@@ -28,7 +28,6 @@ export const getOneMemberByPhone = async (phone) => {
 
 // 회원 리스트 조회 (사업자 등록번호로 조회)
 export const getOneMemberByBusinessNumber = async (businessNumber) => {
-
   const resultMemberByBusinessNumber = await axios.get(
     `${host}/businessNumber/${businessNumber}`
   );
@@ -36,7 +35,7 @@ export const getOneMemberByBusinessNumber = async (businessNumber) => {
     '사업자 등록번호 조회 결과 배열 크기 확인: {}',
     resultMemberByBusinessNumber.data.length
   );
-  
+
   return resultMemberByBusinessNumber.data;
 };
 
@@ -113,7 +112,7 @@ export const getShopList = async (email) => {
   return result.data;
 };
 
-// 상점 1개 조회 (Owner) : 점포 관리를 위한 상점 조회 by Moon
+// 상점 1개 조회 (Owner) : 노점 관리를 위한 상점 조회 by Moon
 export const getOneMoon = async (email) => {
   const result = await axios.get(`${host}/getOneShop/${email}`);
 
