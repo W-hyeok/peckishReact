@@ -93,7 +93,7 @@ export default function Header() {
           <div className="relative flex items-center justify-center pt-3 pb-3 lg:justify-between">
             {/* Logo */}
             <div className="flex items-center">
-              <Link to={'/'} className="flex items-center">
+              <Link to={'/main'} className="flex items-center">
                 <img
                   alt="Your Company"
                   src={fishLogo}
@@ -104,7 +104,6 @@ export default function Header() {
                 </span>
               </Link>
             </div>
-            
 
             {/* Right section on desktop */}
             <div className="flex items-center">
@@ -177,7 +176,7 @@ export default function Header() {
 
             {/* Menu button */}
           </div>
-        <div className="w-full px-4 md:px-10 py-2 border-t border-yellow-400"></div>
+          <div className="w-full px-4 md:px-10 py-2 border-t border-yellow-400"></div>
         </div>
         <div className="lg:hidden">
           <PopoverBackdrop

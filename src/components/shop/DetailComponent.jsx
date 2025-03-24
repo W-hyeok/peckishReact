@@ -10,12 +10,14 @@ import useCustomMove from '../../hooks/useCustomMove';
 import NotFound from '../../pages/NotFound';
 import ownerAddShop from '/src/assets/shop/notCert.png';
 import userAddShop from '/src/assets/shop/notReport.png';
+import locationStar from '../../assets/icon/location_star.png';
 
 const DetailComponent = ({ shop, shopId }) => {
   const membercookie = getCookie('member')
     ? getCookie('member')
     : { email: null };
 
+  const tmpOwned = getCookie('tmpOwned');
   console.log('***********DetailComponent***********');
   console.log(shop);
   console.log(shopId);
@@ -120,6 +122,7 @@ const DetailComponent = ({ shop, shopId }) => {
                   membercookie={membercookie}
                   moveToLogin={moveToLogin}
                   moveToMain={moveToMain}
+                  location_Star={locationStar}
                 />
               ) : (
                 <div className="flex justify-center items-center">
@@ -156,6 +159,7 @@ const DetailComponent = ({ shop, shopId }) => {
                   membercookie={membercookie}
                   mapData={mapData}
                   storeLoc={storeLoc}
+                  locationStar={locationStar}
                 />
               ) : (
                 <div className="flex justify-center items-center">
@@ -167,15 +171,19 @@ const DetailComponent = ({ shop, shopId }) => {
                       width={'60%'}
                       className="m-auto"
                     />
-                    <div className="content-center">
-                      <button
-                        type="button"
-                        onClick={handleAddShopOWNER}
-                        className="mt-4 w-auto rounded-md border border-transparent bg-yellow-500 px-8 py-3 font-extrabold text-lg text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
-                      >
-                        인증 정보 추가하기
-                      </button>
-                    </div>
+                    {membercookie.owned == true || tmpOwned == true ? (
+                      <div className="content-center">
+                        <button
+                          type="button"
+                          onClick={handleAddShopOWNER}
+                          className="mt-4 w-auto rounded-md border border-transparent bg-yellow-500 px-8 py-3 font-extrabold text-lg text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
+                        >
+                          인증 정보 추가하기
+                        </button>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 </div>
               )}
