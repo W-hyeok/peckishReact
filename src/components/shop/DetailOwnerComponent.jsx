@@ -225,6 +225,13 @@ const DetailOwnerComponent = ({
 
   console.log('owner- email ', shop.shopOwnerDTO.email);
   console.log('로그인한 회원 email', membercookie.email);
+
+  // 관리 목록으로 Back
+  const handelClickBack = () => {
+    console.log(' 관리자모드 - 목록으로');
+    navigate(-1);
+  };
+
   return (
     <>
       {result === 'review' && (
@@ -510,21 +517,33 @@ const DetailOwnerComponent = ({
                 </div>
                 {/* 버튼 */}
                 <div className="flex justify-end space-x-4 mt-2">
-                  {membercookie.email === shop.shopOwnerDTO.email && (
-                    <>
-                      <button
-                        onClick={handleOwnerShopModify}
-                        className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
-                      >
-                        수정
-                      </button>
-                      <button
-                        onClick={handleOwnerShopDelete}
-                        className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-                      >
-                        삭제
-                      </button>
-                    </>
+                  {/* 관리자 Role일 때 보여주기 - 목록으로 */}
+                  {membercookie.roleNames == 'ADMIN' ? (
+                    <button
+                      onClick={handelClickBack}
+                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                    >
+                      목록으로
+                    </button>
+                  ) : (
+                    <></>
+                  )}
+                  <button
+                    onClick={handleOwnerShopModify}
+                    className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
+                  >
+                    수정
+                  </button>
+                  {/* 쿠키 저장 email과 로그인한 아이디가 관리자 email일 때 */}
+                  {membercookie.email === shop.shopOwnerDTO.email ? (
+                    <button
+                      onClick={handleOwnerShopDelete}
+                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                    >
+                      삭제
+                    </button>
+                  ) : (
+                    <></>
                   )}
                 </div>
               </TabPanel>
