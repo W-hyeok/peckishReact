@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import { Fragment, useState } from 'react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { StarIcon } from '@heroicons/react/20/solid';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import {
   Map as KakaoMap,
   MapMarker,
@@ -12,28 +12,29 @@ import {
   Toolbox,
   useMap,
 } from 'react-kakao-maps-sdk';
-import '../../css/animate.css'; // 스크롤 애니메이션용 css
-import '../../css/hoverText.css'; // 텍스트 잘림 방지
+import '../../css/animate.css';
+import '../../css/hoverText.css';
 import '../../css/scrollbar.css';
 import '../../css/scrollbar2.css';
 import { useTimeStamp } from '../../hooks/useTimeAgo';
 import useCustomMove from '../../hooks/useCustomMove';
 import AddReviewModal from '../common/AddReviewModal';
 import AddMenuModal from '../common/AddMenuModal';
-import { deleteMenu, getMenuList } from '../../api/shopApi';
-import DetailOwnerMenuComponent from './DetailOwnerMenuComponent';
-import DetailOwnerReviewComponent from '../review/DetailOwnerReviewComponent';
-import { getReview, getOwnerRating, deleteReview } from '../../api/reviewApi';
-import { getCookie } from '../../util/cookieUtil';
-import axios from 'axios';
-import { createRoom } from '../../api/roomApi';
-import '../../css/common.css';
+import { deleteMenu, deleteOne, getMenuList } from '../../api/shopApi';
+import DetailUserMenuComponent from './DetailUserMenuComponent';
+import DetailUserReviewComponent from '../review/DetailUserReviewComponent';
+import {
+  deleteReview,
+  getReview,
+  getUserRating,
+  updateReview,
+} from '../../api/reviewApi';
 import ResultModal from '../common/ResultModal';
 import RemoveModal from '../common/RemoveModal';
+import { getCookie } from '../../util/cookieUtil';
 
 const host = `${API_SERVER_HOST}`;
 const { kakao } = window;
-const memberInfo = getCookie('member'); //채팅
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -41,40 +42,64 @@ function classNames(...classes) {
 
 // days 데이터 (예시)
 const days = [
-  { id: 1, name: '월요일' },
-  { id: 2, name: '화요일' },
-  { id: 3, name: '수요일' },
-  { id: 4, name: '목요일' },
-  { id: 5, name: '금요일' },
-  { id: 6, name: '토요일' },
-  { id: 7, name: '일요일' },
+  { id: 1, name: '월' },
+  { id: 2, name: '화' },
+  { id: 3, name: '수' },
+  { id: 4, name: '목' },
+  { id: 5, name: '금' },
+  { id: 6, name: '토' },
+  { id: 7, name: '일' },
 ];
 
-const DetailOwnerComponent = ({
+const DetailUserComponent = ({
   shop,
   shopDetailId,
   shopId,
   infoType,
+  membercookie,
   mapData,
   storeLoc,
-  membercookie,
 }) => {
-  console.log('DetailOwner - shopDetailId : ', shopDetailId);
+  console.log('DetailUser - shopDetailid : ', shopDetailId);
 
-  const [menuItems, setMenuItems] = useState([]); // 메뉴 목록 뿌려줄때 필요한 것들
-  const [review, setReview] = useState([]); // 리뷰 목록 뿌려줄때 필요한 것들
-  const [ratingAvg, setRatingAvg] = useState(null); // 리뷰 별점계산
-  const [result, setResult] = useState(null); // 모달 띄워주기 위해서
-  const [menuRefresh, setMenuRefresh] = useState(false); // 메뉴 리프레시
+  const [menuItems, setMenuItems] = useState([]); // 메뉴목록 뿌리기
+  const [review, setReview] = useState([]); // 리뷰목록 뿌리기
+  const [ratingAvg, setRatingAvg] = useState(null); // 리뷰 별점 계산
+  const [result, setResult] = useState(null); // 모달 result
+  const [menuRefresh, setMenuRefresh] = useState(false);
   const [reviewRefresh, setReviewRefresh] = useState(false);
-  const [menuFetch, setMenuFetch] = useState(false); // 메뉴 시간차
+  const [menuFetch, setMenuFetch] = useState(false);
   const [reviewFetch, setReviewFetch] = useState(false);
 
-  const [ownerEmail, setOwnerEmail] = useState(null);
-  const navigate = useNavigate();
-
   // 점포 수정페이지로 이동
-  const { moveToOwnerShopModify } = useCustomMove();
+  const { moveToUserShopModify } = useCustomMove();
+
+  // 요일 배열
+  const daysData = (() => {
+    const raw = shop.shopUserDTO.days; // DB에서 가져온 값
+    // raw가 문자열인 경우 처리
+    if (typeof raw === 'string') {
+      // raw가 JSON 배열 형식(예: '["월","화","수"]')인지 확인
+      if (raw.trim().startsWith('[')) {
+        try {
+          return JSON.parse(raw);
+        } catch (e) {
+          // JSON 형식이지만 파싱에 실패할 경우 fallback: 대괄호 제거 후 쉼표로 분리
+          return raw
+            .replace(/^\[|\]$/g, '')
+            .split(',')
+            .map((item) => item.trim());
+        }
+      } else {
+        // raw가 단일 문자나 쉼표로 구분된 문자열인 경우
+        return raw.includes(',')
+          ? raw.split(',').map((item) => item.trim())
+          : [raw.trim()];
+      }
+    }
+    // raw가 문자열이 아니면 그대로 반환
+    return raw;
+  })();
 
   useEffect(() => {
     getMenuList(shopId, infoType).then((data) => {
@@ -95,36 +120,11 @@ const DetailOwnerComponent = ({
   }, [shopId, infoType, reviewRefresh]);
 
   useEffect(() => {
-    getOwnerRating(shopId).then((data) => {
-      console.log('Owner 리뷰 평균 : ', data);
+    getUserRating(shopId).then((data) => {
+      console.log('USER 리뷰 평균 : ', data);
       setRatingAvg(data);
     });
   }, [shopId, infoType, reviewRefresh]);
-
-  // 요일 배열
-  const daysData = (() => {
-    const daylist = shop.shopOwnerDTO.days; // DB에서 가져온 값
-    // raw가 문자열인 경우 처리
-    if (typeof daylist === 'string') {
-      // raw가 JSON 배열 형식(예: '["월","화","수"]')인지 확인
-      if (daylist.trim().startsWith('[')) {
-        try {
-          return JSON.parse(daylist);
-        } catch (e) {
-          return daylist
-            .replace(/^\[|\]$/g, '')
-            .split(',')
-            .map((item) => item.trim());
-        }
-      } else {
-        return daylist.includes(',')
-          ? daylist.split(',').map((item) => item.trim())
-          : [daylist.trim()];
-      }
-    }
-    // raw가 문자열이 아니면 그대로 반환
-    return daylist;
-  })();
 
   // 리뷰 작성 모달
   const handleClickReview = () => {
@@ -165,79 +165,35 @@ const DetailOwnerComponent = ({
   };
 
   // 점포 수정
-  const handleOwnerShopModify = () => {
-    console.log('Owner Shop - Modify');
-    moveToOwnerShopModify(shopId, shopDetailId);
+  const handleUserShopModify = () => {
+    console.log('User Shop - Modify');
+    moveToUserShopModify(shopId, shopDetailId);
   };
 
   // 점포 삭제
-  const handleOwnerShopDelete = () => {
+  const handleUserShopDelete = () => {
     console.log('점포 삭제 모달 보여줘라');
+
     setResult('shopRemove');
   };
 
-  useEffect(() => {
-    const fetchOwnerInfo = async () => {
-      try {
-        const response = await axios.get(`${host}/api/shop/owner/${shopId}`);
-        setOwnerEmail(response.data.email); // 사장님 이메일 저장
-        console.log('setOwnerEmail: ', response.data.email);
-      } catch (error) {
-        console.error('사장님 정보를 가져오지 못했습니다.', error);
-      }
-    };
-    fetchOwnerInfo();
-  }, [shopId]);
+  const navigate = useNavigate();
 
-  //채팅
-  const handleChat = async () => {
-    // 로그인 여부 체크
-    if (!memberInfo) {
-      alert('로그인 후 이용 가능합니다.');
-      return;
-    }
-
-    try {
-      const memberEmail = memberInfo.email; // JWT에서 사용자 이메일 추출
-      if (!ownerEmail) {
-        alert('사장님 이메일을 확인할 수 없습니다.');
-        return;
-      }
-      const member1 = ownerEmail;
-      const member2 = memberEmail;
-      // 두 멤버를 createRoom에 전달
-      const room = await createRoom({
-        member1,
-        member2,
-        shopId,
-      });
-      console.log('채팅방 생성 성공:', room);
-      // 반환된 room 객체의 roomId를 이용해 채팅방 페이지로 이동
-      if (room.room_ID) {
-        navigate(`/room/${room.room_ID}`);
-      } else {
-        console.error('roomId가 반환되지 않았습니다.');
-      }
-    } catch (error) {
-      console.error('채팅방 생성 실패', error);
-    }
-  };
-
-  console.log('owner- email ', shop.shopOwnerDTO.email);
-  console.log('로그인한 회원 email', membercookie.email);
+  console.log('Role', membercookie.roleNames);
 
   // 관리 목록으로 Back
   const handelClickBack = () => {
     console.log(' 관리자모드 - 목록으로');
     navigate(-1);
   };
-
+  console.log('user - email', shop.shopUserDTO.email);
+  console.log('로그인한 회원 email', membercookie.email);
   return (
     <>
       {result === 'review' && (
         <AddReviewModal
           shopId={shopId}
-          shopDetailId={shop.shopOwnerDTO.shopOwnerId}
+          shopDetailId={shop.shopUserDTO.shopUserId}
           infoType={infoType}
           title={'리뷰 작성'}
           content={`리뷰를 작성해주세요`}
@@ -247,7 +203,7 @@ const DetailOwnerComponent = ({
       {result === 'menu' && (
         <AddMenuModal
           shopId={shopId}
-          shopDetailId={shop.shopOwnerDTO.shopOwnerId}
+          shopDetailId={shop.shopUserDTO.shopUserId}
           infoType={infoType}
           callbackFn={closeModal}
         />
@@ -266,6 +222,7 @@ const DetailOwnerComponent = ({
           callbackFn={closeModal}
         />
       )}
+
       {result === 'shopRemove' && (
         <RemoveModal
           title={'상점 정보 삭제'}
@@ -318,23 +275,23 @@ const DetailOwnerComponent = ({
         <div className="flex justify-between items-center mt-2">
           <h1
             className="
-                     text-4xl
-                     sm:text-6xl
-                     font-extrabold
-                     tracking-tight
-                     text-gray-900
-                     mb-4
-                     leading-tight
-                     whitespace-nowrap
-                     overflow-visible
-                   "
+                  text-4xl
+                  sm:text-6xl
+                  font-extrabold
+                  tracking-tight
+                  text-gray-900
+                  mb-4
+                  leading-tight
+                  whitespace-nowrap
+                  overflow-visible
+                "
           >
-            {shop.shopOwnerDTO.title}
+            {shop.shopUserDTO.title}
           </h1>
 
           {/* 최근 수정 텍스트 */}
           <p className="text-lg text-gray-700">
-            최근 수정: {useTimeStamp(shop.shopOwnerDTO.updateDate)}
+            최근 수정: {useTimeStamp(shop.shopUserDTO.updateDate)}
           </p>
         </div>
       </div>
@@ -342,12 +299,13 @@ const DetailOwnerComponent = ({
       {/* 사진 컨테이너 */}
       <div className="mt-4 w-full max-w-5xl mx-auto h-[50vh] overflow-hidden">
         <img
-          alt={shop.shopOwnerDTO.title}
-          src={`${host}/api/shop/view/${shop.shopOwnerDTO.filename}`}
+          alt={shop.shopUserDTO.title}
+          src={`${host}/api/shop/view/${shop.shopUserDTO.filename}`}
           className="w-full h-full object-contain"
         />
       </div>
-      {/* tab */}
+
+      {/* 탭 섹션 */}
       <div className="mt-6 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
         <div className="sm:col-span-2">
           <TabGroup>
@@ -355,54 +313,54 @@ const DetailOwnerComponent = ({
               <TabList className="flex space-x-2">
                 <Tab
                   className="
-                           px-6 py-3
-                           text-lg font-semibold
-                           border-2 border-yellow-500
-                           text-gray-700
-                           bg-white
-                           rounded-t-md
-                           hover:bg-yellow-50
-                           data-[selected]:bg-yellow-500
-                           data-[selected]:text-white
-                           data-[selected]:border-yellow-500
-                           outline-none
-                         "
+      px-6 py-3
+      text-lg font-semibold
+      border-2 border-yellow-500
+      text-gray-700
+      bg-white
+      rounded-t-md
+      hover:bg-yellow-50
+      data-[selected]:bg-yellow-500
+      data-[selected]:text-white
+      data-[selected]:border-yellow-500
+      outline-none
+    "
                 >
                   노점 정보
                 </Tab>
 
                 <Tab
                   className="
-                           px-6 py-3
-                           text-lg font-semibold
-                           border-2 border-yellow-500
-                           text-gray-700
-                           bg-white
-                           rounded-t-md
-                           hover:bg-yellow-50
-                           data-[selected]:bg-yellow-500
-                           data-[selected]:text-white
-                           data-[selected]:border-yellow-500
-                           outline-none
-                         "
+      px-6 py-3
+      text-lg font-semibold
+      border-2 border-yellow-500
+      text-gray-700
+      bg-white
+      rounded-t-md
+      hover:bg-yellow-50
+      data-[selected]:bg-yellow-500
+      data-[selected]:text-white
+      data-[selected]:border-yellow-500
+      outline-none
+    "
                 >
                   노점 메뉴
                 </Tab>
 
                 <Tab
                   className="
-                           px-6 py-3
-                           text-lg font-semibold
-                           border-2 border-yellow-500
-                           text-gray-700
-                           bg-white
-                           rounded-t-md
-                           hover:bg-yellow-50
-                           data-[selected]:bg-yellow-500
-                           data-[selected]:text-white
-                           data-[selected]:border-yellow-500
-                           outline-none
-                         "
+      px-6 py-3
+      text-lg font-semibold
+      border-2 border-yellow-500
+      text-gray-700
+      bg-white
+      rounded-t-md
+      hover:bg-yellow-50
+      data-[selected]:bg-yellow-500
+      data-[selected]:text-white
+      data-[selected]:border-yellow-500
+      outline-none
+    "
                 >
                   노점 리뷰
                 </Tab>
@@ -446,36 +404,29 @@ const DetailOwnerComponent = ({
                     </dd>
                   </dl>
                   {/* <dl className="p-6">
-                    <dt className="text-xl text-gray-900">영업일</dt>
+                    <dt className="text-xl text-gray-900">영업일 & 영업시간</dt>
                     <dd className="text-lg text-gray-700">
-                      <input
-                        name="title"
-                        type="text"
-                        value={shop.shopOwnerDTO.days}
-                        autoComplete="street-address"
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                      />
-                    </dd>
-                  </dl>
-                  <dl className="p-6">
-                    <dt className="text-xl text-gray-900">영업시간</dt>
-                    <dd className="text-lg text-gray-700">
-                      <input
-                        name="title"
-                        type="text"
-                        value={`${shop.shopOwnerDTO.openTime} ~ ${shop.shopOwnerDTO.closeTime}`}
-                        autoComplete="street-address"
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg text-gray-900 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                      />
+                      {days.map((day) => {
+                        // 해당 요일이 영업일에 포함되어 있는지 체크
+                        const isOpen = openDays.includes(day.id);
+                        const timeDisplay = isOpen
+                          ? `${shop.shopUserDTO.openTime} ~ ${shop.shopUserDTO.closeTime}`
+                          : '휴무';
+                        // 요일 이름을 첫 글자만 추출 (예: '월요일' → '월')
+                        const shortDay = day.name.substring(0, 1);
+                        return (
+                          <div key={day.id} className="py-1">
+                            <strong>{shortDay}</strong> {timeDisplay}
+                          </div>
+                        );
+                      })}
                     </dd>
                   </dl> */}
                   <dl className="p-6">
                     <dt className="text-xl text-gray-900">영업일 & 영업시간</dt>
                     <dd className="text-lg text-gray-700">
                       <div
-                        // input처럼 보이도록 스타일링한 div (textarea의 리사이즈 표시 제거)
                         className="block w-full rounded-md bg-white px-4 py-3 text-lg outline outline-1 outline-gray-300 focus:outline focus:outline-2 focus:outline-indigo-600"
-                        // whiteSpace: 'pre-wrap'을 통해 개행 문자를 반영, userSelect를 false로 설정해 텍스트 선택 방지
                         style={{
                           whiteSpace: 'pre-wrap',
                           fontFamily: 'inherit',
@@ -483,21 +434,16 @@ const DetailOwnerComponent = ({
                         }}
                       >
                         {days.map((day) => {
-                          // DB의 daysData와 상수 배열의 day.name을 비교 (이제 DB 값은 "월", "화" 등 그대로 저장됨)
                           const isOpen = daysData.includes(day.name);
-                          // 영업일이면 영업시간, 아니면 "휴무" 문자열 지정
                           const timeDisplay = isOpen
-                            ? `${shop.shopOwnerDTO.openTime} - ${shop.shopOwnerDTO.closeTime}`
+                            ? `${shop.shopUserDTO.openTime} - ${shop.shopUserDTO.closeTime}`
                             : '휴무';
                           return (
                             <div key={day.id}>
-                              {/* 요일은 그대로 출력 (substring 사용 불필요) */}
                               <span>{day.name} </span>
                               {isOpen ? (
-                                // 영업일인 경우 일반 텍스트로 영업시간 출력
                                 <span>{timeDisplay}</span>
                               ) : (
-                                // 영업일이 아닌 경우 "휴무"를 빨간 글씨로 출력 (Tailwind CSS 클래스 사용)
                                 <span className="text-red-500">
                                   {timeDisplay}
                                 </span>
@@ -506,19 +452,6 @@ const DetailOwnerComponent = ({
                           );
                         })}
                       </div>
-                    </dd>
-                  </dl>
-
-                  <dl className="p-6">
-                    <dt className="text-lg text-gray-900">문의하기</dt>
-                    <dd className="text-md text-gray-700">
-                      <button
-                        type="button"
-                        onClick={handleChat}
-                        className="defaultBtn"
-                      >
-                        문의 하기
-                      </button>
                     </dd>
                   </dl>
                 </div>
@@ -536,15 +469,15 @@ const DetailOwnerComponent = ({
                     <></>
                   )}
                   <button
-                    onClick={handleOwnerShopModify}
+                    onClick={handleUserShopModify}
                     className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
                   >
                     수정
                   </button>
-                  {/* 쿠키 저장 email과 로그인한 아이디가 관리자 email일 때 */}
-                  {membercookie.email === shop.shopOwnerDTO.email ? (
+                  {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때때 */}
+                  {membercookie.email === shop.shopUserDTO.email ? (
                     <button
-                      onClick={handleOwnerShopDelete}
+                      onClick={handleUserShopDelete}
                       className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
                     >
                       삭제
@@ -557,9 +490,9 @@ const DetailOwnerComponent = ({
 
               {/* 메뉴 탭 */}
               <TabPanel className="relative text-base text-gray-600 py-4 px-4 pt-20 rounded-lg mt-4">
-                <h3 className="sr-only">Owner Menu</h3>
+                <h3 className="sr-only">User Menu</h3>
                 {menuItems.length > 0 && menuFetch ? (
-                  <DetailOwnerMenuComponent
+                  <DetailUserMenuComponent
                     menuItems={menuItems}
                     handleMenuDelete={handleMenuDelete}
                   />
@@ -580,11 +513,11 @@ const DetailOwnerComponent = ({
 
               {/* 리뷰 탭 */}
               <TabPanel className="relative text-base text-gray-600 py-4 px-4 pt-20 rounded-lg mt-4">
-                <h3 className="sr-only">Owner Reviews</h3>
+                <h3 className="sr-only">User Reviews</h3>
                 {review.length > 0 && reviewFetch ? (
-                  <DetailOwnerReviewComponent
+                  <DetailUserReviewComponent
                     shopId={shopId}
-                    shopDetailId={shop.shopOwnerDTO.shopOwnerId}
+                    shopDetailId={shop.shopUserDTO.shopUserId}
                     infoType={infoType}
                     review={review}
                     handleReviewRemove={handleReviewRemove}
@@ -595,6 +528,7 @@ const DetailOwnerComponent = ({
                     <p className="mt-4 text-lg">리뷰를 추가해주세요!</p>
                   </div>
                 )}
+
                 <button
                   type="button"
                   onClick={handleClickReview}
@@ -611,4 +545,4 @@ const DetailOwnerComponent = ({
   );
 };
 
-export default DetailOwnerComponent;
+export default DetailUserComponent;

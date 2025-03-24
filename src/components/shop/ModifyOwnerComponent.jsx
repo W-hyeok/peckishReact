@@ -28,13 +28,13 @@ const initState = {
 
 // days 데이터 (예시)
 const days = [
-  { id: 1, name: '월' },
-  { id: 2, name: '화' },
-  { id: 3, name: '수' },
-  { id: 4, name: '목' },
-  { id: 5, name: '금' },
-  { id: 6, name: '토' },
-  { id: 7, name: '일' },
+  { id: 1, name: '월요일' },
+  { id: 2, name: '화요일' },
+  { id: 3, name: '수요일' },
+  { id: 4, name: '목요일' },
+  { id: 5, name: '금요일' },
+  { id: 6, name: '토요일' },
+  { id: 7, name: '일요일' },
 ];
 
 const center = {
