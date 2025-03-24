@@ -1,6 +1,9 @@
 .skiptranslate {
   display: none !important;
 }
+.goog-te-spinner-pos {
+  display: none !important;
+}
 body {
   top: 0px !important;
 }
