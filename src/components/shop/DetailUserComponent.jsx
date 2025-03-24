@@ -4,6 +4,7 @@ import { Fragment, useState } from 'react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { StarIcon } from '@heroicons/react/20/solid';
 import { Navigate, useNavigate } from 'react-router-dom';
+import locationStar from '../../assets/icon/location_star.png';
 import {
   Map as KakaoMap,
   MapMarker,
@@ -23,6 +24,7 @@ import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, deleteOne, getMenuList } from '../../api/shopApi';
 import DetailUserMenuComponent from './DetailUserMenuComponent';
 import DetailUserReviewComponent from '../review/DetailUserReviewComponent';
+
 import {
   deleteReview,
   getReview,
@@ -390,7 +392,7 @@ const DetailUserComponent = ({
                             <MapMarker
                               position={storeLoc.center}
                               image={{
-                                src: '../../src/assets/icon/booth_active.png',
+                                src: `${locationStar}`,
                                 size: {
                                   width: 48,
                                   height: 48,
@@ -457,17 +459,12 @@ const DetailUserComponent = ({
                 </div>
                 {/* 버튼 */}
                 <div className="flex justify-end space-x-4 mt-2">
-                  {/* 관리자 Role일 때 보여주기 - 목록으로 */}
-                  {membercookie.roleNames == 'ADMIN' ? (
-                    <button
-                      onClick={handelClickBack}
-                      className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
-                    >
-                      목록으로
-                    </button>
-                  ) : (
-                    <></>
-                  )}
+                  <button
+                    onClick={handelClickBack}
+                    className="h-fit w-fit px-4 py-2 bg-white text-red-500 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-red-500 hover:bg-red-500 hover:text-white"
+                  >
+                    목록으로
+                  </button>
                   <button
                     onClick={handleUserShopModify}
                     className="h-fit w-fit px-4 py-2 bg-white text-blue-600 text-xl font-semibold rounded-[8px] mt-6 border-[2px] border-blue-600 hover:bg-blue-600 hover:text-white"
