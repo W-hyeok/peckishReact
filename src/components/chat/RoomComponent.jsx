@@ -9,8 +9,8 @@ import ChatSideBarComponent from './ChatSideBarComponent';
 
 import '../../css/common.css';
 
-export const WS_SERVER_HOST = 'localhost:8080';
-// export const WS_SERVER_HOST = 'https://hungrymoment.store';
+// export const WS_SERVER_HOST = 'localhost:8080';
+export const WS_SERVER_HOST = 'https://hungrymoment.store';
 
 const RoomComponent = () => {
   const { room_ID } = useParams();
