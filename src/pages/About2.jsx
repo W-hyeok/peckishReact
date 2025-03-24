@@ -49,7 +49,7 @@ import { CgLogIn } from 'react-icons/cg';
 //   { name: 'Marketplace', href: '#' },
 //   { name: 'Company', href: '#' },
 // ];
-
+import landingImage from '../assets/imgs/landingImage.png';
 const features = [
   {
     name: '내 주변의 노점 찾기.',
@@ -282,7 +282,7 @@ const About2 = () => {
               </div>
               <img
                 alt="Product screenshot"
-                src="https://tailwindcss.com/plus-assets/img/component-images/dark-project-app-screenshot.png"
+                src={landingImage}
                 width={2432}
                 height={1442}
                 className="w-[48rem] max-w-none rounded-xl ring-1 shadow-xl ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
