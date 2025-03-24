@@ -8,7 +8,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { getMsgs } from '../../api/roomApi';
 import { getCookie } from '../../util/cookieUtil';
 import { API_SERVER_HOST } from '../../api/todoApi';
-import ChatSideBarComponenet from './ChatSideBarComponenet';
+import ChatSideBarComponent from './ChatSideBarComponent';
 import '../../css/common.css';
 
 export const WS_SERVER_HOST = 'localhost:8080';
@@ -200,12 +200,12 @@ const RoomComponent = () => {
       {/* Mobile Sidebar */}
       <Dialog
         open={sidebarOpen}
-        onClose={setSidebarOpen}
-        className="relative z-50 lg:hidden"
+        onClose={() => setSidebarOpen(false)}
+        className="fixed inset-0 z-50 lg:hidden"
       >
         {/* 반투명 배경 */}
         <Dialog.Overlay className="fixed inset-0 bg-gray-900/80" />
-        <div className="fixed inset-0 flex">
+        <div className="flex h-full">
           <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1 bg-white p-6 mt-16 mb-16">
             <div className="flex h-16 shrink-0 items-center">
               <img
@@ -214,7 +214,7 @@ const RoomComponent = () => {
                 className="h-8 w-auto"
               />
             </div>
-            <ChatSideBarComponenet
+            <ChatSideBarComponent
               socket={socket}
               resetUnreadTrigger={resetUnreadTrigger}
               activeRoomId={room_ID}
@@ -234,11 +234,11 @@ const RoomComponent = () => {
       </Dialog>
 
       {/* 데스크톱용 Sidebar */}
-      <div className="hidden lg:flex lg:flex-col w-64 bg-white border-r border-gray-200 p-4 overflow-y-auto">
+      <div className="hidden lg:flex lg:flex-col w-64 bg-white border-r border-gray-200 p-4 rounded-tl-lg rounded-bl-lg overflow-y-auto">
         <div className="mb-4">
           <h2 className="text-xl font-bold">채팅방 목록</h2>
         </div>
-        <ChatSideBarComponenet
+        <ChatSideBarComponent
           socket={socket}
           resetUnreadTrigger={resetUnreadTrigger}
           activeRoomId={room_ID}
@@ -248,7 +248,7 @@ const RoomComponent = () => {
       {/* 오른쪽: 실제 채팅 UI 영역 */}
       <div className="flex-1 flex flex-col">
         {/* 상단 헤더 (모바일 메뉴 버튼 + 채팅방 나가기 등) */}
-        <div className="flex items-center justify-between bg-yellow-200 p-4 border-b border-gray-200">
+        <div className="flex items-center justify-between bg-yellow-200 p-4 rounded-tr-lg  sm:rounded-tl-lg border-b border-gray-200">
           <div className="flex items-center space-x-4">
             {/* 모바일에서만 보이는 메뉴 버튼 */}
             <button
@@ -320,7 +320,7 @@ const RoomComponent = () => {
         </div>
 
         {/* 메시지 입력 영역 */}
-        <div className="flex items-center space-x-2 p-4 bg-white border-t border-gray-200">
+        <div className="flex items-center space-x-2 p-4 rounded-br-lg sm:rounded-bl-lg bg-white border-t border-gray-200">
           <input
             type="text"
             value={inputMessage}

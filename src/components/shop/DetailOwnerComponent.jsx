@@ -512,13 +512,15 @@ const DetailOwnerComponent = ({
                   <dl className="p-6">
                     <dt className="text-lg text-gray-900">문의하기</dt>
                     <dd className="text-md text-gray-700">
-                      <button
-                        type="button"
-                        onClick={handleChat}
-                        className="defaultBtn"
-                      >
-                        문의 하기
-                      </button>
+                      {membercookie.email !== shop.shopOwnerDTO.email && (
+                        <button
+                          type="button"
+                          onClick={handleChat}
+                          className="defaultBtn"
+                        >
+                          문의 하기
+                        </button>
+                      )}
                     </dd>
                   </dl>
                 </div>
