@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import DetailComponent from '../../components/shop/DetailComponent';
+import DetailComponentMoon from '../../components/shop/DetailComponentMoon';
 import { useEffect, useState } from 'react';
 import { getOneMoon } from '../../api/memberApi';
 import FetchModal from '../../components/common/FetchModal';
@@ -26,7 +26,7 @@ const DetailPageMoon = () => {
   const [loaded, setLoaded] = useState(true);
 
   const closeModal = () => {
-    moveToPath('/');
+    moveToPath('/main');
   };
 
   useEffect(() => {
@@ -35,8 +35,8 @@ const DetailPageMoon = () => {
       console.log(data.RESULT);
       if (data.RESULT.shopOwnerDTO != null) {
         setShop({ ...data.RESULT });
-        setShopId(data.RESULT.shopOwnerDTO.shopId); // by Moon
-        console.log(data.RESULT.shopOwnerDTO.shopId);
+        setShopId(data.RESULT.shopDTO.shopId); // by Moon
+        console.log(data.RESULT.shopDTO.shopId);
       }
       setFetch(false); // 로딩X -> Fetch 모달 닫히게
       setLoaded(false); // 로딩 완료!!!
@@ -52,7 +52,7 @@ const DetailPageMoon = () => {
         loaded ? (
           <></>
         ) : (
-          <DetailComponent shop={shop} shopId={shopId} />
+          <DetailComponentMoon shop={shop} shopId={shopId} />
         )
       ) : (
         <ResultModal

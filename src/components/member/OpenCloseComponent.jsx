@@ -29,13 +29,13 @@ const OpenCloseComponent = () => {
   const closeModal = () => {
     setResult(2);
     // moveToPath(`/shop/detailMoon/${cookieMember.email}`);
-    moveToPath(`/`);
+    moveToPath(`/main`);
   };
 
   const closeModalForClose = () => {
     setResult(2);
     // moveToPath(`/member/logout`);
-    moveToPath(`/`);
+    moveToPath(`/main`);
   };
 
   return (
