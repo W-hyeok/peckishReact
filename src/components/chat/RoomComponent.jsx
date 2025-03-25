@@ -2,16 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  TransitionChild,
-} from '@headlessui/react';
+import { Dialog } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import { getMsgs } from '../../api/roomApi';
@@ -19,7 +10,7 @@ import { getCookie } from '../../util/cookieUtil';
 import { API_SERVER_HOST } from '../../api/todoApi';
 import ChatSideBarComponent from './ChatSideBarComponent';
 import '../../css/common.css';
-
+import fishLogo from '/src/assets/fish_logo.png';
 export const WS_SERVER_HOST = 'localhost:8080';
 // export const WS_SERVER_HOST = 'https://hungrymoment.store';
 
@@ -221,15 +212,11 @@ const RoomComponent = () => {
           className="fixed inset-0 z-50 lg:hidden"
         >
           {/* 반투명 배경 */}
-          <Dialog.Overlay className="fixed inset-0 bg-gray-900/80" />
+          {/* <Dialog.Overlay className="fixed inset-0 bg-gray-900/80" /> */}
           <div className="flex h-full">
             <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1 bg-white p-6 mt-16 mb-16">
               <div className="flex h-16 shrink-0 items-center">
-                <img
-                  alt="Your Company"
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                  className="h-8 w-auto"
-                />
+                <img alt="Your Company" src={fishLogo} className="h-8 w-auto" />
               </div>
               <div>
                 <ChatSideBarComponent
@@ -280,7 +267,7 @@ const RoomComponent = () => {
               </button>
               <h2 className="text-lg font-semibold">채팅방 #{room_ID}</h2>
             </div>
-            <Link to="/main" className="defaultBtn">
+            <Link to="/main" className="defaultBtn smText">
               채팅방 나가기
             </Link>
           </div>
@@ -351,7 +338,7 @@ const RoomComponent = () => {
               placeholder="메시지를 입력하세요"
               className="flex-grow p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
-            <button onClick={sendMessage} className="positiveBtn">
+            <button onClick={sendMessage} className="positiveBtn smText">
               전송
             </button>
           </div>

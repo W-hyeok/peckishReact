@@ -40,6 +40,11 @@
     border-[1px] border-yellow-400 hover:bg-white hover:text-yellow-400;
 }
 
+.ChatBtn {
+  @apply h-fit w-fit px-4 py-2 bg-amber-500 text-white text-base rounded-[8px] 
+    border-[1px] border-amber-500 hover:bg-white hover:text-amber-500;
+}
+
 .smText {
   @apply text-sm sm:text-base;
 }
