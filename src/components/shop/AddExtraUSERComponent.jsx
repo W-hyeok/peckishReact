@@ -360,10 +360,10 @@ const AddExtraUSERComponent = ({ shopId }) => {
             </p>
             <div>
               <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-                {/* 점포 사진 영역 */}
+                {/* 노점 사진 영역 */}
                 <div className="col-span-full mb-8">
                   <label className="block text-sm font-medium text-gray-900">
-                    점포 사진 <span className="text-red-500">*</span>
+                    노점 사진 <span className="text-red-500">*</span>
                   </label>
                   <div className="mt-2 flex justify-center rounded-lg border bg-white border-gray-900/25 px-6 py-10">
                     <div className="text-center">
@@ -382,7 +382,7 @@ const AddExtraUSERComponent = ({ shopId }) => {
                       )}
                       <div className="mt-4 flex justify-center text-sm text-gray-600">
                         <label className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500">
-                          <span>{image ? '사진 변경' : '점포 사진 등록'}</span>
+                          <span>{image ? '사진 변경' : '노점 사진 등록'}</span>
                           <input
                             type="file"
                             ref={uploadRef}
@@ -401,13 +401,13 @@ const AddExtraUSERComponent = ({ shopId }) => {
                 </div>
               </div>
             </div>
-            {/* 점포명 영역 */}
+            {/* 노점명 영역 */}
             <div className="sm:col-span-2 mb-8">
               <label
                 htmlFor="title"
                 className="block text-sm font-medium text-gray-700"
               >
-                점포명 <span className="text-red-500">*</span>
+                노점명 <span className="text-red-500">*</span>
               </label>
               <div className="mt-2">
                 <input
@@ -459,7 +459,7 @@ const AddExtraUSERComponent = ({ shopId }) => {
               <MapMarker position={position.center ?? center} />
             </Map>
             <p className="text-center pt-1 text-gray-600">
-              <span className="text-red-500">*</span>제보/등록할 점포의 위치를
+              <span className="text-red-500">*</span>제보/등록할 노점의 위치를
               클릭해서 지정해주세요!
             </p>
             <div id="clickLatlng" className="hidden">
@@ -467,13 +467,13 @@ const AddExtraUSERComponent = ({ shopId }) => {
                 `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
             </div>
             {/* 지도 끝  */}
-            {/* 점포 주소 영역 */}
+            {/* 노점 주소 영역 */}
             <div className="sm:col-span-2 mb-8">
               <label
                 htmlFor="location"
                 className="block text-sm font-medium text-gray-700"
               >
-                점포 주소 <span className="text-red-500">*</span>
+                노점 주소 <span className="text-red-500">*</span>
               </label>
               <div className="mt-2">
                 <input

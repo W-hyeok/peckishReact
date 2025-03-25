@@ -420,7 +420,7 @@
                 </div>
 
                 <p className="mt-6 text-gray-500">
-                  점포 위치 {shop.shopOwnerDTO.location}
+                  노점 위치 {shop.shopOwnerDTO.location}
                 </p>
                 {/**방문 인증 여부 */}
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">

@@ -224,7 +224,7 @@ const AddComponent = () => {
   const handleCheckboxCertificate = (isChecked) => {
     // 체크박스 체크 시 owned 체크
     if (memberCookie.owned == true) {
-      alert('인증된 점포가 이미 존재합니다.');
+      alert('인증된 노점가 이미 존재합니다.');
       setShop({ ...shop, certificate: false });
       return;
     } else if (isChecked) {
@@ -289,7 +289,7 @@ const AddComponent = () => {
       return;
     }
     if (memberCookie.owned === true) {
-      alert('인증된 점포가 이미 존재합니다.');
+      alert('인증된 노점가 이미 존재합니다.');
       return;
     }
 
@@ -332,7 +332,7 @@ const AddComponent = () => {
 
   const closeModal = () => {
     setResult(null); // result
-    moveToShop(result); // 등록 시 점포 상세페이지로 이동
+    moveToShop(result); // 등록 시 노점 상세페이지로 이동
   };
 
   // 일반 input태그 값 작성시 실행되는 함수
@@ -381,10 +381,10 @@ const AddComponent = () => {
         <div className="">
           <div>
             <div className="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
-              {/* 점포 사진 영역 */}
+              {/* 노점 사진 영역 */}
               <div className="col-span-full mb-8">
                 <label className="block text-base font-medium text-gray-900">
-                  점포 사진 <span className="text-red-500">*</span>
+                  노점 사진 <span className="text-red-500">*</span>
                 </label>
                 <div className="mt-2 flex justify-center rounded-lg border bg-white border-gray-900/25 px-6 py-10">
                   <div className="text-center">
@@ -403,7 +403,7 @@ const AddComponent = () => {
                     )}
                     <div className="mt-4 flex justify-center text-sm text-gray-600">
                       <label className="relative cursor-pointer rounded-md bg-white font-semibold text-red-500  hover:text-amber-500">
-                        <span>{image ? '사진 변경' : '점포 사진 등록'}</span>
+                        <span>{image ? '사진 변경' : '노점 사진 등록'}</span>
                         <input
                           type="file"
                           ref={uploadRef}
@@ -422,13 +422,13 @@ const AddComponent = () => {
               </div>
             </div>
           </div>
-          {/* 점포명 영역 */}
+          {/* 노점명 영역 */}
           <div className="sm:col-span-2 mb-8">
             <label
               htmlFor="title"
               className="block text-base font-medium text-gray-900"
             >
-              점포명 <span className="text-red-500">*</span>
+              노점명 <span className="text-red-500">*</span>
             </label>
             <div className="mt-2">
               <input
@@ -480,7 +480,7 @@ const AddComponent = () => {
             <MapMarker position={position.center ?? center} />
           </Map>
           <p className="text-center smText pt-1 text-gray-600">
-            <span className="text-red-500">*</span>제보/등록할 점포의 위치를
+            <span className="text-red-500">*</span>제보/등록할 노점의 위치를
             클릭해서 지정해주세요!
           </p>
           <div id="clickLatlng" className="hidden">
@@ -488,13 +488,10 @@ const AddComponent = () => {
               `위도: ${position.center.lat}, \r\n 경도: ${position.center.lng}`}
           </div>
           {/* 지도 끝  */}
-          {/* 점포 주소 영역 */}
+          {/* 노점 주소 영역 */}
           <div className="sm:col-span-2 mb-8">
-            <label
-              htmlFor="location"
-              className="block text-base text-gray-900"
-            >
-              점포 주소 <span className="text-red-500">*</span>
+            <label htmlFor="location" className="block text-base text-gray-900">
+              노점 주소 <span className="text-red-500">*</span>
             </label>
             <div className="mt-2">
               <input
@@ -667,8 +664,8 @@ const AddComponent = () => {
                   </div>
                   <div className="flex text-lg">
                     <label className="select-none text-base text-gray-900">
-                      내 점포 인증하기
-                      <br/>
+                      내 노점 인증하기
+                      <br />
                       <span className="sm:text-base text-xs text-gray-600">
                         (회원정보 수정 - 사업자 정보 추가 필요)
                       </span>
@@ -692,9 +689,9 @@ const AddComponent = () => {
                     </div>
                     <div className="flex text-lg">
                       <label className="select-none font-medium text-gray-500">
-                        내 점포 인증하기
+                        내 노점 인증하기
                         <span className="text-gray-400">
-                          (이미 점포를 인증하셨습니다.)
+                          (이미 노점를 인증하셨습니다.)
                         </span>
                       </label>
                     </div>
@@ -715,9 +712,9 @@ const AddComponent = () => {
                     </div>
                     <div className="flex text-lg">
                       <label className="select-none smText text-gray-900">
-                        내 점포 인증하기
+                        내 노점 인증하기
                         <span className="text-gray-400">
-                          (해당 점포의 사장님일 경우 체크해주세요.)
+                          (해당 노점의 사장님일 경우 체크해주세요.)
                         </span>
                       </label>
                     </div>

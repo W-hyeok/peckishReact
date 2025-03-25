@@ -43,16 +43,18 @@ const DetailOwnerMenuComponent = ({ menuItems, handleMenuDelete }) => {
                 </MenuButton>
                 <MenuItems className="absolute right-0 z-10 mt-2 w-24 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-gray-900/5">
                   <MenuItem>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleMenuDelete(menuOwner.menuId);
-                      }}
-                      className="flex items-center justify-center w-full px-3 py-1 text-base text-gray-900"
-                    >
-                      {/* 삭제하기 아이콘, 살짝 위로 올림 */}
-                      삭제하기
-                    </button>
+                    {membercookie.email === shop.shopOwnerDTO.email && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleMenuDelete(menuOwner.menuId);
+                        }}
+                        className="flex items-center justify-center w-full px-3 py-1 text-base text-gray-900"
+                      >
+                        {/* 삭제하기 아이콘, 살짝 위로 올림 */}
+                        삭제하기
+                      </button>
+                    )}
                   </MenuItem>
                 </MenuItems>
               </Menu>

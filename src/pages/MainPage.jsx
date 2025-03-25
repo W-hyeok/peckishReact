@@ -87,43 +87,43 @@ const MainPage = () => {
     // 무한 렌더링 방지를 위해(페이지 로드 시 한 번만 렌더링) 의존성 배열 추가
   }, []);
   return (
-    <div className='chat-page'>
+    <div className="chat-page">
       <BasicLayout>
-      <div>
-        <HeaderFilter
-          onChangeAddress={handleChangeAddress}
-          onEnter={handleButtonClick}
-          onFilterClick={handleFilterClick}
-          onOpenClick={handleOpenFilter}
-          filterData={parentData}
-          openData={openData}
-          cookieMember={cookieMember}
-        />
-        <main className="max-h-full">
-          {/* <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8"> */}
-          <div className="mx-10">
-            {/* Main 3 column grid */}
-            <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-5 lg:gap-4">
-              {/* Left column */}
-              <div className="grid grid-cols-1 gap-4 lg:col-span-6">
-                <section aria-labelledby="section-1-title">
-                  <h2 id="section-1-title" className="sr-only">
-                    지도에용
-                  </h2>
-                  <div className="overflow-hidden rounded-lg shadow">
-                    <div className="">
-                      {/* 지도 들어갈 부분 */}
-                      <MapComponent
-                        data={searchAddress}
-                        onButtonClick={handleButtonClick}
-                        onMarkerClick={handleMarkerClick}
-                        transFilterData={childData}
-                        transOpenData={transOpenData}
-                      />
+        <div>
+          <HeaderFilter
+            onChangeAddress={handleChangeAddress}
+            onEnter={handleButtonClick}
+            onFilterClick={handleFilterClick}
+            onOpenClick={handleOpenFilter}
+            filterData={parentData}
+            openData={openData}
+            cookieMember={cookieMember}
+          />
+          <main className="max-h-full">
+            {/* <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8"> */}
+            <div className="mx-10">
+              {/* Main 3 column grid */}
+              <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-5 lg:gap-4">
+                {/* Left column */}
+                <div className="grid grid-cols-1 gap-4 lg:col-span-6">
+                  <section aria-labelledby="section-1-title">
+                    <h2 id="section-1-title" className="sr-only">
+                      지도에용
+                    </h2>
+                    <div className="overflow-hidden rounded-lg shadow">
+                      <div className="">
+                        {/* 지도 들어갈 부분 */}
+                        <MapComponent
+                          data={searchAddress}
+                          onButtonClick={handleButtonClick}
+                          onMarkerClick={handleMarkerClick}
+                          transFilterData={childData}
+                          transOpenData={transOpenData}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </section>
-              </div>
+                  </section>
+                </div>
 
                 {/* 오른쪽 영역 */}
                 {/* <div className="grid grid-cols-1 gap-4 lg:col-span-2">

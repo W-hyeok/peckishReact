@@ -24,7 +24,6 @@ const RightComponent = ({ email }) => {
       href: `/roomList`,
       current: false,
     },
-
   ];
 
   const clickTabs = (click) => {
@@ -40,7 +39,6 @@ const RightComponent = ({ email }) => {
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
-
 
   useEffect(() => {
     getShopList(email).then((data) => {
@@ -188,7 +186,9 @@ const RightComponent = ({ email }) => {
                 aria-label="Select a tab"
                 onClick={handleToggle}
                 onChange={(e) => {
-                  const selectedTab = tabs.find((tab) => tab.name === e.target.value);
+                  const selectedTab = tabs.find(
+                    (tab) => tab.name === e.target.value
+                  );
                   if (selectedTab) {
                     window.location.href = selectedTab.href; // 선택된 탭의 URL로 이동
                   }
@@ -196,10 +196,12 @@ const RightComponent = ({ email }) => {
                 className="w-full appearance-none bg-amber-100 shadow py-2 pl-3 pr-10 text-base text-amber-900 outline outline-1 -outline-offset-1 outline-amber-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-amber-500 rounded-lg"
               >
                 {tabs.map((tab) => (
-                  <option key={tab.name} className="rounded-lg bg-amber-100 hover:bg-amber-200 w-full"
-                  // style={{
-                  //   width: "100%", // 드롭다운 너비 강제 지정
-                  // }}
+                  <option
+                    key={tab.name}
+                    className="rounded-lg bg-amber-100 hover:bg-amber-200 w-full"
+                    // style={{
+                    //   width: "100%", // 드롭다운 너비 강제 지정
+                    // }}
                   >
                     {tab.name}
                   </option>
@@ -214,10 +216,15 @@ const RightComponent = ({ email }) => {
                   stroke="currentColor"
                   aria-hidden="true"
                   style={{
-                    transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                   }}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </div>
             </div>
@@ -237,9 +244,9 @@ const RightComponent = ({ email }) => {
                       // aria-current={tab.current ? 'page' : undefined}
                       className={classNames(
                         tab.current
-                        ? 'border-amber-500 text-amber-900 hover:border-amber-300 hover:bg-amber-200 border-b-2 rounded-bl-lg rounded-br-sm hover:rounded-lg'
-                        : 'border-transparent text-amber-700 hover:border-amber-300 hover:bg-amber-200 ',
-                      'w-1/2 py-4 text-center text-sm font-medium transition-colors duration-200'
+                          ? 'border-amber-500 text-amber-900 hover:border-amber-300 hover:bg-amber-200 border-b-2 rounded-bl-lg rounded-br-sm hover:rounded-lg'
+                          : 'border-transparent text-amber-700 hover:border-amber-300 hover:bg-amber-200 ',
+                        'w-1/2 py-4 text-center text-sm font-medium transition-colors duration-200'
                       )}
                     >
                       {tab.name}
