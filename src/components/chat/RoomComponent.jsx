@@ -11,8 +11,9 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 import ChatSideBarComponent from './ChatSideBarComponent';
 import '../../css/common.css';
 import fishLogo from '/src/assets/fish_logo.png';
-export const WS_SERVER_HOST = 'localhost:8080';
-// export const WS_SERVER_HOST = 'https://hungrymoment.store';
+
+// export const WS_SERVER_HOST = 'localhost:8080';
+export const WS_SERVER_HOST = 'https://hungrymoment.store';
 
 const RoomComponent = () => {
   const { room_ID } = useParams();
@@ -82,7 +83,8 @@ const RoomComponent = () => {
     fetchMessages();
 
     // WebSocket 연결
-    const wsUrl = `ws://${WS_SERVER_HOST}/ws/chat`;
+    // const wsUrl = `ws://${WS_SERVER_HOST}/ws/chat`;
+    const wsUrl = `wss://${WS_SERVER_HOST}/ws/chat`; // https 연결일때 wss:// 로 연결해야함.
     const ws = new WebSocket(wsUrl);
     let isRoomEntered = false;
 
@@ -205,20 +207,40 @@ const RoomComponent = () => {
       }}
     >
       {/* 중앙 정렬을 위한 고정 크기 컨테이너 */}
-      <div className="w-full max-w-full flex h-full">
+      <div className="w-full max-w-full flex h-full relative">
+        {/* 커스텀 오버레이: 사이드바가 열렸을 때 배경에 반투명 효과 적용 */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 bg-gray-900/80 z-40"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
         <Dialog
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
           className="fixed inset-0 z-50 lg:hidden"
         >
-          {/* 반투명 배경 */}
-          {/* <Dialog.Overlay className="fixed inset-0 bg-gray-900/80" /> */}
-          <div className="flex h-full">
-            <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1 bg-white p-6 mt-16 mb-16">
-              <div className="flex h-16 shrink-0 items-center">
+          <div className="flex h-full w-full">
+            <Dialog.Panel className="relative w-60 max-w-xs bg-white p-6 mt-16 mb-16 z-50 rounded-lg">
+              {/* 상단 헤더 영역 */}
+              <div className="flex items-center justify-between">
+                {/* 좌측 상단 로고 */}
                 <img alt="Your Company" src={fishLogo} className="h-8 w-auto" />
+
+                {/* 우측 상단 닫기 아이콘 */}
+                <button
+                  type="button"
+                  onClick={() => setSidebarOpen(false)}
+                  className="-m-2.5 p-2.5 text-gray-700"
+                >
+                  <span className="sr-only">Close sidebar</span>
+                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
               </div>
-              <div>
+
+              {/* 아래쪽에 프로필(채팅방 목록 등) */}
+              <div className="mt-6">
                 <ChatSideBarComponent
                   socket={socket}
                   resetUnreadTrigger={resetUnreadTrigger}
@@ -226,16 +248,6 @@ const RoomComponent = () => {
                 />
               </div>
             </Dialog.Panel>
-            <div className="w-16 flex items-center justify-center">
-              <button
-                type="button"
-                onClick={() => setSidebarOpen(false)}
-                className="-m-2.5 p-2.5 text-gray-700"
-              >
-                <span className="sr-only">Close sidebar</span>
-                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-              </button>
-            </div>
           </div>
         </Dialog>
 
