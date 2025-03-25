@@ -570,7 +570,9 @@ const DetailOwnerComponent = ({
                 ) : (
                   <div className="flex flex-col items-center justify-center py-10">
                     <span className="text-5xl">🍽️</span>
-                    <p className="mt-4">메뉴를 추가해주세요!</p>
+                    <p className="mt-4">
+                      사장님이 아직 메뉴를 추가하지 않았습니다!
+                    </p>
                   </div>
                 )}
                 {/* 쿠키 저장 email과 로그인한 아이디가 해당 작성자 email일 때 */}
