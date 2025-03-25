@@ -726,8 +726,8 @@ function MapComponent({
               image={{
                 src: `${centerIcon}`,
                 size: {
-                  width: 40,
-                  height: 53,
+                  width: 0,
+                  height: 0,
                 },
               }}
               title="현재 지도의 중심입니다."
