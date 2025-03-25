@@ -17,7 +17,8 @@ const DetailComponent = ({ shop, shopId }) => {
     ? getCookie('member')
     : { email: null };
 
-  const tmpOwned = getCookie('tmpOwned');
+  const tmpOwned = getCookie('tmpOwned') ? getCookie('tmpOwned') : false;
+  console.log('tmpOwned:', tmpOwned);
   console.log('***********DetailComponent***********');
   console.log(shop);
   console.log(shopId);
@@ -123,16 +124,16 @@ const DetailComponent = ({ shop, shopId }) => {
               {/* userData = true 이면서 ownerData = false일 때 => 404에러 페이지지*/}
               {shop.shopDTO.userData ? (
                 <DetailUserComponent
-                shop={shop}
-                shopId={shopId}
-                shopDetailId={shop.shopUserDTO.shopUserId}
-                infoType={USER}
-                mapData={mapData}
-                storeLoc={storeLoc}
-                membercookie={membercookie}
-                moveToLogin={moveToLogin}
-                moveToMain={moveToMain}
-                location_Star={locationStar}
+                  shop={shop}
+                  shopId={shopId}
+                  shopDetailId={shop.shopUserDTO.shopUserId}
+                  infoType={USER}
+                  mapData={mapData}
+                  storeLoc={storeLoc}
+                  membercookie={membercookie}
+                  moveToLogin={moveToLogin}
+                  moveToMain={moveToMain}
+                  location_Star={locationStar}
                 />
               ) : (
                 <div className="flex justify-center items-center">
@@ -145,8 +146,8 @@ const DetailComponent = ({ shop, shopId }) => {
                       className="m-auto"
                     />
                     <div>
-                      <span className='flex justify-center text-xs sm:text-lg mb-7 text-gray-900'> 
-                      👇👇👇 지금 바로 제보하세요 👇👇👇
+                      <span className="flex justify-center text-xs sm:text-lg mb-7 text-gray-900">
+                        👇👇👇 지금 바로 제보하세요 👇👇👇
                       </span>
                     </div>
                     {membercookie.email ? (
@@ -175,7 +176,7 @@ const DetailComponent = ({ shop, shopId }) => {
             <TabPanel className="p-6 text-sm text-gray-500">
               {shop.shopDTO.ownerData ? (
                 <DetailOwnerComponent
-                shop={shop}
+                  shop={shop}
                   shopDetailId={shop.shopOwnerDTO.shopOwnerId}
                   shopId={shopId}
                   infoType={OWNER}
@@ -194,7 +195,7 @@ const DetailComponent = ({ shop, shopId }) => {
                       width={'60%'}
                       className="m-auto"
                     />
-                    {!membercookie ? (
+                    {membercookie.email == null ? (
                       <div className="content-center">
                         <Link
                           onClick="/member/login"
@@ -219,8 +220,9 @@ const DetailComponent = ({ shop, shopId }) => {
                     ) : (
                       <></>
                     )}
-                    {membercookie.roleNames.length <= 1 ||
-                      (membercookie.owned == true && tmpOwned == true && <></>)}
+                    {membercookie.roleNames.length == 1 &&
+                      membercookie.owned == true &&
+                      tmpOwned == true && <></>}
                   </div>
                 </div>
               )}
