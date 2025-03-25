@@ -19,6 +19,7 @@ const DetailComponent = ({ shop, shopId }) => {
 
   const tmpOwned = getCookie('tmpOwned') ? getCookie('tmpOwned') : false;
   console.log('tmpOwned:', tmpOwned);
+  console.log('memberCookie:', membercookie);
   console.log('***********DetailComponent***********');
   console.log(shop);
   console.log(shopId);
@@ -198,31 +199,31 @@ const DetailComponent = ({ shop, shopId }) => {
                     {membercookie.email == null ? (
                       <div className="content-center">
                         <Link
-                          onClick="/member/login"
+                          to="/member/login"
                           className="mt-4 w-auto rounded-md border border-transparent bg-yellow-500 px-8 py-3 font-extrabold text-lg text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
                         >
                           인증 정보 추가하기
                         </Link>
                       </div>
                     ) : (
-                      <></>
+                      <>
+                        {membercookie.roleNames.length !== 1 &&
+                        membercookie.owned == false &&
+                        tmpOwned == false ? (
+                          <div className="content-center">
+                            <button
+                              type="button"
+                              onClick={handleAddShopOWNER}
+                              className="mt-4 w-auto rounded-md border border-transparent bg-yellow-500 px-8 py-3 font-extrabold text-lg text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
+                            >
+                              인증 정보 추가하기
+                            </button>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
+                      </>
                     )}
-                    {membercookie.owned == false && tmpOwned == false ? (
-                      <div className="content-center">
-                        <button
-                          type="button"
-                          onClick={handleAddShopOWNER}
-                          className="mt-4 w-auto rounded-md border border-transparent bg-yellow-500 px-8 py-3 font-extrabold text-lg text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-700 focus:ring-offset-2 focus:ring-offset-gray-50"
-                        >
-                          인증 정보 추가하기
-                        </button>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                    {membercookie.roleNames.length == 1 &&
-                      membercookie.owned == true &&
-                      tmpOwned == true && <></>}
                   </div>
                 </div>
               )}

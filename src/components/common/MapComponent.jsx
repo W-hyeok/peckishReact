@@ -12,8 +12,12 @@ import {
 import { getMapList } from '../../api/mapApi';
 import useCustomMove from '../../hooks/useCustomMove';
 import PermissionModal from './PermissionModal';
-import activeBooth from '../../assets/icon/location_star.png';
-import inactiveBooth from '../../assets/icon/location_star_off.png';
+import certIcon from '../../assets/icon/location_star.png';
+import certIcon_off from '../../assets/icon/location_star_off.png';
+// import normalIcon from '../../assets/icon/location_normal.png';
+// import normalIcon_off from '../../assets/icon/location_normal_off.png';
+import normalIcon from '../../assets/icon/location_normal2.png';
+import normalIcon_off from '../../assets/icon/location_normal2_off.png';
 import curloc from '../../assets/icon/curloc.png';
 import myLocation from '../../assets/icon/curloc3.png';
 import research from '../../assets/icon/researchCur.png';
@@ -23,7 +27,7 @@ import mapCenterIcon from '../../assets/icon/mapCenter.png';
 import redDot from '../../assets/icon/location-red.png';
 import currentLocation from '../../assets/icon/currentLocation_faca15.png';
 import currentLocatiion2 from '../../assets/icon/current-location-final.png';
-import centerIcon from '../../assets/icon/centerIcon.png';
+import centerIcon from '../../assets/icon/home.png';
 import { EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { API_SERVER_HOST } from '../../api/todoApi';
 const { kakao } = window;
@@ -40,6 +44,8 @@ function MapComponent({
   const [serverData, setServerData] = useState([]); // 서버에서 받을 데이터
   const [isOpenData, setIsOpenData] = useState([]); // 서버데이터 중 open = true
   const [isCloseData, setIsCloseData] = useState([]); // 서버데이터 중 open = close
+  const [isCertData, setIsCertData] = useState([]); // 서버데이터 중 cert = true
+  const [isNormalData, setIsNormalData] = useState([]); // 서버데이터 중 cert = false
   const [renderingMarker, setRenderingMarker] = useState([]); // ...데이터 중 렌더링 할 것들
   const [selectedMarker, setSelectedMarker] = useState('');
   const [cate, setCate] = useState('all'); // 카테고리, 기본 all
@@ -183,16 +189,28 @@ function MapComponent({
         // 렌더링할 마커가 없으면 data에서 가져오기(초기 마커용)
         if (renderingMarker.length != 0) {
           setIsOpenData(renderingMarker.filter((e) => e.status == 'opened')); // (...영업 중)
-          console.log('isOpenData: ', isOpenData);
+          console.log('isOpenData:', isOpenData);
           // 렌더링할 마커 중에서 준비 중
           setIsCloseData(renderingMarker.filter((e) => e.status == 'closed')); // (...준비 중)
-          console.log('isCloseData: ', isCloseData);
+          console.log('isCloseData:', isCloseData);
+          setIsCertData(renderingMarker.filter((e) => e.certificate == true));
+          console.log('isCertData:', isCertData);
+          setIsNormalData(
+            renderingMarker.filter((e) => e.certificate == false)
+          );
+          console.log('isNormalData:', isNormalData);
         } else {
           setIsOpenData(data.filter((e) => e.status == 'opened')); // (...영업 중)
           console.log('isOpenData: ', isOpenData);
           // 렌더링할 마커 중에서 준비 중
           setIsCloseData(data.filter((e) => e.status == 'closed')); // (...준비 중)
           console.log('isCloseData: ', isCloseData);
+          setIsCertData(renderingMarker.filter((e) => e.certificate == true));
+          console.log('isCertData:', isCertData);
+          setIsNormalData(
+            renderingMarker.filter((e) => e.certificate == false)
+          );
+          console.log('isNormalData:', isNormalData);
         }
         if (isOpenData) {
           setOpen(transOpenData); // 영업값
@@ -229,12 +247,26 @@ function MapComponent({
           // 렌더링할 마커 중에서 준비 중
           setIsCloseData(renderingMarker.filter((e) => e.status == 'closed')); // (...준비 중)
           console.log('isCloseData: ', isCloseData);
+
+          setIsCertData(renderingMarker.filter((e) => e.certificate == true));
+          console.log('isCertData:', isCertData);
+
+          setIsNormalData(
+            renderingMarker.filter((e) => e.certificate == false)
+          );
+          console.log('isNormalData:', isNormalData);
         } else {
           setIsOpenData(data.filter((e) => e.status == 'opened')); // (...영업 중)
           console.log('isOpenData: ', isOpenData);
           // 렌더링할 마커 중에서 준비 중
           setIsCloseData(data.filter((e) => e.status == 'closed')); // (...준비 중)
           console.log('isCloseData: ', isCloseData);
+          setIsCertData(renderingMarker.filter((e) => e.certificate == true));
+          console.log('isCertData:', isCertData);
+          setIsNormalData(
+            renderingMarker.filter((e) => e.certificate == false)
+          );
+          console.log('isNormalData:', isNormalData);
         }
         if (isOpenData) {
           setOpen(transOpenData); // 영업값
@@ -300,7 +332,7 @@ function MapComponent({
     return (
       <>
         {/* 조건부 렌더링: status = opened */}
-        {renderingMarker && isOpenData && (
+        {renderingMarker && isOpenData && isNormalData && (
           <MapMarker
             position={position}
             onClick={() => {
@@ -310,11 +342,11 @@ function MapComponent({
             // onMouseOut={() => setIsVisible(false)}
             image={{
               // 그냥 객체로는 못 가져오고, ${} 형태로 가져와야 함
-              src: `${activeBooth}`,
+              src: `${normalIcon}`,
               // 마커이미지 주소
               size: {
-                width: 50,
-                height: 55,
+                width: 40,
+                height: 45,
               }, // 마커이미지의 크기입니다
             }}
           >
@@ -355,7 +387,72 @@ function MapComponent({
         {/* 조건부 렌더링: status = closed */}
         {/* 반드시 조건 뒤에 연산자를 붙여야 함, 그렇지 않으면 함수로 인식함 */}
         {/* 'opened'만 썼다가 함수로 인식(바로 뒤에 '(' 가 옴)해서 문제 생겼음 */}
-        {renderingMarker && isCloseData && transOpenData !== 'opened' && (
+        {renderingMarker &&
+          isCloseData &&
+          transOpenData !== 'opened' &&
+          isNormalData && (
+            <MapMarker
+              position={position}
+              onClick={() => {
+                setIsVisible(!isVisible);
+              }}
+              // onMouseOver={() => setIsVisible(true)}
+              // onMouseOut={() => setIsVisible(false)}
+              image={{
+                // 그냥 객체로는 못 가져오고, ${} 형태로 가져와야 함
+                src: `${normalIcon_off}`,
+                // 마커이미지 주소
+                size: {
+                  width: 30,
+                  height: 35,
+                }, // 마커이미지의 크기입니다
+              }}
+            >
+              {isVisible && (
+                <div className="relative p-2 rounded-lg bg-white outline outline-4 outline-gray-400">
+                  <div className="flex items-start">
+                    {content}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation(); // 부모 onClick 전파 방지
+                        setIsVisible(false); // 해당 마커의 내용만 숨김
+                      }}
+                      className="mt-1.5"
+                    >
+                      <XMarkIcon className="close size-6" title="닫기" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </MapMarker>
+          )}
+      </>
+    );
+  };
+
+  // 마커: 영업 중 (인증됨)
+  const OpenMarkerContainerCert = ({
+    position,
+    content,
+    index,
+    onClick,
+    isClicked,
+  }) => {
+    const map = useMap();
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+      if (isClicked) {
+        console.log('isClicked?', isClicked);
+        setIsVisible(false);
+        setSelectedMarker('');
+      }
+    }, [isClicked]);
+
+    return (
+      <>
+        {/* 조건부 렌더링: status = opened */}
+        {renderingMarker && isOpenData && isCertData && (
           <MapMarker
             position={position}
             onClick={() => {
@@ -365,16 +462,80 @@ function MapComponent({
             // onMouseOut={() => setIsVisible(false)}
             image={{
               // 그냥 객체로는 못 가져오고, ${} 형태로 가져와야 함
-              src: `${inactiveBooth}`,
+              src: `${certIcon}`,
               // 마커이미지 주소
               size: {
                 width: 40,
-                height: 43,
+                height: 45,
               }, // 마커이미지의 크기입니다
             }}
           >
             {isVisible && (
-              <div className="relative p-2 rounded-lg bg-white outline outline-4 outline-gray-400">
+              /* 자동 생성되는 부모 요소의 border 덮어쓰기 위해 outline 설정, 4 이상이어야 가려짐 */
+              <div className="relative p-2 rounded-lg bg-white outline outline-4 outline-yellow-300">
+                <div className="flex items-start">
+                  {content}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // 부모 onClick 전파 방지
+                      setIsVisible(false); // 해당 마커의 내용만 숨김
+                    }}
+                    className="mt-1.5"
+                  >
+                    <XMarkIcon className="close size-6" title="닫기" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </MapMarker>
+        )}
+      </>
+    );
+  };
+
+  // 마커: 준비 중 (인증됨)
+  const CloseMarkerContainerCert = ({
+    position,
+    content,
+    index,
+    onClick,
+    isClicked,
+  }) => {
+    const map = useMap();
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+      if (isClicked) {
+        console.log('isClicked?', isClicked);
+        setIsVisible(false);
+        setSelectedMarker('');
+      }
+    }, [isClicked]);
+
+    return (
+      <>
+        {/* 조건부 렌더링: status = opened */}
+        {renderingMarker && isOpenData && isCertData && (
+          <MapMarker
+            position={position}
+            onClick={() => {
+              setIsVisible(!isVisible);
+            }}
+            // onMouseOver={() => setIsVisible(true)}
+            // onMouseOut={() => setIsVisible(false)}
+            image={{
+              // 그냥 객체로는 못 가져오고, ${} 형태로 가져와야 함
+              src: `${certIcon_off}`,
+              // 마커이미지 주소
+              size: {
+                width: 30,
+                height: 35,
+              }, // 마커이미지의 크기입니다
+            }}
+          >
+            {isVisible && (
+              /* 자동 생성되는 부모 요소의 border 덮어쓰기 위해 outline 설정, 4 이상이어야 가려짐 */
+              <div className="relative p-2 rounded-lg bg-white outline outline-4 outline-yellow-300">
                 <div className="flex items-start">
                   {content}
                   <button
@@ -565,8 +726,8 @@ function MapComponent({
               image={{
                 src: `${centerIcon}`,
                 size: {
-                  width: 25,
-                  height: 25,
+                  width: 40,
+                  height: 53,
                 },
               }}
               title="현재 지도의 중심입니다."
@@ -599,7 +760,7 @@ function MapComponent({
             ]}
           >
             {renderingMarker.map((data, index) => {
-              if (data.status == 'opened') {
+              if (data.status == 'opened' && data.certificate == false) {
                 return (
                   <OpenMarkerContainer
                     index={index}
@@ -611,7 +772,7 @@ function MapComponent({
                       <div className="wrap p-2">
                         <div className="info">
                           <div className="title flex min-w-max">
-                            <div className="font-semibold">
+                            <div className="bg-yellow-300">
                               {data.title} /{' '}
                               {
                                 data.category === 'bread'
@@ -654,7 +815,8 @@ function MapComponent({
                     }
                   />
                 );
-              } else {
+              }
+              if (data.status == 'closed' && data.certificate == false) {
                 return (
                   <CloseMarkerContainer
                     index={index}
@@ -689,6 +851,122 @@ function MapComponent({
                             />
                             <div className="desc min-w-max">
                               <div className="ellipsis">{data.location}</div>
+                              <div>
+                                <button
+                                  onClick={() => {
+                                    console.log('shopId: ', data.shopId);
+                                    moveToShop(data.shopId);
+                                  }}
+                                  target="_blank"
+                                  className="link text-blue-400 text-sm"
+                                  rel="noreferrer"
+                                >
+                                  자세히 보기
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  />
+                );
+              }
+              if (data.status == 'opened' && data.certificate == true) {
+                return (
+                  <OpenMarkerContainerCert
+                    index={index}
+                    isClicked={selectedMarker === index}
+                    key={`CloseMarkerContainer-${data.lat}-${data.lng}`}
+                    position={{ lat: data.lat, lng: data.lng }}
+                    // 마커 마우스 올리면 나타나는 화면 div
+                    content={
+                      <div className="wrap p-2">
+                        <div className="info">
+                          <div className="title flex min-w-max">
+                            <div className="bg-yellow-300">
+                              {data.title} /{' '}
+                              {
+                                data.category === 'bread'
+                                  ? '붕어빵'
+                                  : data.category === 'snack'
+                                    ? '분식'
+                                    : data.category === 'hotteok'
+                                      ? '호떡'
+                                      : data.category === 'sweetPotato'
+                                        ? '군고구마'
+                                        : data.category // 조건에 맞지 않으면(예외) 원래 값 출력
+                              }
+                            </div>
+                          </div>
+                          <hr className="my-1" />
+                          <div className="body">
+                            <img
+                              src={`${host}/api/shop/view/${data.filename}`}
+                              className="size-24"
+                            />
+                            <div className="desc min-w-max">
+                              <div className="ellipsis">
+                                {data.location} (인증됨)
+                              </div>
+                              <div>
+                                <button
+                                  onClick={() => {
+                                    console.log('shopId: ', data.shopId);
+                                    moveToShop(data.shopId);
+                                  }}
+                                  target="_blank"
+                                  className="link text-blue-400 text-sm"
+                                  rel="noreferrer"
+                                >
+                                  자세히 보기
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  />
+                );
+              }
+              if (data.status == 'closed' && data.certificate == true) {
+                return (
+                  <CloseMarkerContainerCert
+                    index={index}
+                    isClicked={selectedMarker === index}
+                    key={`CloseMarkerContainer-${data.lat}-${data.lng}`}
+                    position={{ lat: data.lat, lng: data.lng }}
+                    // 마커 마우스 올리면 나타나는 화면 div
+                    content={
+                      <div className="wrap p-2">
+                        <div className="info">
+                          <div className="title flex min-w-max">
+                            <div className="bg-gray-300">
+                              {data.title} /{' '}
+                              {
+                                data.category === 'bread'
+                                  ? '붕어빵'
+                                  : data.category === 'snack'
+                                    ? '분식'
+                                    : data.category === 'hotteok'
+                                      ? '호떡'
+                                      : data.category === 'sweetPotato'
+                                        ? '군고구마'
+                                        : data.category // 조건에 맞지 않으면(예외) 원래 값 출력
+                              }
+                            </div>
+                          </div>
+                          <hr className="my-1" />
+                          <div className="body">
+                            <img
+                              src={`${host}/api/shop/view/${data.filename}`}
+                              className="size-24"
+                            />
+                            <div className="desc min-w-max">
+                              <div className="ellipsis">
+                                {data.location} (인증됨){' '}
+                              </div>
                               <div>
                                 <button
                                   onClick={() => {

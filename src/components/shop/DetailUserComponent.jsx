@@ -3,7 +3,7 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 import { Fragment, useState } from 'react';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react';
 import { StarIcon } from '@heroicons/react/20/solid';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import {
   Map as KakaoMap,
   MapMarker,
