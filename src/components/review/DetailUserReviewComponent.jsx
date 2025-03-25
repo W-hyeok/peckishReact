@@ -16,82 +16,102 @@ const DetailUserReviewComponent = ({
 
   return (
     <div className="relative min-h-[300px]">
-      {review.map((reviewUser) => (
-        <div
-          key={reviewUser.reviewId}
-          className="flex items-start gap-4 py-6 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
-        >
-          {/* 프로필 이미지 */}
-          <div className="flex-none w-12 h-12">
-            <img
-              alt="작성자 프로필 사진"
-              src={`${host}/api/shop/view/${reviewUser.profileFilename}`}
-              className="w-12 h-12 rounded-full bg-gray-100 object-cover"
-            />
-          </div>
-
-          {/* 리뷰 내용 */}
-          <div className="flex-1 space-y-1">
-            {/* 작성자와 삭제 버튼 */}
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-900">
-                {reviewUser.email}
-              </h3>
-              {memberCookie?.email === reviewUser.email && (
-                <Menu as="div" className="relative">
-                  <MenuButton className="p-1 text-gray-500 hover:text-gray-900">
-                    <EllipsisVerticalIcon
-                      className="w-5 h-5"
-                      aria-hidden="true"
-                    />
-                  </MenuButton>
-                  <MenuItems className="absolute right-0 z-10 mt-2 w-24 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-gray-900/5">
-                    <MenuItem>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleReviewRemove(reviewUser.reviewId);
-                        }}
-                        className="flex items-center justify-center w-full px-3 py-1 text-sm text-gray-900"
-                      >
-                        삭제하기
-                      </button>
-                    </MenuItem>
-                  </MenuItems>
-                </Menu>
-              )}
-            </div>
-
-            {/* 별점 및 개별 평점 점수 */}
-            <div className="flex items-center gap-x-1">
-              {[0, 1, 2, 3, 4].map((index) => (
-                <StarIcon
-                  key={index}
-                  className={`w-5 h-5 ${
-                    Number(reviewUser.rating) > index
-                      ? 'text-yellow-400'
-                      : 'text-gray-300'
-                  }`}
-                />
-              ))}
-              <span className="text-sm text-gray-600 ml-1">
-                ({Number(reviewUser.rating).toFixed(1)})
-              </span>
-            </div>
-
-            {/* 업데이트 시간: 별점 아래 별도 행 */}
-            <div className="text-xs text-gray-500">
-              {useTimeStamp(reviewUser.updateDate)}
+      {review.map((reviewUser) => {
+        const rating = Number(reviewUser.rating);
+        return (
+          <div
+            key={reviewUser.reviewId}
+            className="flex items-start gap-4 py-6 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
+          >
+            {/* 프로필 이미지 */}
+            <div className="flex-none w-12 h-12">
+              <img
+                alt="작성자 프로필 사진"
+                src={`${host}/api/shop/view/${reviewUser.profileFilename}`}
+                className="w-12 h-12 rounded-full bg-gray-100 object-cover"
+              />
             </div>
 
             {/* 리뷰 내용 */}
-            <div
-              dangerouslySetInnerHTML={{ __html: reviewUser.content }}
-              className="text-sm text-gray-700 leading-relaxed"
-            />
+            <div className="flex-1 space-y-1">
+              {/* 작성자와 삭제 버튼 */}
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold text-gray-900">
+                  {reviewUser.email}
+                </h3>
+                {memberCookie?.email === reviewUser.email && (
+                  <Menu as="div" className="relative">
+                    <MenuButton className="p-1 text-gray-500 hover:text-gray-900">
+                      <EllipsisVerticalIcon
+                        className="w-5 h-5"
+                        aria-hidden="true"
+                      />
+                    </MenuButton>
+                    <MenuItems className="absolute right-0 z-10 mt-2 w-24 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-gray-900/5">
+                      <MenuItem>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleReviewRemove(reviewUser.reviewId);
+                          }}
+                          className="flex items-center justify-center w-full px-3 py-1 text-sm text-gray-900"
+                        >
+                          삭제하기
+                        </button>
+                      </MenuItem>
+                    </MenuItems>
+                  </Menu>
+                )}
+              </div>
+
+              {/* 별점 및 개별 평점 점수 - 0.5점 단위 별 색칠 */}
+              <div className="flex items-center gap-x-1">
+                {[0, 1, 2, 3, 4].map((index) => {
+                  const starValue = index + 1;
+                  if (rating >= starValue) {
+                    return (
+                      <StarIcon
+                        key={index}
+                        className="w-5 h-5 text-yellow-400"
+                      />
+                    );
+                  } else if (rating >= starValue - 0.5) {
+                    return (
+                      <span
+                        key={index}
+                        className="relative inline-block w-5 h-5"
+                      >
+                        <StarIcon className="w-5 h-5 text-gray-300" />
+                        <span className="absolute top-0 left-0 w-1/2 overflow-hidden">
+                          <StarIcon className="w-5 h-5 text-yellow-400" />
+                        </span>
+                      </span>
+                    );
+                  } else {
+                    return (
+                      <StarIcon key={index} className="w-5 h-5 text-gray-300" />
+                    );
+                  }
+                })}
+                <span className="text-sm text-gray-600 ml-1">
+                  ({rating.toFixed(1)})
+                </span>
+              </div>
+
+              {/* 업데이트 시간: 별점 아래 별도 행 */}
+              <div className="text-xs text-gray-500">
+                {useTimeStamp(reviewUser.updateDate)}
+              </div>
+
+              {/* 리뷰 내용 */}
+              <div
+                dangerouslySetInnerHTML={{ __html: reviewUser.content }}
+                className="text-sm text-gray-700 leading-relaxed"
+              />
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
