@@ -512,7 +512,7 @@ function MapComponent({
           isPanto={state.isPanto}
           style={{
             width: '100%',
-            height: 'calc(100vh - 22.55vh)',
+            height: 'calc(100vh - 27vh)',
             position: 'relative', // 지도 위에 버튼 깔기 위해 설정
             float: 'right', // 상동
           }}

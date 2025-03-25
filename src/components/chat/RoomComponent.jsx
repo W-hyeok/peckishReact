@@ -11,7 +11,7 @@ import {
   MenuItem,
   MenuItems,
   TransitionChild,
-} from '@headlessui/react'
+} from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 import { getMsgs } from '../../api/roomApi';
@@ -206,151 +206,157 @@ const RoomComponent = () => {
   };
 
   return (
-    <div className="flex bg-gray-100 justify-center" style={{ margin: '5vh', height: 'calc(100vh - 26.5vh)', width: 'calc(100vw - 20vh)' }}>
-    {/* 중앙 정렬을 위한 고정 크기 컨테이너 */}
-    <div className="w-full max-w-full flex h-full">
-      <Dialog
-        open={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-        className="fixed inset-0 z-50 lg:hidden"
-      >
-        {/* 반투명 배경 */}
-        <Dialog.Overlay className="fixed inset-0 bg-gray-900/80" />
-        <div className="flex h-full">
-          <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1 bg-white p-6 mt-16 mb-16">
-            <div className="flex h-16 shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto"
-              />
-            </div>
-            <div>
-              <ChatSideBarComponent
-                socket={socket}
-                resetUnreadTrigger={resetUnreadTrigger}
-                activeRoomId={room_ID}
-              />
-            </div>
-          </Dialog.Panel>
-          <div className="w-16 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(false)}
-              className="-m-2.5 p-2.5 text-gray-700"
-            >
-              <span className="sr-only">Close sidebar</span>
-              <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-            </button>
-          </div>
-        </div>
-      </Dialog>
-
-      {/* 데스크톱용 Sidebar */}
-      <div className="hidden lg:flex lg:flex-col w-64 bg-white border-r border-gray-200 p-4 rounded-tl-lg rounded-bl-lg overflow-y-auto">
-        <div className="mb-4">
-          <h2 className="text-xl font-bold">채팅방 목록</h2>
-        </div>
-        <ChatSideBarComponent
-          socket={socket}
-          resetUnreadTrigger={resetUnreadTrigger}
-          activeRoomId={room_ID}
-        />
-      </div>
-
-      {/* 오른쪽: 실제 채팅 UI 영역 */}
-      <div className="flex-1 flex flex-col">
-        {/* 상단 헤더 (모바일 메뉴 버튼 + 채팅방 나가기 등) */}
-        <div className="flex items-center justify-between bg-yellow-200 p-4 rounded-tr-lg  sm:rounded-tl-lg border-b border-gray-200">
-          <div className="flex items-center space-x-4">
-            {/* 모바일에서만 보이는 메뉴 버튼 */}
-            <button
-              type="button"
-              onClick={() => setSidebarOpen(true)}
-              className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
-            >
-              <span className="sr-only">Open sidebar</span>
-              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-            </button>
-            <h2 className="text-lg font-semibold">채팅방 #{room_ID}</h2>
-          </div>
-          <Link to="/" className="defaultBtn">
-            채팅방 나가기
-          </Link>
-        </div>
-
-        {/* 채팅 메시지 표시 영역 */}
-        <div className="flex-1 overflow-y-auto p-4">
-          <ul>
-            {messages.map((msg, index) => (
-              <li
-                key={index}
-                className={index === messages.length - 1 ? 'mb-12' : ''}
+    <div
+      className="flex bg-gray-100 justify-center"
+      style={{
+        margin: '5vh',
+        height: 'calc(100vh - 30vh)',
+      }}
+    >
+      {/* 중앙 정렬을 위한 고정 크기 컨테이너 */}
+      <div className="w-full max-w-full flex h-full">
+        <Dialog
+          open={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-50 lg:hidden"
+        >
+          {/* 반투명 배경 */}
+          <Dialog.Overlay className="fixed inset-0 bg-gray-900/80" />
+          <div className="flex h-full">
+            <Dialog.Panel className="relative mr-16 flex w-full max-w-xs flex-1 bg-white p-6 mt-16 mb-16">
+              <div className="flex h-16 shrink-0 items-center">
+                <img
+                  alt="Your Company"
+                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+                  className="h-8 w-auto"
+                />
+              </div>
+              <div>
+                <ChatSideBarComponent
+                  socket={socket}
+                  resetUnreadTrigger={resetUnreadTrigger}
+                  activeRoomId={room_ID}
+                />
+              </div>
+            </Dialog.Panel>
+            <div className="w-16 flex items-center justify-center">
+              <button
+                type="button"
+                onClick={() => setSidebarOpen(false)}
+                className="-m-2.5 p-2.5 text-gray-700"
               >
-                {msg.email === memberEmail ? (
-                  // 내 메시지
-                  <div className="flex justify-end items-end space-x-1 mt-2 max-w-xs ml-auto">
-                    <div>
-                      <div className="bg-blue-600 text-white w-fit p-3 rounded-l-lg rounded-br-lg break-words">
-                        <p className="text-sm">{msg.content}</p>
-                      </div>
-                      <span className="text-xs text-gray-500 leading-none">
-                        {msg.reg_date}
-                      </span>
-                    </div>
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
-                      <img
-                        src={msg.profileFilename}
-                        alt="member Avatar"
-                        className="w-10 h-10 object-cover"
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  // 상대 메시지
-                  <div className="flex w-full mt-2 space-x-3 max-w-xs">
-                    <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
-                      <img
-                        src={msg.profileFilename}
-                        alt="member Avatar"
-                        className="w-10 h-10 object-cover"
-                      />
-                    </div>
-                    <div>
-                      <div className="bg-gray-100 p-3 rounded-r-lg rounded-bl-lg">
-                        <p className="text-sm">{msg.content}</p>
-                      </div>
-                      <span className="text-xs text-gray-500 leading-none">
-                        {msg.reg_date}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </li>
-            ))}
-            <div ref={messagesEndRef} />
-          </ul>
+                <span className="sr-only">Close sidebar</span>
+                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+        </Dialog>
+
+        {/* 데스크톱용 Sidebar */}
+        <div className="hidden lg:flex lg:flex-col w-64 bg-white border-r border-gray-200 p-4 rounded-tl-lg rounded-bl-lg overflow-y-auto">
+          <div className="mb-4">
+            <h2 className="text-xl font-bold">채팅방 목록</h2>
+          </div>
+          <ChatSideBarComponent
+            socket={socket}
+            resetUnreadTrigger={resetUnreadTrigger}
+            activeRoomId={room_ID}
+          />
         </div>
 
-        {/* 메시지 입력 영역 */}
-        <div className="flex items-center space-x-2 p-4 rounded-br-lg sm:rounded-bl-lg bg-white border-t border-gray-200">
-          <input
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') sendMessage();
-            }}
-            onFocus={handleInputFocus}
-            placeholder="메시지를 입력하세요"
-            className="flex-grow p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
-          />
-          <button onClick={sendMessage} className="positiveBtn">
-            전송
-          </button>
+        {/* 오른쪽: 실제 채팅 UI 영역 */}
+        <div className="flex-1 flex flex-col">
+          {/* 상단 헤더 (모바일 메뉴 버튼 + 채팅방 나가기 등) */}
+          <div className="flex items-center justify-between bg-yellow-200 p-4 rounded-tr-lg  sm:rounded-tl-lg border-b border-gray-200">
+            <div className="flex items-center space-x-4">
+              {/* 모바일에서만 보이는 메뉴 버튼 */}
+              <button
+                type="button"
+                onClick={() => setSidebarOpen(true)}
+                className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+              >
+                <span className="sr-only">Open sidebar</span>
+                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+              </button>
+              <h2 className="text-lg font-semibold">채팅방 #{room_ID}</h2>
+            </div>
+            <Link to="/" className="defaultBtn">
+              채팅방 나가기
+            </Link>
+          </div>
+
+          {/* 채팅 메시지 표시 영역 */}
+          <div className="flex-1 overflow-y-auto p-4">
+            <ul>
+              {messages.map((msg, index) => (
+                <li
+                  key={index}
+                  className={index === messages.length - 1 ? 'mb-12' : ''}
+                >
+                  {msg.email === memberEmail ? (
+                    // 내 메시지
+                    <div className="flex justify-end items-end space-x-1 mt-2 max-w-xs ml-auto">
+                      <div>
+                        <div className="bg-blue-600 text-white p-3 rounded-l-lg rounded-br-lg break-words">
+                          <p className="text-sm">{msg.content}</p>
+                        </div>
+                        <span className="text-xs text-gray-500 leading-none">
+                          {msg.reg_date}
+                        </span>
+                      </div>
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
+                        <img
+                          src={msg.profileFilename}
+                          alt="member Avatar"
+                          className="w-10 h-10 object-cover"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    // 상대 메시지
+                    <div className="flex w-full mt-2 space-x-3 max-w-xs">
+                      <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-100 overflow-hidden">
+                        <img
+                          src={msg.profileFilename}
+                          alt="member Avatar"
+                          className="w-10 h-10 object-cover"
+                        />
+                      </div>
+                      <div>
+                        <div className="bg-gray-100 p-3 rounded-r-lg rounded-bl-lg">
+                          <p className="text-sm">{msg.content}</p>
+                        </div>
+                        <span className="text-xs text-gray-500 leading-none">
+                          {msg.reg_date}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+              <div ref={messagesEndRef} />
+            </ul>
+          </div>
+
+          {/* 메시지 입력 영역 */}
+          <div className="flex items-center space-x-2 p-4 rounded-br-lg sm:rounded-bl-lg bg-white border-t border-gray-200">
+            <input
+              type="text"
+              value={inputMessage}
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') sendMessage();
+              }}
+              onFocus={handleInputFocus}
+              placeholder="메시지를 입력하세요"
+              className="flex-grow p-2 border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
+            />
+            <button onClick={sendMessage} className="positiveBtn">
+              전송
+            </button>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };
