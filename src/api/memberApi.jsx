@@ -104,7 +104,7 @@ export const getMapListFromMyProfile = async (cookieEmail) => {
   return result.data;
 };
 
-// 상점 리스트 조회(제보한 가게 찾기)
+// 상점 리스트 조회(제보한 노점 찾기)
 // back과 연결되는 URL
 export const getShopList = async (email) => {
   const result = await axios.get(`${host}/detail/${email}`);

@@ -74,7 +74,7 @@ const MainPage = () => {
   // 제보/등록 버튼용 useCustomMove
   // const { moveToPost, moveToLogin } = useCustomMove();
 
-  // 쿠키 정보 가져오기 (가게 제보/등록 구분 위함) (useEffect으로 감싸야 자동 렌더링됨)
+  // 쿠키 정보 가져오기 (노점 제보/등록 구분 위함) (useEffect으로 감싸야 자동 렌더링됨)
   useEffect(() => {
     // 쿠키가 있으면(getCookie('member')값이 있으면) 진행...
     if (getCookie('member')) {
