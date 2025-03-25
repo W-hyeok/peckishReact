@@ -183,10 +183,10 @@ const DetailUserComponent = ({
 
   // 관리 목록으로 Back
   const handelClickBack = () => {
-    navigate(-1);
+    navigate('/main');
   };
-  console.log('user - email', shop.shopUserDTO.email);
-  console.log('로그인한 회원 email', membercookie.email);
+  console.log('user작성자', shop.shopUserDTO.email);
+  console.log('로그인회원원', membercookie.email);
   return (
     <>
       {result === 'review' && (
@@ -263,40 +263,41 @@ const DetailUserComponent = ({
           <span className="text-base font-semibold text-gray-800 ml-2">
             ({typeof ratingAvg === 'number' ? ratingAvg.toFixed(1) : '0.0'})
           </span>
-          {ratingAvg == '0.0' ? (
-            <p className="text-base font-semibold text-red-500 ml-2">
-              첫 리뷰를 작성해주세요!
-            </p>
-          ) : (
-            <></>
-          )}
         </div>
+        {ratingAvg == '0.0' ? (
+          <p className="text-base font-semibold text-red-500 mt-3 mb-5">
+            첫 리뷰를 작성해주세요!
+          </p>
+        ) : (
+          <></>
+        )}
+
         <div className="flex justify-between items-center mt-2">
           <h1
             className="
-                  text-4xl
-                  sm:text-6xl
-                  font-extrabold
-                  tracking-tight
-                  text-gray-900
-                  mb-4
-                  leading-tight
-                  whitespace-nowrap
-                  overflow-visible
-                "
+                     text-2xl
+                     sm:text-5xl
+                     font-extrabold
+                     tracking-tight
+                     text-gray-900
+                     mb-4
+                     leading-tight
+                     whitespace-nowrap
+                     overflow-visible
+                   "
           >
             {shop.shopUserDTO.title}
           </h1>
 
           {/* 최근 수정 텍스트 */}
-          <p className="text-lg text-gray-700">
+          <p className="text-sm text-gray-700">
             최근 수정: {useTimeStamp(shop.shopUserDTO.updateDate)}
           </p>
         </div>
       </div>
 
       {/* 사진 컨테이너 */}
-      <div className="mt-4 w-full max-w-5xl mx-auto h-[50vh] overflow-hidden">
+      <div className="mt-4 w-full h-[30vh] overflow-hidden">
         <img
           alt={shop.shopUserDTO.title}
           src={`${host}/api/shop/view/${shop.shopUserDTO.filename}`}
@@ -308,21 +309,23 @@ const DetailUserComponent = ({
       <div className="mt-6 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
         <div className="sm:col-span-2">
           <TabGroup>
-            <div className="border-b border-gray-200">
+            <div className="ml-5 border-b border-gray-200">
               <TabList className="flex space-x-2">
                 <Tab
                   className="
-      px-6 py-3
-      text-lg font-semibold
-      border-2 border-yellow-500
-      text-gray-700
-      bg-white
-      rounded-t-md
-      hover:bg-yellow-50
-      data-[selected]:bg-yellow-500
-      data-[selected]:text-white
-      data-[selected]:border-yellow-500
-      outline-none
+     px-3 py-1.5
+                           sm:px-6 py-3
+                           smText
+                           border-2 border-yellow-400
+                           text-gray-700
+                           bg-white
+                           rounded-t-md
+                           hover:bg-yellow-400
+                           hover:text-white
+                           data-[selected]:bg-yellow-400
+                           data-[selected]:text-white
+                           data-[selected]:border-yellow-400
+                           outline-none
     "
                 >
                   노점 정보
@@ -330,17 +333,19 @@ const DetailUserComponent = ({
 
                 <Tab
                   className="
-      px-6 py-3
-      text-lg font-semibold
-      border-2 border-yellow-500
-      text-gray-700
-      bg-white
-      rounded-t-md
-      hover:bg-yellow-50
-      data-[selected]:bg-yellow-500
-      data-[selected]:text-white
-      data-[selected]:border-yellow-500
-      outline-none
+       px-3 py-1.5
+                           sm:px-6 py-3
+                           smText
+                           border-2 border-yellow-400
+                           text-gray-700
+                           bg-white
+                           rounded-t-md
+                           hover:bg-yellow-400
+                           hover:text-white
+                           data-[selected]:bg-yellow-400
+                           data-[selected]:text-white
+                           data-[selected]:border-yellow-400
+                           outline-none
     "
                 >
                   노점 메뉴
@@ -348,17 +353,19 @@ const DetailUserComponent = ({
 
                 <Tab
                   className="
-      px-6 py-3
-      text-lg font-semibold
-      border-2 border-yellow-500
-      text-gray-700
-      bg-white
-      rounded-t-md
-      hover:bg-yellow-50
-      data-[selected]:bg-yellow-500
-      data-[selected]:text-white
-      data-[selected]:border-yellow-500
-      outline-none
+     px-3 py-1.5
+                           sm:px-6 py-3
+                           smText
+                           border-2 border-yellow-400
+                           text-gray-700
+                           bg-white
+                           rounded-t-md
+                           hover:bg-yellow-400
+                           hover:text-white
+                           data-[selected]:bg-yellow-400
+                           data-[selected]:text-white
+                           data-[selected]:border-yellow-400
+                           outline-none
     "
                 >
                   노점 리뷰
@@ -425,7 +432,7 @@ const DetailUserComponent = ({
                     <dt className="text-xl text-gray-900">영업일 & 영업시간</dt>
                     <dd className="text-lg text-gray-700">
                       <div
-                        className="block w-full rounded-md bg-white px-4 py-3 text-lg outline outline-1 outline-gray-300 focus:outline focus:outline-2 focus:outline-indigo-600"
+                        className="block w-full rounded-md bg-white px-5 sm:px-4 py-3 smText outline outline-1 outline-gray-300 focus:outline focus:outline-2 focus:outline-indigo-600 mt-3"
                         style={{
                           whiteSpace: 'pre-wrap',
                           fontFamily: 'inherit',
