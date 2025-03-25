@@ -23,6 +23,7 @@ import mapCenterIcon from '../../assets/icon/mapCenter.png';
 import redDot from '../../assets/icon/location-red.png';
 import currentLocation from '../../assets/icon/currentLocation_faca15.png';
 import currentLocatiion2 from '../../assets/icon/current-location-final.png';
+import centerIcon from '../../assets/icon/centerIcon.png';
 import { EyeIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { API_SERVER_HOST } from '../../api/todoApi';
 const { kakao } = window;
@@ -562,10 +563,10 @@ function MapComponent({
             <MapMarker
               position={mapCenter.center} // curLoc 값에 따라 마커 설정 (고정)
               image={{
-                src: `${currentLocation}`,
+                src: `${centerIcon}`,
                 size: {
-                  width: 40,
-                  height: 40,
+                  width: 25,
+                  height: 25,
                 },
               }}
               title="현재 지도의 중심입니다."

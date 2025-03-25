@@ -1,11 +1,10 @@
 import { StarIcon, TrashIcon } from '@heroicons/react/24/solid';
-import React, { useState } from 'react';
+import React from 'react';
 import { useTimeStamp } from '../../hooks/useTimeAgo';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { getCookie } from '../../util/cookieUtil';
 import { API_SERVER_HOST } from '../../api/todoApi';
-import { FaRegStar, FaStar, FaStarHalfAlt } from 'react-icons/fa';
 
 const DetailUserReviewComponent = ({
   review = [],
@@ -16,34 +15,30 @@ const DetailUserReviewComponent = ({
   const host = `${API_SERVER_HOST}`;
 
   return (
-    // 최소 높이(min-h-[300px])를 추가하여 내용이 1개여도 높이가 일정하게 유지됨
     <div className="relative min-h-[300px]">
       {review.map((reviewUser) => (
         <div
           key={reviewUser.reviewId}
-          className="flex items-center gap-x-4 py-6 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
+          className="flex items-start gap-4 py-6 border-b border-gray-200 hover:bg-gray-50 transition-all duration-200"
         >
-          <div className="flex-none">
+          {/* 프로필 이미지 */}
+          <div className="flex-none w-12 h-12">
             <img
               alt="작성자 프로필 사진"
               src={`${host}/api/shop/view/${reviewUser.profileFilename}`}
-              className="w-14 h-14 rounded-full bg-gray-100"
+              className="w-12 h-12 rounded-full bg-gray-100 object-cover"
             />
           </div>
-          <div className="flex-1">
-            {/* 작성자(이메일/타임스탬프) 한 줄 */}
+
+          {/* 리뷰 내용 */}
+          <div className="flex-1 space-y-1">
+            {/* 작성자와 삭제 버튼 */}
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <h3 className="font-light text-gray-700 text-xs">
-                  {reviewUser.email}
-                </h3>
-                <p className="text-xs text-gray-500">
-                  {useTimeStamp(reviewUser.updateDate)}
-                </p>
-              </div>
-              {/* 삭제버튼 */}
+              <h3 className="text-sm font-semibold text-gray-900">
+                {reviewUser.email}
+              </h3>
               {memberCookie?.email === reviewUser.email && (
-                <Menu as="div" className="relative flex-none">
+                <Menu as="div" className="relative">
                   <MenuButton className="p-1 text-gray-500 hover:text-gray-900">
                     <EllipsisVerticalIcon
                       className="w-5 h-5"
@@ -67,35 +62,32 @@ const DetailUserReviewComponent = ({
               )}
             </div>
 
-            {/* 별점 및 별점 점수 한 줄 */}
-            <div className="mt-1 flex items-center gap-x-1 text-xs text-gray-700">
-              {[0, 1, 2, 3, 4].map((index) => {
-                if (reviewUser.rating >= index + 1) {
-                  return (
-                    <FaStar key={index} className="w-5 h-5 text-yellow-400" />
-                  );
-                } else if (reviewUser.rating >= index + 0.5) {
-                  return (
-                    <FaStarHalfAlt
-                      key={index}
-                      className="w-5 h-5 text-yellow-400"
-                    />
-                  );
-                } else {
-                  return (
-                    <FaRegStar key={index} className="w-5 h-5 text-gray-300" />
-                  );
-                }
-              })}
-              <span className="text-xs text-gray-700">
-                ({reviewUser.rating.toFixed(1)})
+            {/* 별점 및 개별 평점 점수 */}
+            <div className="flex items-center gap-x-1">
+              {[0, 1, 2, 3, 4].map((index) => (
+                <StarIcon
+                  key={index}
+                  className={`w-5 h-5 ${
+                    Number(reviewUser.rating) > index
+                      ? 'text-yellow-400'
+                      : 'text-gray-300'
+                  }`}
+                />
+              ))}
+              <span className="text-sm text-gray-600 ml-1">
+                ({Number(reviewUser.rating).toFixed(1)})
               </span>
             </div>
 
-            {/* 리뷰 내용 (별점/작성자 아래 한 줄) */}
+            {/* 업데이트 시간: 별점 아래 별도 행 */}
+            <div className="text-xs text-gray-500">
+              {useTimeStamp(reviewUser.updateDate)}
+            </div>
+
+            {/* 리뷰 내용 */}
             <div
               dangerouslySetInnerHTML={{ __html: reviewUser.content }}
-              className="mt-1 text-left text-xs font-semibold text-gray-600"
+              className="text-sm text-gray-700 leading-relaxed"
             />
           </div>
         </div>

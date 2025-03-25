@@ -23,6 +23,8 @@ import AddMenuModal from '../common/AddMenuModal';
 import { deleteMenu, deleteOne, getMenuList } from '../../api/shopApi';
 import DetailUserMenuComponent from './DetailUserMenuComponent';
 import DetailUserReviewComponent from '../review/DetailUserReviewComponent';
+import locationStar from '../../assets/icon/location_star.png';
+
 import {
   deleteReview,
   getReview,
@@ -312,28 +314,15 @@ const DetailUserComponent = ({
             <div className="ml-5 border-b border-gray-200">
               <TabList className="flex space-x-2">
                 <Tab
-                  className="
-     px-3 py-1.5
-                           sm:px-6 py-3
-                           smText
-                           border-2 border-yellow-400
-                           text-gray-700
-                           bg-white
-                           rounded-t-md
-                           hover:bg-yellow-400
-                           hover:text-white
-                           data-[selected]:bg-yellow-400
-                           data-[selected]:text-white
-                           data-[selected]:border-yellow-400
-                           outline-none
+                  className="px-3 sm:px-6 py-3 smText border-2 border-yellow-400 text-gray-700 bg-white rounded-t-md hover:bg-yellow-400
+                          hover:text-white data-[selected]:bg-yellow-400 data-[selected]:text-white data-[selected]:border-yellow-400 outline-none
     "
                 >
                   노점 정보
                 </Tab>
 
                 <Tab
-                  className="
-       px-3 py-1.5
+                  className="px-3
                            sm:px-6 py-3
                            smText
                            border-2 border-yellow-400
@@ -353,7 +342,7 @@ const DetailUserComponent = ({
 
                 <Tab
                   className="
-     px-3 py-1.5
+     px-3
                            sm:px-6 py-3
                            smText
                            border-2 border-yellow-400
@@ -396,7 +385,7 @@ const DetailUserComponent = ({
                             <MapMarker
                               position={storeLoc.center}
                               image={{
-                                src: '../../src/assets/icon/booth_active.png',
+                                src: `${locationStar}`,
                                 size: {
                                   width: 48,
                                   height: 48,
