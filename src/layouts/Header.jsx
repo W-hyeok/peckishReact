@@ -118,11 +118,19 @@ export default function Header() {
                   <MenuButton className="relative flex rounded-full shadow-xl bg-white text-sm ring-2 ring-white/20 focus:outline-none focus:ring-white">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
-                    <img
-                      alt=""
-                      src={`${host}/api/member/view/${cookieMember.profileFilename}`}
-                      className="size-12 rounded-full border-[1px] border-yellow-400"
-                    />
+                    {cookieMember.email != null ? (
+                      <img
+                        alt=""
+                        src={`${host}/api/member/view/${cookieMember.profileFilename}`}
+                        className="size-12 rounded-full border-[1px] border-yellow-400"
+                      />
+                    ) : (
+                      <img
+                        alt=""
+                        src={profile}
+                        className="size-12 rounded-full border-[1px] border-yellow-400"
+                      />
+                    )}
                   </MenuButton>
                 </div>
                 <MenuItems
