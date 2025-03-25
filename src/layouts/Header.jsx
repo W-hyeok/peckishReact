@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { getCookie } from '../util/cookieUtil';
 import fishLogo from '/src/assets/fish_logo.png';
 import profile from '/src/assets/icon/profile.png';
+import defaultProfile from '/src/assets/icon/default-avatar.jpg';
 import profileIcon from '../assets/icon/profileIcon.png';
 import { API_SERVER_HOST } from '../api/todoApi';
 import GoogleTranslate from '../components/common/GoogleTranslate';
@@ -127,7 +128,7 @@ export default function Header() {
                     ) : (
                       <img
                         alt=""
-                        src={profile}
+                        src={defaultProfile}
                         className="size-12 rounded-full border-[1px] border-yellow-400"
                       />
                     )}
