@@ -440,7 +440,7 @@ const DetailOwnerComponent = ({
                             <MapMarker
                               position={storeLoc.center}
                               image={{
-                                src: { locationStar },
+                                src: `${locationStar}`,
                                 size: {
                                   width: 48,
                                   height: 48,
