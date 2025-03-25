@@ -99,8 +99,11 @@ export default function Header() {
                   src={fishLogo}
                   className="h-[40px] w-auto"
                 />
-                <span className="h-[40px] px-4 text-xl font-extrabold flex items-center justify-center text-[#422006]">
-                  배고픈 순간!
+                <span
+                  className="h-[40px] px-4 text-lx sm:text-3xl flex items-center justify-center text-[#422006]"
+                  style={{ fontFamily: 'PartialSansKR-Regular, sans-serif' }}
+                >
+                  배고픈 순간
                 </span>
               </Link>
             </div>

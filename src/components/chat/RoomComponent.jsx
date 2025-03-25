@@ -280,7 +280,7 @@ const RoomComponent = () => {
               </button>
               <h2 className="text-lg font-semibold">채팅방 #{room_ID}</h2>
             </div>
-            <Link to="/" className="defaultBtn">
+            <Link to="/main" className="defaultBtn">
               채팅방 나가기
             </Link>
           </div>

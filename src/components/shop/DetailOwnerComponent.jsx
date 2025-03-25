@@ -310,13 +310,13 @@ const DetailOwnerComponent = ({
             ({typeof ratingAvg === 'number' ? ratingAvg.toFixed(1) : '0.0'})
           </span>
         </div>
-          {ratingAvg == '0.0' ? (
-            <p className="text-base font-semibold text-red-500 mt-3 mb-5">
-              첫 리뷰를 작성해주세요!
-            </p>
-          ) : (
-            <></>
-          )}
+        {ratingAvg == '0.0' ? (
+          <p className="text-base font-semibold text-red-500 mt-3 mb-5">
+            첫 리뷰를 작성해주세요!
+          </p>
+        ) : (
+          <></>
+        )}
         <div className="flex justify-between items-center mt-2">
           <h1
             className="
@@ -335,7 +335,7 @@ const DetailOwnerComponent = ({
           </h1>
 
           {/* 최근 수정 텍스트 */}
-          <p className="text-sm text-gray-700">
+          <p className=" ml-12 sm:ml-1 text-sm text-gray-700">
             최근 수정: {useTimeStamp(shop.shopOwnerDTO.updateDate)}
           </p>
         </div>
@@ -494,10 +494,12 @@ const DetailOwnerComponent = ({
                     </dd>
                   </dl>
 
-                  <dl className="p-6">
-                    <dt className="sm:text-base text-sm text-gray-900">문의하기</dt>
-                    <dd className="sm:text-base text-sm text-gray-700">
-                      {membercookie.email !== shop.shopOwnerDTO.email && (
+                  {membercookie.email !== shop.shopOwnerDTO.email && (
+                    <dl className="p-6">
+                      <dt className="sm:text-base text-sm text-gray-900">
+                        문의하기
+                      </dt>
+                      <dd className="sm:text-base text-sm text-gray-700">
                         <button
                           type="button"
                           onClick={handleChat}
@@ -505,15 +507,15 @@ const DetailOwnerComponent = ({
                         >
                           문의 하기
                         </button>
-                      )}
-                    </dd>
-                  </dl>
+                      </dd>
+                    </dl>
+                  )}
                 </div>
                 {/* 버튼 */}
-                <div className="flex justify-end space-x-4 mt-2">
+                <div className="flex justify-end space-x-2 mt-2">
                   <button
                     onClick={handelClickBack}
-                    className="defaultBtn smText"
+                    className="defaultBtn text-xs sm:text-base"
                   >
                     돌아가기
                   </button>
@@ -523,7 +525,7 @@ const DetailOwnerComponent = ({
                       {' '}
                       <button
                         onClick={handleOwnerShopModify}
-                        className="positiveBtn smText"
+                        className="positiveBtn text-xs sm:text-base"
                       >
                         수정
                       </button>
@@ -531,7 +533,7 @@ const DetailOwnerComponent = ({
                       {membercookie.email === shop.shopOwnerDTO.email ? (
                         <button
                           onClick={handleOwnerShopDelete}
-                          className="negativeBtn"
+                          className="negativeBtn text-xs sm:text-base"
                         >
                           삭제
                         </button>
@@ -542,17 +544,11 @@ const DetailOwnerComponent = ({
                   ) : (
                     // 비로그인 상태일 때...
                     <>
-                      <Link
-                        to="/member/login"
-                        className="positiveBtn"
-                      >
+                      <Link to="/member/login" className="positiveBtn">
                         수정
                       </Link>
                       {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때 */}
-                      <Link
-                        to="/member/login"
-                        className="negativeBtn"
-                      >
+                      <Link to="/member/login" className="negativeBtn">
                         삭제
                       </Link>
                     </>
