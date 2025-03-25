@@ -226,12 +226,12 @@ const DetailOwnerComponent = ({
     }
   };
 
-  console.log('owner- email ', shop.shopOwnerDTO.email);
-  console.log('로그인한 회원 email', membercookie.email);
+  console.log('owner작성자 - ', shop.shopOwnerDTO.email);
+  console.log('로그인회원 - ', membercookie.email);
 
   // 관리 목록으로 Back
   const handelClickBack = () => {
-    navigate(-1);
+    navigate('/main');
   };
 
   return (
@@ -335,7 +335,7 @@ const DetailOwnerComponent = ({
           </h1>
 
           {/* 최근 수정 텍스트 */}
-          <p className=" ml-12 sm:ml-1 text-sm text-gray-700">
+          <p className="text-sm text-gray-700">
             최근 수정: {useTimeStamp(shop.shopOwnerDTO.updateDate)}
           </p>
         </div>
@@ -494,12 +494,12 @@ const DetailOwnerComponent = ({
                     </dd>
                   </dl>
 
-                  {membercookie.email !== shop.shopOwnerDTO.email && (
-                    <dl className="p-6">
-                      <dt className="sm:text-base text-sm text-gray-900">
-                        문의하기
-                      </dt>
-                      <dd className="sm:text-base text-sm text-gray-700">
+                  <dl className="p-6">
+                    <dt className="sm:text-base text-sm text-gray-900">
+                      문의하기
+                    </dt>
+                    <dd className="sm:text-base text-sm text-gray-700">
+                      {membercookie.email !== shop.shopOwnerDTO.email && (
                         <button
                           type="button"
                           onClick={handleChat}
@@ -507,15 +507,16 @@ const DetailOwnerComponent = ({
                         >
                           문의 하기
                         </button>
-                      </dd>
-                    </dl>
-                  )}
+                      )}
+                    </dd>
+                  </dl>
                 </div>
                 {/* 버튼 */}
-                <div className="flex justify-end space-x-2 mt-2">
+                <div className="flex justify-end space-x-4 mt-2">
+                  {/* 돌아가기 버튼은 누구에게나 보이게 */}
                   <button
                     onClick={handelClickBack}
-                    className="defaultBtn text-xs sm:text-base"
+                    className="defaultBtn smText"
                   >
                     돌아가기
                   </button>
@@ -523,20 +524,23 @@ const DetailOwnerComponent = ({
                   {membercookie.email ? (
                     <>
                       {' '}
-                      <button
-                        onClick={handleOwnerShopModify}
-                        className="positiveBtn text-xs sm:text-base"
-                      >
-                        수정
-                      </button>
-                      {/* 쿠키 저장 email과 로그인한 아이디가 User email일 때때 */}
+                      {/* 쿠키 저장 email과 로그인한 아이디가 해당 작성자 email일 때 */}
                       {membercookie.email === shop.shopOwnerDTO.email ? (
-                        <button
-                          onClick={handleOwnerShopDelete}
-                          className="negativeBtn text-xs sm:text-base"
-                        >
-                          삭제
-                        </button>
+                        <>
+                          <button
+                            onClick={handleOwnerShopModify}
+                            className="positiveBtn smText"
+                          >
+                            수정
+                          </button>
+
+                          <button
+                            onClick={handleOwnerShopDelete}
+                            className="negativeBtn"
+                          >
+                            삭제
+                          </button>
+                        </>
                       ) : (
                         <></>
                       )}
@@ -570,13 +574,16 @@ const DetailOwnerComponent = ({
                     <p className="mt-4">메뉴를 추가해주세요!</p>
                   </div>
                 )}
-                <button
-                  type="button"
-                  onClick={handleClickAddMenu}
-                  className="absolute top-6 right-6 inline-flex items-center justify-center defaultBtn"
-                >
-                  메뉴 작성
-                </button>
+                {/* 쿠키 저장 email과 로그인한 아이디가 해당 작성자 email일 때 */}
+                {membercookie.email === shop.shopOwnerDTO.email && (
+                  <button
+                    type="button"
+                    onClick={handleClickAddMenu}
+                    className="absolute top-6 right-6 inline-flex items-center justify-center defaultBtn"
+                  >
+                    메뉴 작성
+                  </button>
+                )}
               </TabPanel>
 
               {/* 리뷰 탭 */}

@@ -38,6 +38,7 @@ const days = [
 
 const center = {
   // 지도의 중심좌표
+
   lat: 33.450701,
   lng: 126.570667,
 };
