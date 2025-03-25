@@ -333,8 +333,9 @@ const DetailOwnerComponent = ({
           >
             {shop.shopOwnerDTO.title}
           </h1>
-
-          {/* 최근 수정 텍스트 */}
+        </div>
+        {/* 최근 수정 텍스트 */}
+        <div className="flex justify-end">
           <p className="text-sm text-gray-700">
             최근 수정: {useTimeStamp(shop.shopOwnerDTO.updateDate)}
           </p>
@@ -351,7 +352,7 @@ const DetailOwnerComponent = ({
       </div>
       {/* tab */}
       <div className="mt-6 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
-        <div className="sm:col-span-2">
+        <div>
           <TabGroup>
             <div className="ml-5 border-b border-gray-200">
               <TabList className="flex space-x-2">

@@ -84,7 +84,8 @@ const RoomComponent = () => {
 
     // WebSocket 연결
     // const wsUrl = `ws://${WS_SERVER_HOST}/ws/chat`;
-    const wsUrl = `wss://${WS_SERVER_HOST}/ws/chat`; // https 연결일때 wss:// 로 연결해야함.
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const wsUrl = `${protocol}://${WS_SERVER_HOST}/ws/chat`; // https 연결일때 wss:// 로 연결해야함.
     const ws = new WebSocket(wsUrl);
     let isRoomEntered = false;
 
@@ -322,7 +323,7 @@ const RoomComponent = () => {
                         />
                       </div>
                       <div>
-                        <div className="bg-gray-100 p-3 rounded-r-lg rounded-bl-lg">
+                        <div className="bg-white p-3 rounded-r-lg rounded-bl-lg">
                           <p className="text-sm">{msg.content}</p>
                         </div>
                         <span className="text-xs text-gray-500 leading-none">
