@@ -13,7 +13,7 @@ import '../../css/common.css';
 import fishLogo from '/src/assets/fish_logo.png';
 
 // export const WS_SERVER_HOST = 'localhost:8080';
-export const WS_SERVER_HOST = 'https://hungrymoment.store';
+export const WS_SERVER_HOST = 'hungrymoment.store';
 
 const RoomComponent = () => {
   const { room_ID } = useParams();
