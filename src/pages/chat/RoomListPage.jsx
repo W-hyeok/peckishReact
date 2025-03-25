@@ -65,7 +65,8 @@ const RoomList = () => {
 
   // WebSocket을 통한 실시간 unread 업데이트 처리 및 최신 메시지 업데이트
   useEffect(() => {
-    const wsUrl = `ws://${WS_SERVER_HOST}/ws/chat`;
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const wsUrl = `${protocol}://${WS_SERVER_HOST}/ws/chat`;
     const ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
@@ -121,12 +122,12 @@ const RoomList = () => {
           {rooms.length === 0 ? (
             // 채팅방이 없는 경우 문구 출력
             <div className="flex flex-col items-center justify-center h-full py-20">
-            <div className="bg-white shadow-md rounded-lg p-8">
-              <p className="text-center text-2xl font-semibold text-gray-600">
-              문의 내역이 없습니다.
-              </p>
+              <div className="bg-white shadow-md rounded-lg p-8">
+                <p className="text-center text-2xl font-semibold text-gray-600">
+                  문의 내역이 없습니다.
+                </p>
+              </div>
             </div>
-          </div>
           ) : (
             // 채팅방이 존재하면 원래 로직대로 목록 출력
             <ul className="col-span-full divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto overflow-x-hidden border border-gray-300 dark:border-gray-600 rounded-lg mt-5 w-1/2 mx-auto">
