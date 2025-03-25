@@ -8,8 +8,8 @@ import '../../css/common.css';
 import { getCookie } from '../../util/cookieUtil';
 import useCustomMove from '../../hooks/useCustomMove';
 import NotFound from '../../pages/NotFound';
-import ownerAddShop from '/src/assets/shop/notCert.png';
-import userAddShop from '/src/assets/shop/notReport.png';
+import ownerAddShop from '/src/assets/shop/information.png';
+import userAddShop from '/src/assets/shop/information.png';
 import locationStar from '../../assets/icon/location_star.png';
 
 const DetailComponentMoon = ({ shop, shopId }) => {
