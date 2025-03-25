@@ -21,7 +21,7 @@ const MapComponent2 = ({
   transOpenData,
   cookieMember,
 }) => {
-  // const [cookieMember, setCookieMember] = useState(''); // 가게 제보/등록 구분을 위한 쿠키 정보 가져오기
+  // const [cookieMember, setCookieMember] = useState(''); // 노점 제보/등록 구분을 위한 쿠키 정보 가져오기
   const [serverData, setServerData] = useState([]); // 서버에서 받아오는 데이터
   const [cate, setCate] = useState('all'); // 카테고리, 기본값 all('카테고리 없음')
   const [role, setRole] = useState(0); // user: 1(true), owner: 2(false), 기본값 0 ('구분 없음')
@@ -61,8 +61,8 @@ const MapComponent2 = ({
           onClick={cookieMember ? moveToPost : moveToLogin}
         >
           {cookieMember
-            ? '가게 제보/등록하기'
-            : '가게 제보/등록하기 (로그인 필요)'}
+            ? '노점 제보/등록하기'
+            : '노점 제보/등록하기 (로그인 필요)'}
         </a>
       </div>
       {serverData.length != 0 ? (

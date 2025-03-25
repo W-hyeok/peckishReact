@@ -36,7 +36,7 @@ const initialNavigation = [
 
 // // 인증/제보값 초기화 객체(배열)
 // const initialCertification = [
-//   { name: '제보된 가게', href: '#', current: false },
+//   { name: '제보된 노점', href: '#', current: false },
 //   { name: '사장님 직영점', href: '#', current: false },
 // ];
 
@@ -165,8 +165,8 @@ export default function HeaderFilter({
   //   // 사장님 직영점 -> -/2/- 로 요청
   //   if (certName === '사장님 직영점') {
   //     onCertClick(2);
-  //     // 제보된 가게 -> -/1/-로 요청
-  //   } else if (certName === '제보된 가게') {
+  //     // 제보된 노점 -> -/1/-로 요청
+  //   } else if (certName === '제보된 노점') {
   //     onCertClick(1);
   //   }
   // };
@@ -364,7 +364,7 @@ export default function HeaderFilter({
                   onClick={cookieMember ? moveToPost : moveToLogin}
                 >
                   {' '}
-                  가게 등록하기
+                  노점 등록하기
                 </button>
               </div>
             </div>
@@ -457,7 +457,7 @@ export default function HeaderFilter({
                       className="defaultBtn smText"
                       onClick={cookieMember ? moveToPost : moveToLogin}
                     >
-                      가게 등록하기
+                      노점 등록하기
                     </button>
                   </div>
                   <div className="flex mb-12 justify-center">

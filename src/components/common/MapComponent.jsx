@@ -46,7 +46,7 @@ function MapComponent({
   // const [role, setRole] = useState(0); // user: 1(true), owner: 2(false), 기본값 0 ('구분 없음')
   const [open, setOpen] = useState(''); // true: 1, 기본값: 0(준비중 포함)
   const [permission, setPermission] = useState('');
-  const { moveToShop } = useCustomMove(); // 해당 가게 정보로 이동
+  const { moveToShop } = useCustomMove(); // 해당 노점 정보로 이동
   const [result, setResult] = useState(null);
   const [curLocBtn, setCurLocBtn] = useState(false); // 현재 위치로 이동 버튼 분기처리용
   const [popOpened, setPopOpened] = useState(false);

@@ -15,7 +15,7 @@ function classNames(...classes) {
 const RightComponent = ({ email }) => {
   const tabs = [
     {
-      name: '제보한 가게',
+      name: '제보한 노점',
       href: `/member/read/${email}`,
       current: true,
     },
