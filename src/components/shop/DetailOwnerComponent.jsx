@@ -502,7 +502,7 @@ const DetailOwnerComponent = ({
                         <button
                           type="button"
                           onClick={handleChat}
-                          className="defaultBtn smText mt-3"
+                          className="ChatBtn smText mt-3"
                         >
                           문의 하기
                         </button>
