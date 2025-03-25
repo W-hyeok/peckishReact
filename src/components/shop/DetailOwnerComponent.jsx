@@ -493,13 +493,12 @@ const DetailOwnerComponent = ({
                       </div>
                     </dd>
                   </dl>
-
-                  <dl className="p-6">
-                    <dt className="sm:text-base text-sm text-gray-900">
-                      문의하기
-                    </dt>
-                    <dd className="sm:text-base text-sm text-gray-700">
-                      {membercookie.email !== shop.shopOwnerDTO.email && (
+                  {membercookie.email !== shop.shopOwnerDTO.email && (
+                    <dl className="p-6">
+                      <dt className="sm:text-base text-sm text-gray-900">
+                        문의하기
+                      </dt>
+                      <dd className="sm:text-base text-sm text-gray-700">
                         <button
                           type="button"
                           onClick={handleChat}
@@ -507,9 +506,9 @@ const DetailOwnerComponent = ({
                         >
                           문의 하기
                         </button>
-                      )}
-                    </dd>
-                  </dl>
+                      </dd>
+                    </dl>
+                  )}
                 </div>
                 {/* 버튼 */}
                 <div className="flex justify-end space-x-4 mt-2">

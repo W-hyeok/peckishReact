@@ -115,7 +115,7 @@ export default function Header() {
               {/* Profile dropdown */}
               <Menu as="div" className="relative ml-4 shrink-0">
                 <div>
-                  <MenuButton className="relative flex rounded-full shadow-xl bg-white text-sm ring-2 ring-white/20 focus:outline-none focus:ring-white">
+                  <MenuButton className="relative flex rounded-full shadow-xl text-sm ring-2 ring-white/20 focus:outline-none">
                     <span className="absolute -inset-1.5" />
                     <span className="sr-only">Open user menu</span>
                     {cookieMember.email != null ? (
