@@ -565,8 +565,10 @@ const DetailOwnerComponent = ({
                 <h3 className="sr-only">Owner Menu</h3>
                 {menuItems.length > 0 && menuFetch ? (
                   <DetailOwnerMenuComponent
+                    shop={shop}
                     menuItems={menuItems}
                     handleMenuDelete={handleMenuDelete}
+                    membercookie={membercookie}
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center py-10">

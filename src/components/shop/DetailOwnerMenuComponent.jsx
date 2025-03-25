@@ -5,7 +5,12 @@ import { API_SERVER_HOST } from '../../api/todoApi';
 
 const host = `${API_SERVER_HOST}`;
 
-const DetailOwnerMenuComponent = ({ menuItems, handleMenuDelete }) => {
+const DetailOwnerMenuComponent = ({
+  menuItems,
+  handleMenuDelete,
+  membercookie,
+  shop,
+}) => {
   return (
     // 최소 높이(min-h-[300px])를 추가하여 내용이 1개여도 높이가 일정하게 유지됨
     <div className="relative min-h-[300px]">
