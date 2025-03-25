@@ -352,7 +352,7 @@ const DetailOwnerComponent = ({
       </div>
       {/* tab */}
       <div className="mt-6 grid grid-cols-1 gap-y-8 sm:grid-cols-2 sm:gap-x-4">
-        <div>
+        <div className="sm:col-span-2">
           <TabGroup>
             <div className="ml-5 border-b border-gray-200">
               <TabList className="flex space-x-2">
